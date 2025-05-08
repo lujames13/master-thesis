@@ -8,16 +8,31 @@ Our Blockchain-based Federated Learning (BFL) framework extends the traditional 
 Architecture Overview:
 1. Requester: Initiates federated learning tasks and defines parameters
 2. Clients: Perform local model training on private datasets
-3. Aggregator Pool: Multiple aggregators that process client updates
+3. Edge Servers: Multiple aggregators that process client updates
 4. Validator Network: Nodes that can validate aggregations during challenges
 5. Challenge Mechanism: Hybrid verification system to detect malicious behavior
 6. Blockchain Layer: Provides immutability, coordination, and security guarantees
 7. IPFS Layer: Handles model and update storage
 ```
+![圖一](utils/BFL-L2-secure-aggregation.png)
 
 Figure 1 illustrates the high-level architecture of our BFL system, showing the interactions between components and the data flow during the federated learning process.
 
-## B. Multi-Aggregator Model
+介紹一下系統的安全性由validator保護
+
+## B. System Overview
+
+介紹圖一的流程
+
+## C. System Workflow
+
+![圖二:sequence diagram](utils/sequenceDiagram.mmd)
+
+介紹setup, learning, challenge三個state
+
+challenge 機制會在後面細談
+
+## D. Multi-Aggregator Model
 
 Unlike traditional federated learning systems with a single aggregator, our framework employs multiple aggregators operating in a round-robin fashion. This design enhances system efficiency by distributing computational load while maintaining security through our challenge mechanism.
 
@@ -33,6 +48,8 @@ Multi-Aggregator Selection:
 ```
 
 The round-robin selection ensures fair distribution of aggregation tasks among all available aggregators, reducing computational burden on any single node and enhancing system scalability. This selection process operates with O(n) complexity, significantly more efficient than full Byzantine consensus approaches.
+
+Round-robin 的 aggregator 分工機制，讓每個 aggregator 在整個 Task 的工作過程只需要負責 r/N 的聚合工作
 
 ## C. Challenge Mechanism
 
@@ -77,6 +94,8 @@ This hybrid approach provides significant advantages:
 4. Dual security guarantees through both economic incentives and Byzantine consensus
 
 By combining these mechanisms, our system achieves both the efficiency of optimistic approaches and the security guarantees of Byzantine consensus protocols.
+
+若假設 aggregator 必定參與 validator 任務，且善意 validator 不會在 aggregate update 合法的情況下發起挑戰。在滿足 PBFT 可負擔的最大量惡意節點 m=f ，每個 aggregator 所負擔的最大工作量為 Wh = r/N + m ，參與的 aggregator 越多，每個節點所需負擔的工作量越小，相較於傳統 PBFT 工作量 Wp=r 的情況工作量小很多
 
 ## E. Exclusion and Recovery Mechanism
 
