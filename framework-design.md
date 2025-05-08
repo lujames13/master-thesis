@@ -2,16 +2,17 @@
 
 ## A. System Architecture
 
-Our Blockchain-based Federated Learning (BFL) framework extends the traditional federated learning architecture by incorporating multiple aggregators with a challenge-based security mechanism inspired by Optimistic Rollup. The system operates on the principle that a single honest validator can ensure the security of the entire federated learning process, enabling a more efficient aggregation workflow compared to traditional Byzantine Fault Tolerance (BFT) approaches.
+Our Blockchain-based Federated Learning (BFL) framework extends the traditional federated learning architecture by incorporating multiple aggregators with a hybrid Optimistic-PBFT security mechanism. The system operates on a dual-layer security principle, leveraging the efficiency of round-robin selection during normal operation while activating Byzantine Fault Tolerance mechanisms during challenge resolution.
 
 ```
 Architecture Overview:
 1. Requester: Initiates federated learning tasks and defines parameters
 2. Clients: Perform local model training on private datasets
 3. Aggregator Pool: Multiple aggregators that process client updates
-4. Challenge Mechanism: Verification system to detect malicious behavior
-5. Blockchain Layer: Provides immutability, coordination, and security guarantees
-6. IPFS Layer: Handles model and update storage
+4. Validator Network: Nodes that can validate aggregations during challenges
+5. Challenge Mechanism: Hybrid verification system to detect malicious behavior
+6. Blockchain Layer: Provides immutability, coordination, and security guarantees
+7. IPFS Layer: Handles model and update storage
 ```
 
 Figure 1 illustrates the high-level architecture of our BFL system, showing the interactions between components and the data flow during the federated learning process.
@@ -31,41 +32,55 @@ Multi-Aggregator Selection:
 3. If no successful challenges, G_r becomes the official model for round r+1
 ```
 
-The round-robin selection ensures fair distribution of aggregation tasks among all available aggregators, while the challenge period provides a window for validators to identify and report malicious behavior before the model update is finalized.
+The round-robin selection ensures fair distribution of aggregation tasks among all available aggregators, reducing computational burden on any single node and enhancing system scalability. This selection process operates with O(n) complexity, significantly more efficient than full Byzantine consensus approaches.
 
 ## C. Challenge Mechanism
 
-We incorporate a challenge mechanism based on established methods in the literature to detect potentially malicious aggregations. Rather than focusing on developing new validation techniques, we leverage these proven approaches as triggers for our novel Optimistic Rollup-inspired recovery system. The challenge mechanism serves as a detection layer that activates the security guarantees provided by our rollback protocol.
+Our system incorporates a hybrid challenge mechanism that combines the efficiency of optimistic assumption with the security guarantees of Byzantine Fault Tolerance. This approach allows validators to challenge potentially malicious aggregations during a designated challenge period.
 
 ```
 Challenge Process Overview:
 1. After aggregator A_i submits aggregated model G_r
 2. System enters challenge period of T blocks/time
 3. Any validator can submit challenge if suspicious behavior detected
-4. System evaluates challenge validity using predefined metrics
+4. Upon challenge, system activates PBFT validation process
 5. If challenge successful, trigger rollback procedure
 ```
 
-The challenge period provides a crucial security window during which validators can verify aggregations and submit proofs if malicious behavior is detected, similar to the fraud proof submission in Optimistic Rollup systems.
+The challenge period provides a crucial security window during which validators can verify aggregations and submit challenges if malicious behavior is detected. The system then activates a more intensive Byzantine consensus process only when necessary, preserving efficiency while maintaining security.
 
-## D. Optimistic Rollup Integration
+## D. Hybrid Optimistic-PBFT Consensus Mechanism
 
-The core innovation of our framework lies in the application of Optimistic Rollup principles to federated learning. In blockchain systems, Optimistic Rollup allows for high throughput by assuming transactions are valid by default, with a challenge period where anyone can submit fraud proofs. Similarly, our BFL framework assumes aggregations are honest by default but provides a challenge window where validators can contest malicious results.
+The core innovation of our framework lies in the application of a hybrid Optimistic-PBFT approach to federated learning. This mechanism combines the efficiency of optimistic assumptions with the security guarantees of Byzantine Fault Tolerance consensus when needed.
 
 ```
-Optimistic Security Model:
-1. Assume aggregations are valid by default
-2. Allow system to proceed without expensive consensus for each aggregation
-3. Provide challenge period where validators can submit proofs of incorrect aggregation
-4. Require only one honest validator to maintain system security
-5. Enforce penalties (stake slashing) for proven malicious behavior
+Optimistic Operation (Normal Case):
+1. Assume aggregations are valid by default (Optimistic principle)
+2. Use efficient round-robin aggregator selection with O(n) complexity
+3. Proceed with federation without expensive consensus for each aggregation
+4. Maintain challenge period where validators can contest suspicious results
+
+Challenge Resolution via PBFT:
+1. When a challenge is submitted during period T
+2. System activates PBFT consensus collection
+3. All validators compute aggregation independently
+4. System collects at least 2f+1 aggregation results (where f is max faulty nodes)
+5. Challenge is validated if submitted result differs from PBFT consensus
+6. System enforces penalties and triggers rollback if challenge is successful
 ```
 
-This approach significantly improves system efficiency compared to traditional Byzantine Fault Tolerance protocols that require consensus from a majority of honest nodes for each update. By adopting the Optimistic Rollup paradigm, we can achieve higher throughput while maintaining strong security guarantees with minimal honest participation.
+This hybrid approach provides significant advantages:
+
+1. Efficiency under normal operation with O(n) complexity
+2. Strong Byzantine Fault Tolerance with 2f+1 security when challenges occur
+3. Resource optimization by activating expensive PBFT only when necessary
+4. Dual security guarantees through both economic incentives and Byzantine consensus
+
+By combining these mechanisms, our system achieves both the efficiency of optimistic approaches and the security guarantees of Byzantine consensus protocols.
 
 ## E. Exclusion and Recovery Mechanism
 
-When malicious behavior is detected through a successful challenge, our system employs a comprehensive recovery mechanism. This includes rolling back to a secure state, excluding the malicious aggregator, and redistributing tasks to honest aggregators.
+When malicious behavior is detected through a successful PBFT-validated challenge, our system employs a comprehensive recovery mechanism. This includes rolling back to a secure state, excluding the malicious aggregator, and redistributing tasks to honest aggregators.
 
 ```
 Recovery Protocol:
@@ -82,15 +97,23 @@ The exclusion mechanism ensures that once identified, malicious aggregators cann
 
 ## F. Security Model and Assumptions
 
-Our security model requires at least one honest validator to ensure system integrity, similar to Optimistic Rollup's security guarantees. We assume that malicious aggregators cannot prevent honest validators from accessing the system or submitting challenges.
+Our hybrid security model combines the efficiency of optimistic approaches with the strong guarantees of Byzantine Fault Tolerance. The system security relies on both economic incentives and Byzantine consensus when challenges occur.
 
 ```
 Security Assumptions:
-1. At least one honest validator exists in the system
-2. Validators have access to sufficient computational resources to verify aggregations
-3. Challenge submission cannot be censored by malicious actors
-4. Challenge period T is sufficiently long for validation but short enough for system efficiency
-5. Stake amounts are significant enough to deter malicious behavior
+1. Under normal operation (Optimistic mode):
+   a. At least one honest validator exists in the system
+   b. Challenge submission cannot be censored by malicious actors
+   c. Challenge period T is sufficiently long for validation
+
+2. Under challenge resolution (PBFT mode):
+   a. At least 2f+1 validators are honest (where f is max faulty nodes)
+   b. Validators have access to sufficient computational resources
+   c. Network provides eventual synchrony for PBFT consensus
+   
+3. General assumptions:
+   a. Stake amounts are significant enough to deter malicious behavior
+   b. Malicious aggregators cannot collude with more than f validators
 ```
 
-These assumptions establish the security boundaries of our system and highlight the advantages of our approach over traditional Byzantine Fault Tolerance methods that typically require a two-thirds majority of honest participants. Our framework can maintain security with just a single honest validator, significantly reducing the trust requirements for secure federated learning.
+These assumptions establish the security boundaries of our system and highlight the advantages of our hybrid approach. During normal operation, we benefit from the efficiency of optimistic assumptions, while under challenge, we can leverage the strong security guarantees of Byzantine consensus. This dual approach provides a more practical and resource-efficient solution for secure federated learning in blockchain environments.

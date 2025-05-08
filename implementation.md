@@ -2,7 +2,7 @@
 
 ## A. Technology Stack and Development Environment
 
-Our implementation extends the Flower federated learning framework to support multiple aggregators and challenge-based security mechanisms. The system is built using Python with PyTorch for model training and evaluation.
+Our implementation extends the Flower federated learning framework to support multiple aggregators and our hybrid Optimistic-PBFT security mechanism. The system is built using Python with PyTorch for model training and evaluation.
 
 ```
 Key Components:
@@ -38,41 +38,66 @@ Output: aggregated_parameters G_r, metrics M
 13: return aggregated_parameters, metrics
 ```
 
-The strategy handles the selection of aggregators for each round, the creation of malicious aggregations for simulation purposes, and the scheduling of delayed detection to mimic the challenge period in Optimistic Rollup systems.
+The strategy handles the selection of aggregators for each round, the creation of malicious aggregations for simulation purposes, and the scheduling of delayed detection to mimic the challenge period in our Optimistic-PBFT system.
 
-## C. Challenge Mechanism Implementation
+## C. Hybrid Challenge Mechanism Implementation
 
-We implement a simplified challenge mechanism that triggers our rollback protocol upon detection of malicious behavior. While the actual validation logic follows established methods in the literature, our focus is on the system's response to successful challenges.
+Our implementation includes a hybrid challenge mechanism that combines the efficiency of optimistic assumptions with the security guarantees of Byzantine Fault Tolerance when needed.
 
 ```
-Algorithm 2: Challenge Detection and Processing
-Input: challenge_round r, malicious_round m, aggregator_id a
+Algorithm 2: Hybrid Challenge Processing with PBFT
+Input: challenge_round r, challenged_aggregator_id a, challenged_result R
 Output: challenge_result (success/failure)
 
-1: if IsPendingDetection(r, m, a) then
-2:     honest_parameters ← safe_parameters_history[m-1]
-3:     challenge_success ← ValidateChallenge(m, a, honest_parameters)
-4:     if challenge_success then
-5:         Add m to detected_attacks
-6:         Add a to excluded_aggregators
-7:         Increment total_rollbacks
+1: if ValidChallenge(r, a, R) then
+2:     Activate PBFT validation mode
+3:     Broadcast validation request to all validators
+4:     Wait for at least 2f+1 validator responses V = {v_1, v_2, ..., v_m}
+5:     consensus_result ← PBFT_Consensus(V)
+6:     if DifferSignificantly(R, consensus_result) then
+7:         Add a to excluded_aggregators
 8:         Set recovery_mode ← true
-9:         Set recovery_from_round ← m-1
-10:        Log challenge metrics
-11:    end if
-12:    Remove from pending_detections
-13: end if
-14: return challenge_success
+9:         Set recovery_from_round ← r-1
+10:        Apply penalties to aggregator a
+11:        return success
+12:    else
+13:        Apply penalties to challenger
+14:        return failure
+15:    end if
+16: end if
 ```
 
-The challenge detection process uses delayed verification to simulate the time window in which validators can submit challenges in an Optimistic Rollup system. This implementation allows us to study the effectiveness of the challenge mechanism and its impact on system performance.
+The challenge mechanism activates PBFT consensus only when a challenge is submitted, maintaining system efficiency during normal operation while providing strong security guarantees when needed.
 
-## D. Delayed Detection and Rollback Implementation
+## D. PBFT Consensus Implementation
 
-The enhanced version of our implementation includes a delayed detection mechanism to reflect the challenge period in Optimistic Rollup systems. When malicious behavior is detected, the system triggers a rollback to restore the last secure state.
+We implemented a simplified PBFT consensus algorithm for challenge validation, which collects aggregation results from validators and determines the consensus based on Byzantine quorum.
 
 ```
-Algorithm 3: Recovery Mode Execution
+Algorithm 3: PBFT Consensus for Challenge Validation
+Input: validator_results V = {v_1, v_2, ..., v_m}
+Output: consensus_result C
+
+1: for each validator result v_i in V do
+2:     Verify digital signature of v_i
+3: end for
+4: Group results by similarity
+5: if Largest group size ≥ 2f+1 (Byzantine quorum) then
+6:     C ← Median result from largest group
+7:     return C
+8: else
+9:     return inconclusive
+10: end if
+```
+
+This implementation ensures that the system can achieve Byzantine consensus when validating challenges, providing strong security guarantees with 2f+1 honest validators.
+
+## E. Delayed Detection and Rollback Implementation
+
+Our implementation includes a delayed detection mechanism to reflect the challenge period in Optimistic Rollup systems. When malicious behavior is detected and validated through PBFT, the system triggers a rollback to restore the last secure state.
+
+```
+Algorithm 4: Recovery Mode Execution
 Input: server_round r, client_updates U
 Output: recovered_parameters G_r, metrics M
 
@@ -89,12 +114,12 @@ Output: recovered_parameters G_r, metrics M
 
 The recovery mode ensures that the system can restore a secure state after detecting malicious behavior. By rolling back to the last verified state and excluding the malicious aggregator, the system can continue operating without compromising security.
 
-## E. Malicious Behavior Simulation
+## F. Malicious Behavior Simulation
 
 For research purposes, we implemented a noise attack simulation to study the effectiveness of our challenge mechanism. The noise attack adds random perturbations to the aggregated model parameters.
 
 ```
-Algorithm 4: Malicious Aggregation with Noise Attack
+Algorithm 5: Malicious Aggregation with Noise Attack
 Input: honest_parameters H
 Output: malicious_parameters M
 
@@ -110,12 +135,44 @@ Output: malicious_parameters M
 
 This implementation allows us to simulate malicious behavior in a controlled environment and evaluate the effectiveness of our challenge and recovery mechanisms in detecting and mitigating such attacks.
 
-## F. Experimental Configuration
+## G. Mode Switching Implementation
+
+A key aspect of our hybrid approach is the ability to switch between efficient optimistic mode and secure PBFT mode when needed. We implemented a mode switching mechanism that activates PBFT consensus only during challenge resolution.
+
+```
+Algorithm 6: Mode Switching Mechanism
+Input: system_state S, event E
+Output: updated_system_state S'
+
+1: if E is normal_round_start then
+2:     S.mode ← OPTIMISTIC
+3:     S.current_aggregator_id ← (S.round - 1) mod N
+4:     if S.current_aggregator_id ∈ S.excluded_aggregators then
+5:         Find next non-excluded aggregator
+6:     end if
+7: else if E is challenge_submitted then
+8:     S.mode ← PBFT
+9:     S.challenge_round ← S.round
+10:    S.validators_required ← 2 * S.max_faulty + 1
+11:    Broadcast validation request to all validators
+12: else if E is challenge_resolved then
+13:    S.mode ← OPTIMISTIC
+14:    if S.challenge_result = successful then
+15:        S.recovery_mode ← true
+16:        S.recovery_from_round ← S.challenge_target_round - 1
+17:    end if
+18: end if
+19: return S
+```
+
+This mode switching mechanism ensures that the system operates efficiently under normal conditions (O(n) complexity) while activating more expensive but secure Byzantine consensus (O(n²) complexity) only when necessary.
+
+## H. Experimental Configuration
 
 The system can be configured with various parameters to simulate different research scenarios, including varying numbers of clients, aggregators, malicious entities, and enabling/disabling the challenge mechanism.
 
 ```
-Algorithm 5: Experiment Configuration
+Algorithm 7: Experiment Configuration
 Input: scenario_type, num_clients, num_rounds, num_aggregators, malicious_ids, enable_challenges
 Output: Configured simulation environment
 
@@ -128,28 +185,32 @@ Output: Configured simulation environment
 7: else if scenario_type = "malicious_with_challenges" then
 8:     malicious_ids ← [predefined IDs]
 9:     enable_challenges ← true
-10: end if
-11: strategy ← MultiAggregatorStrategy(
-12:     num_aggregators=num_aggregators,
-13:     malicious_aggregator_ids=malicious_ids,
-14:     enable_challenges=enable_challenges,
-15:     detection_delay=2  // Default challenge period
-16: )
-17: return strategy
+10:    consensus_mode ← "hybrid_optimistic_pbft"
+11: end if
+12: strategy ← MultiAggregatorStrategy(
+13:     num_aggregators=num_aggregators,
+14:     malicious_aggregator_ids=malicious_ids,
+15:     enable_challenges=enable_challenges,
+16:     detection_delay=2,  // Default challenge period
+17:     consensus_mode=consensus_mode
+18: )
+19: return strategy
 ```
 
-These configuration options allow researchers to explore the performance and security characteristics of the system under various conditions, facilitating comprehensive evaluation of the proposed approach.
+These configuration options allow researchers to explore the performance and security characteristics of the system under various conditions, facilitating comprehensive evaluation of the proposed hybrid Optimistic-PBFT approach.
 
-## G. Implementation Challenges and Solutions
+## I. Implementation Challenges and Solutions
 
-During the implementation of our BFL framework, we encountered several challenges that required creative solutions:
+During the implementation of our hybrid Optimistic-PBFT framework, we encountered several challenges that required creative solutions:
 
-1. **Simulating Delayed Detection**: We implemented a pending detection mechanism that schedules validation for future rounds, mimicking the challenge period in Optimistic Rollup.
+1. **Balancing Modes**: We implemented a dynamic mode switching mechanism that activates PBFT only when challenges occur, maintaining efficiency under normal operation.
 
-2. **Maintaining Safe Parameters**: We created a history of safe parameters to enable recovery when malicious behavior is detected, ensuring the system can revert to a secure state.
+2. **Byzantine Quorum Collection**: We developed a validator response collection system that waits for at least 2f+1 responses to form a Byzantine quorum.
 
-3. **Handling Excluded Aggregators**: We developed a mechanism to track excluded aggregators and adjust the round-robin selection to skip them, ensuring that known malicious aggregators cannot participate in future rounds.
+3. **Similarity Grouping**: We implemented a parameter similarity grouping algorithm to identify the largest consensus group among validator responses.
 
-4. **Recovery Mode Logic**: We implemented a special recovery mode that allows the system to resume from a secure state after detecting malicious behavior, minimizing the impact on the learning process.
+4. **Secure Parameter Storage**: We created a history of safe parameters to enable recovery when malicious behavior is detected, ensuring the system can revert to a secure state.
 
-These solutions demonstrate the practical feasibility of applying Optimistic Rollup principles to federated learning systems, providing both security guarantees and performance benefits compared to traditional approaches.
+5. **Validator Coordination**: We developed a broadcast mechanism to coordinate validator participation during PBFT mode, ensuring sufficient responses for Byzantine consensus.
+
+These solutions demonstrate the practical feasibility of our hybrid Optimistic-PBFT approach, combining the efficiency of optimistic operation with the security guarantees of Byzantine consensus when needed.
