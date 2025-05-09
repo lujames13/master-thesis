@@ -1,5 +1,5 @@
-# OptBFL: Secure Aggregation in Blockchain-based Federated Learning with Byzantine-Robust Optimistic Consensus
-# OptBFL：基於樂觀拜占庭容錯共識的區塊鏈聯邦學習安全聚合機制
+# Byzantine-Robust Optimistic Aggregation: A Multi-Aggregator Framework for Blockchain-based Federated Learning
+# 具拜占庭容錯能力的樂觀聚合：多聚合器區塊鏈聯邦學習框架
 # Abstract
 # I. Introduction
 # II. Background
