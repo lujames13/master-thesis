@@ -1,138 +1,363 @@
-# IV. Framework Design
+# IV. 框架設計
 
-## A. System Architecture
+## A. 系統架構
 
-Our Blockchain-based Federated Learning (BFL) framework extends the traditional federated learning architecture by incorporating multiple aggregators with a hybrid Optimistic-PBFT security mechanism. The system operates on a dual-layer security principle, leveraging the efficiency of round-robin selection during normal operation while activating Byzantine Fault Tolerance mechanisms during challenge resolution.
-
-```
-Architecture Overview:
-1. Requester: Initiates federated learning tasks and defines parameters
-2. Clients: Perform local model training on private datasets
-3. Edge Servers: Multiple aggregators that process client updates
-4. Validator Network: Nodes that can validate aggregations during challenges
-5. Challenge Mechanism: Hybrid verification system to detect malicious behavior
-6. Blockchain Layer: Provides immutability, coordination, and security guarantees
-7. IPFS Layer: Handles model and update storage
-```
-![圖一](utils/BFL-L2-secure-aggregation.png)
-
-Figure 1 illustrates the high-level architecture of our BFL system, showing the interactions between components and the data flow during the federated learning process.
-
-介紹一下系統的安全性由validator保護
-
-## B. System Overview
-
-介紹圖一的流程
-
-## C. System Workflow
-
-![圖二:sequence diagram](utils/sequenceDiagram.mmd)
-
-介紹setup, learning, challenge三個state
-
-challenge 機制會在後面細談
-
-## D. Multi-Aggregator Model
-
-Unlike traditional federated learning systems with a single aggregator, our framework employs multiple aggregators operating in a round-robin fashion. This design enhances system efficiency by distributing computational load while maintaining security through our challenge mechanism.
+本文提出的區塊鏈聯邦學習（BFL）框架在傳統聯邦學習架構基礎上，引入多聚合器機制並結合混合Optimistic-PBFT安全機制。系統採用雙層安全原則，在正常運作期間利用輪替選擇機制確保效率，在挑戰解決期間啟動拜占庭容錯機制確保安全性。
 
 ```
-Multi-Aggregator Selection:
-1. For each round r:
-   a. Select aggregator A_i where i = (r-1) mod N
-   b. A_i collects client updates U = {u_1, u_2, ..., u_m}
-   c. A_i performs aggregation to produce new global model G_r
-   d. A_i submits G_r to the system
-2. Enter challenge period for round r
-3. If no successful challenges, G_r becomes the official model for round r+1
+系統架構概述：
+1. 請求者(Requester)：發起聯邦學習任務並定義參數
+2. 客戶端(Clients)：在私人資料集上執行本地模型訓練
+3. 邊緣伺服器(Edge Servers)：多個聚合器處理客戶端更新
+4. 驗證者網路(Validator Network)：在挑戰期間驗證聚合結果的節點
+5. 挑戰機制(Challenge Mechanism)：混合驗證系統檢測惡意行為
+6. 區塊鏈層(Blockchain Layer)：提供不可變性、協調和安全保證
+7. IPFS層(IPFS Layer)：處理模型和更新資料的儲存
 ```
 
-The round-robin selection ensures fair distribution of aggregation tasks among all available aggregators, reducing computational burden on any single node and enhancing system scalability. This selection process operates with O(n) complexity, significantly more efficient than full Byzantine consensus approaches.
+![系統架構圖](utils/BFL-L2-secure-aggregation.png)
 
-Round-robin 的 aggregator 分工機制，讓每個 aggregator 在整個 Task 的工作過程只需要負責 r/N 的聚合工作
+圖1展示了我們BFL系統的高層架構，顯示了各組件之間的互動以及聯邦學習過程中的資料流向。系統的安全性由驗證者網路保護，確保在出現惡意行為時能夠及時偵測和應對。
 
-## C. Challenge Mechanism
+## B. 系統概述
 
-Our system incorporates a hybrid challenge mechanism that combines the efficiency of optimistic assumption with the security guarantees of Byzantine Fault Tolerance. This approach allows validators to challenge potentially malicious aggregations during a designated challenge period.
+如圖1所示，我們的系統設計將傳統的中心化聚合架構升級為多聚合器分散式架構。在正常運作期間，聚合器按照輪替方式負責處理客戶端更新，而驗證者網路則在後臺監控聚合結果的合法性。當檢測到可疑行為時，驗證者可以發起挑戰，系統隨即啟動PBFT共識機制進行驗證。
 
-```
-Challenge Process Overview:
-1. After aggregator A_i submits aggregated model G_r
-2. System enters challenge period of T blocks/time
-3. Any validator can submit challenge if suspicious behavior detected
-4. Upon challenge, system activates PBFT validation process
-5. If challenge successful, trigger rollback procedure
-```
+系統運作基於以下核心設計原則：
 
-The challenge period provides a crucial security window during which validators can verify aggregations and submit challenges if malicious behavior is detected. The system then activates a more intensive Byzantine consensus process only when necessary, preserving efficiency while maintaining security.
+1. **樂觀執行**：假設大多數聚合器是誠實的，優先採用高效的輪替機制
+2. **挑戰驗證**：提供挑戰期間，允許驗證者質疑可疑的聚合結果
+3. **拜占庭容錯**：當挑戰發生時，啟動PBFT共識確保安全性
+4. **經濟激勵**：透過質押機制防止惡意行為，透過獎勵機制鼓勵參與
 
-## D. Hybrid Optimistic-PBFT Consensus Mechanism
+## C. 系統工作流程
 
-The core innovation of our framework lies in the application of a hybrid Optimistic-PBFT approach to federated learning. This mechanism combines the efficiency of optimistic assumptions with the security guarantees of Byzantine Fault Tolerance consensus when needed.
+![系統序列圖](utils/sequenceDiagram.mmd)
 
-```
-Optimistic Operation (Normal Case):
-1. Assume aggregations are valid by default (Optimistic principle)
-2. Use efficient round-robin aggregator selection with O(n) complexity
-3. Proceed with federation without expensive consensus for each aggregation
-4. Maintain challenge period where validators can contest suspicious results
+如圖2的序列圖所示，系統的運作流程包含三個主要狀態：設置(Setup)、學習(Learning)和挑戰(Challenge)。
 
-Challenge Resolution via PBFT:
-1. When a challenge is submitted during period T
-2. System activates PBFT consensus collection
-3. All validators compute aggregation independently
-4. System collects at least 2f+1 aggregation results (where f is max faulty nodes)
-5. Challenge is validated if submitted result differs from PBFT consensus
-6. System enforces penalties and triggers rollback if challenge is successful
-```
+**設置階段**：
+1. 請求者發起聯邦學習任務，定義模型架構和任務參數
+2. 系統初始化聚合器集合和驗證者網路
+3. 建立初始全域模型並上傳至IPFS
+4. 配置挑戰參數（挑戰期間T、驗證閾值θ等）
 
-This hybrid approach provides significant advantages:
+**學習階段**：
+1. 系統按輪替順序選擇聚合器處理當前回合
+2. 客戶端從IPFS下載當前全域模型
+3. 客戶端執行本地訓練並上傳更新至IPFS
+4. 選定的聚合器收集更新，執行聚合算法
+5. 聚合器將新的全域模型上傳至IPFS並提交至區塊鏈
+6. 進入挑戰期間，等待潛在的驗證者挑戰
 
-1. Efficiency under normal operation with O(n) complexity
-2. Strong Byzantine Fault Tolerance with 2f+1 security when challenges occur
-3. Resource optimization by activating expensive PBFT only when necessary
-4. Dual security guarantees through both economic incentives and Byzantine consensus
+**挑戰階段**：
+1. 驗證者監控鏈上提交的聚合結果
+2. 如發現可疑行為，驗證者可在挑戰期間內提交挑戰
+3. 系統啟動PBFT驗證程序，收集多個驗證者的獨立聚合結果
+4. 比較被挑戰結果與PBFT共識結果
+5. 根據比較結果決定挑戰成功與否，並執行相應的懲罰或獎勵
 
-By combining these mechanisms, our system achieves both the efficiency of optimistic approaches and the security guarantees of Byzantine consensus protocols.
+## D. 多聚合器模型
 
-若假設 aggregator 必定參與 validator 任務，且善意 validator 不會在 aggregate update 合法的情況下發起挑戰。在滿足 PBFT 可負擔的最大量惡意節點 m=f ，每個 aggregator 所負擔的最大工作量為 Wh = r/N + m ，參與的 aggregator 越多，每個節點所需負擔的工作量越小，相較於傳統 PBFT 工作量 Wp=r 的情況工作量小很多
+相較於傳統的單一聚合器聯邦學習系統，我們的框架採用多聚合器輪替運作模式。這種設計透過分散計算負荷提升系統效率，同時透過挑戰機制維持安全性。
 
-## E. Exclusion and Recovery Mechanism
-
-When malicious behavior is detected through a successful PBFT-validated challenge, our system employs a comprehensive recovery mechanism. This includes rolling back to a secure state, excluding the malicious aggregator, and redistributing tasks to honest aggregators.
+**多聚合器選擇演算法**：
 
 ```
-Recovery Protocol:
-1. Upon successful challenge against aggregator A_m:
-   a. Revert to last verified state (round r-1)
-   b. Add A_m to exclusion list E
-   c. Slash stake of A_m as penalty
-   d. Reassign round r to next eligible aggregator A_j where j ∉ E
-   e. Resume federation from round r with A_j
-2. Update security metrics and system state
+演算法 1：多聚合器選擇與聚合過程
+輸入：當前回合 r，聚合器總數 N，排除清單 E
+輸出：選定的聚合器 ID a
+
+1: a ← (r-1) mod N
+2: while a ∈ E do
+3:     r ← r + 1
+4:     a ← (r-1) mod N
+5: end while
+6: return a
 ```
 
-The exclusion mechanism ensures that once identified, malicious aggregators cannot participate in future rounds, gradually improving system security over time. The recovery mechanism enables the system to restore a secure state without losing significant progress in the federated learning process.
+**聚合責任分配**：
 
-## F. Security Model and Assumptions
+在多聚合器架構下，每個聚合器僅需負責 $\frac{R}{N}$ 的聚合任務，其中 R 為總回合數，N 為聚合器總數。這種分散化的設計具有以下優勢：
 
-Our hybrid security model combines the efficiency of optimistic approaches with the strong guarantees of Byzantine Fault Tolerance. The system security relies on both economic incentives and Byzantine consensus when challenges occur.
+1. **計算負荷分散**：單一聚合器不需承擔所有計算壓力
+2. **容錯能力增強**：單一聚合器故障不會導致系統完全停止
+3. **可擴展性提升**：可透過增加聚合器數量來處理更大規模的聯邦學習任務
+
+## E. 挑戰機制設計
+
+我們的系統整合了一個混合挑戰機制，結合了樂觀假設的效率和拜占庭容錯的安全保證。這種方法允許驗證者在指定的挑戰期間對潛在的惡意聚合結果發起挑戰。
+
+**挑戰觸發條件**：
+
+驗證者可在以下情況發起挑戰：
+1. 聚合結果明顯偏離預期（如模型性能急劇下降）
+2. 聚合器行為異常（如響應時間過長、通信模式異常）
+3. 基於歷史數據的異常檢測觸發警報
+
+**挑戰處理流程**：
 
 ```
-Security Assumptions:
-1. Under normal operation (Optimistic mode):
-   a. At least one honest validator exists in the system
-   b. Challenge submission cannot be censored by malicious actors
-   c. Challenge period T is sufficiently long for validation
+演算法 2：挑戰提交與驗證流程
+輸入：聚合結果 G_r，挑戰期間 T，驗證者集合 V
+輸出：挑戰結果 (成功|失敗)
 
-2. Under challenge resolution (PBFT mode):
-   a. At least 2f+1 validators are honest (where f is max faulty nodes)
-   b. Validators have access to sufficient computational resources
-   c. Network provides eventual synchrony for PBFT consensus
-   
-3. General assumptions:
-   a. Stake amounts are significant enough to deter malicious behavior
-   b. Malicious aggregators cannot collude with more than f validators
+1: 進入挑戰期間 T
+2: for t = 1 to T do
+3:     if 收到挑戰(c) from v_i ∈ V then
+4:         啟動 PBFT 驗證程序
+5:         收集至少 2f+1 個驗證者回應
+6:         執行拜占庭共識驗證
+7:         if 挑戰有效 then
+8:             執行回滾程序
+9:             將惡意聚合器加入排除清單
+10:            return 挑戰成功
+11:        else
+12:            對挑戰者施加懲罰
+13:            return 挑戰失敗
+14:        end if
+15:    end if
+16: end for
+17: return 無挑戰
 ```
 
-These assumptions establish the security boundaries of our system and highlight the advantages of our hybrid approach. During normal operation, we benefit from the efficiency of optimistic assumptions, while under challenge, we can leverage the strong security guarantees of Byzantine consensus. This dual approach provides a more practical and resource-efficient solution for secure federated learning in blockchain environments.
+**挑戰期間設計考量**：
+
+挑戰期間 T 的設計需要平衡效率與安全性：
+- T過短：驗證者可能沒有足夠時間檢測惡意行為
+- T過長：系統整體效率降低，延遲增加
+
+建議的設計原則：
+$$T = max(T_{min}, \alpha \cdot T_{aggregate})$$
+
+其中 $T_{min}$ 為最小挑戰期間，$T_{aggregate}$ 為聚合時間，$\alpha$ 為調整係數。
+
+## F. 混合Optimistic-PBFT共識機制
+
+我們框架的核心創新在於將混合Optimistic-PBFT方法應用於聯邦學習。這種機制在需要時結合了樂觀假設的效率和拜占庭容錯共識的安全保證。
+
+**樂觀運作模式（正常情況）**：
+
+在正常運作期間，系統採用以下樂觀假設：
+
+$$\text{聚合有效性假設} : \mathbb{P}(\text{聚合}_r \text{ 為惡意}) < \epsilon$$
+
+其中 $\epsilon$ 是一個極小的機率閾值（通常 $\epsilon < 0.01$）。
+
+在樂觀模式下，系統具有以下特性：
+- **高效執行**：聚合complexity為 O(n)，其中 n 為參與客戶端數
+- **低延迟**：無需等待多重確認，聚合完成即可繼續
+- **資源節約**：不需要額外的驗證計算
+
+**PBFT挑戰解決模式**：
+
+當挑戰發生時，系統啟動拜占庭共識驗證：
+
+```
+演算法 3：PBFT挑戰驗證程序
+輸入：被挑戰的聚合結果 G_r，驗證者回應集合 R
+輸出：共識結果 C
+
+1: 收集至少 2f+1 個驗證者獨立計算的聚合結果
+2: 將相似結果分組 (使用歐幾里得距離)
+3: if |最大群組| ≥ 2f+1 then
+4:     C ← median(最大群組的結果)
+5:     if distance(G_r, C) > θ then
+6:         return 挑戰有效
+7:     else
+8:         return 挑戰無效
+9:     end if
+10: else
+11:     return 無法達成共識
+12: end if
+```
+
+**模式切換機制**：
+
+系統支援動態模式切換：
+
+$$\text{模式} = \begin{cases} 
+\text{Optimistic} & \text{if } \text{無挑戰} \\
+\text{PBFT} & \text{if } \text{挑戰發生}
+\end{cases}$$
+
+這種設計確保系統在大多數時間保持高效，僅在必要時切換到安全但較慢的PBFT模式。
+
+## G. 排除與恢復機制
+
+當透過成功的PBFT驗證的挑戰檢測到惡意行為時，系統採用完善的恢復機制。包括回滾到安全狀態、排除惡意聚合器，以及將任務重新分配給誠實聚合器。
+
+**惡意行為檢測標準**：
+
+系統使用以下標準判定聚合器是否為惡意：
+
+$$\text{惡意判定} = \begin{cases} 
+\text{True} & \text{if } d(G_{challenged}, G_{consensus}) > \theta \\
+\text{False} & \text{otherwise}
+\end{cases}$$
+
+其中 $d(\cdot, \cdot)$ 為距離函數，$\theta$ 為預設閾值。
+
+**恢復協議**：
+
+```
+演算法 4：惡意聚合器恢復程序
+輸入：惡意聚合器 A_m，當前回合 r
+輸出：更新的系統狀態
+
+1: 回滾至最後驗證狀態（回合 r-1）
+2: E ← E ∪ {A_m}  // 將 A_m 加入排除清單
+3: 對 A_m 實施經濟懲罰（削減質押）
+4: 選擇下一個合格聚合器 A_j，其中 j ∉ E
+5: 從回合 r 開始，由 A_j 重新執行聚合
+6: 更新安全度量和系統狀態
+```
+
+**動態排除機制**：
+
+排除清單支援動態管理：
+- **臨時排除**：對於輕微違規，實施時間限制的排除
+- **永久排除**：對於嚴重違規，實施永久排除
+- **恢復機制**：允許被排除的聚合器在滿足特定條件後重新加入
+
+**系統恢復度量**：
+
+設定系統的安全級別 $S_t$ 在時間 $t$ 的值為：
+
+$$S_t = \frac{N - |E_t|}{N} \times \frac{\text{成功回合數}}{t}$$
+
+其中 $|E_t|$ 為時間 $t$ 的排除聚合器數量。目標是維持 $S_t > S_{min}$，其中 $S_{min}$ 為系統可接受的最低安全級別。
+
+## H. 安全模型與假設
+
+我們的混合安全模型結合了樂觀方法的效率和拜占庭容錯的強安全保證。系統安全性依賴於經濟誘因和在挑戰發生時的拜占庭共識。
+
+**安全假設**：
+
+1. **正常運作期間（樂觀模式）**：
+   - 系統中至少存在一個誠實驗證者
+   - 挑戰提交無法被惡意行為者審查
+   - 挑戰期間 $T$ 足夠長，可進行驗證
+   - 網路具有最終一致性
+
+2. **挑戰解決期間（PBFT模式）**：
+   - 至少 $2f+1$ 個驗證者是誠實的，其中 $f < \frac{n}{3}$
+   - 驗證者具有足夠的計算資源
+   - 網路為PBFT共識提供最終同步性
+   - 消息不會被無限期延遲
+
+3. **一般假設**：
+   - 質押金額足以阻止惡意行為
+   - 惡意聚合器無法與超過 $f$ 個驗證者串謀
+   - 密碼學假設：數位簽章安全、雜湊函數無碰撞
+
+**攻擊模型**：
+
+我們考慮以下攻擊場景：
+
+1. **拜占庭聚合器**：產生錯誤的聚合結果
+2. **延遲攻擊**：故意延遲提交結果
+3. **Sybil攻擊**：創建多個偽身份
+4. **共謀攻擊**：多個惡意節點協同攻擊
+
+系統設計確保在上述攻擊下仍能維持安全性和活性。
+
+**安全性理論分析**：
+
+我們的系統安全性可以透過以下機率模型分析：
+
+$$\mathbb{P}(\text{系統被攻破}) \leq \mathbb{P}(\text{樂觀期間攻擊未被偵測}) + \mathbb{P}(\text{樂觀期間攻擊有被偵測}) \times \mathbb{P}(\text{PBFT共識被攻破})$$
+
+由於 $\mathbb{P}(\text{樂觀期間攻擊未被偵測}) + \mathbb{P}(\text{樂觀期間攻擊有被偵測}) = 1$，上式可簡化為：
+
+$$\mathbb{P}(\text{系統被攻破}) \leq 1 - \mathbb{P}(\text{樂觀期間攻擊有被偵測}) \times (1 - \mathbb{P}(\text{PBFT共識被攻破}))$$
+
+**實務安全性分析**：
+
+在實務上，只要存在一個勤奮的善意驗證者持續監控鏈上數據並適時發起挑戰，系統即可獲得接近PBFT等級的安全性保證。具體而言：
+
+1. **攻擊偵測機率**：假設至少有一個善意驗證者 $v_h$ 能夠正確偵測惡意聚合，則：
+   $$\mathbb{P}(\text{樂觀期間攻擊有被偵測} | v_h \text{ 監控中}) \approx 1$$
+
+2. **PBFT安全性**：當 $f < \frac{n}{3}$ 時，PBFT共識無法被攻破：
+   $$\mathbb{P}(\text{PBFT共識被攻破} | f < \frac{n}{3}) = 0$$
+
+因此，在理想情況下（至少一個善意驗證者積極監控且滿足PBFT條件），系統的整體安全性為：
+
+$$\mathbb{P}(\text{系統被攻破}) \approx 0$$
+
+這證明了我們混合Optimistic-PBFT機制的有效性：在大多數情況下以樂觀模式高效運作，在檢測到威脅時自動切換至具有完整拜占庭容錯保證的PBFT模式。
+
+## I. 計算複雜度分析
+
+假設聯邦學習需要進行 $R$ 個回合，有 $N$ 個聚合器和 $V$ 個驗證者。在拜占庭容錯的條件下，系統最多可容忍 $f = \lfloor \frac{V-1}{3} \rfloor$ 個惡意驗證者。我們分析三種不同情境下的計算複雜度：
+
+### 1. 最樂觀情境（所有聚合器誠實）
+
+在此情境下，系統僅使用輪替機制，每個聚合器的平均工作負載為：
+
+$$W_{\text{最樂觀}} = \frac{R}{N}$$
+
+系統總計算複雜度為 $O(R)$，與傳統的單聚合器系統相同，但分散在 N 個節點上。
+
+**特性分析**：
+- 線性可擴展性：增加聚合器數量直接減少單個節點負載
+- 無額外驗證開銷
+- 適合信任環境的高效運作
+
+### 2. 最悲觀情境（惡意驗證者惡意挑戰）
+
+若有惡意驗證者在每個回合都惡意發起挑戰（犧牲其質押），系統將在每回合啟動PBFT共識。此時，每個驗證者的工作負載為：
+
+$$W_{\text{最悲觀}} = R \times V$$
+
+系統總計算複雜度為 $O(R \times V^2)$，等同於傳統PBFT的複雜度。
+
+**特性分析**：
+- 計算負載最重的情況
+- 需要所有驗證者參與每次聚合驗證
+- 提供最高等級的安全保證
+
+### 3. 實際運作情境（PBFT最大惡意節點數）
+
+在實務中，我們假設：
+- 有 $f$ 個惡意聚合器
+- 善意驗證者僅對惡意聚合發起挑戰
+- 每個惡意聚合器平均負責 $\frac{R}{N}$ 個回合
+- 每次挑戰需要 $V$ 個驗證者參與
+
+則每個驗證者的工作負載包含：
+
+$$W_{\text{實際}} = \frac{R}{N} + f \times \frac{R}{N} \times V = \frac{R}{N}(1 + f \times V)$$
+
+當 $f$ 很小時（通常 $f \ll N$），實際工作負載接近最樂觀情況。
+
+**實際參數分析**：
+
+考慮一個具體例子：$R=100$, $N=10$, $V=21$, $f=3$
+
+- 最樂觀：$W = \frac{100}{10} = 10$
+- 最悲觀：$W = 100 \times 21 = 2100$  
+- 實際：$W = 10(1 + 3 \times 21) = 640$
+
+實際工作負載遠低於最悲觀情況。
+
+### 4. 計算效率比較
+
+相較於傳統PBFT，我們的混合機制在實際運作下的效率提升為：
+
+$$\text{效率提升比} = \frac{R \times V^2}{\frac{R}{N}(1 + f \times V)} = \frac{N \times V^2}{1 + f \times V}$$
+
+當 $f \ll V$ 且 $N$ 較大時：
+
+$$\text{效率提升比} \approx \frac{N \times V^2}{f \times V} = \frac{N \times V}{f}$$
+
+這顯示效率提升與聚合器數量 $N$ 成正比，與惡意節點數 $f$ 成反比。
+
+**漸近複雜度分析**：
+
+- **樂觀模式**：$O(\frac{R}{N})$ per aggregator
+- **PBFT模式**：$O(R \times V)$ per validator
+- **混合模式**：$O(\frac{R}{N}(1 + f \times V))$ per validator
+
+當 $N \gg 1$ 且 $f$ 為常數時，混合模式的複雜度主要由第一項決定，實現了接近樂觀模式的效率。
