@@ -1,13 +1,18 @@
 ## 現有研究的問題
 ### 只是把區塊鏈當不變帳本，本質上還是中心化聯邦學習的
 ### 提出多聚合器協作，使用PBFT的
-Che等人[1]提出基於委員會機制的聯邦學習框架(CMFL)，以無服務器架構實現聯邦學習中的拜占庭容錯，但其僅依賴歐氏距離的單一評分度量標準在異質數據環境下易於失效，且全域模型聚合使用PBFT共識。
+
+Jia等人[5]利用區塊鏈的去中心化、共享、匿名、可信、可回溯和防篡改特性，為多方互不信任環境下的聯邦學習建立了安全機制。通過區塊鏈技術，該框架實現了模型訓練過程的透明公正，並通過RAFT共識算法確保了分布式狀態機在計算機系統集群中的邏輯分離和一致性，但RAFT共識算法無法抵抗拜占庭攻擊。
+
+Che等人[1]提出基於委員會機制的聯邦學習框架(CMFL)，以無服務器架構實現聯邦學習中的拜占庭容錯，但其僅依賴歐氏距離的單一評分度量標準在異質數據環境下易於失效，全域模型聚合使用PBFT共識。
 
 Wang等人[2]提出了FL-MFC框架能處理異質聯邦學習，但其模型校準過程缺乏有效的驗證機制，任何能提交工作量證明的礦工都可操縱更新過程，無法確保聚合安全性。
 
-在區塊鏈聯邦學習的安全聚合研究中，Qi等人[4]提出了一種基於聲譽的安全聚合機制，通過賦予不同節點基於其模型質量的聲譽權重，有效減輕了惡意節點對全局模型的負面影響。實驗結果顯示，即使在50%節點為惡意節點的場景中，該聲譽加權聚合方法仍能維持較高的模型性能。
+在區塊鏈聯邦學習的安全聚合研究中，Qi等人[4]提出了一種基於聲譽的安全聚合機制，通過賦予不同節點基於其模型質量的聲譽權重，有效減輕了惡意節點對全局模型的負面影響。實驗結果顯示，即使在50%節點為惡意節點的場景中，該聲譽加權聚合方法仍能維持較高的模型性能，代價是信譽評估機制成本高昂。
 
 
+
+以上這些論文雖在隱私保護方面各有所長，
 ### 證明使用optimistic rollup可以增加效能的
 Alief等人[3]提出了FLB2架構，成功將Layer 2區塊鏈（特別是Optimistic Rollup技術）應用於聯邦學習系統，實驗結果表明與傳統Layer 1方法相比，該架構能將訓練時間減少約50%，同時保持模型準確性並維持去中心化的安全保障。
 ### 使用zk的->zk計算很耗費資源
@@ -17,3 +22,4 @@ Alief等人[3]提出了FLB2架構，成功將Layer 2區塊鏈（特別是Optimis
 [2]:  Blockchain-Empowered Federated Learning Through Model and Feature Calibration
 [3]: FLB2: Layer 2 Blockchain Implementation Scheme on Federated Learning Technique
 [4]: High-Quality Model Aggregation for Blockchain-Based Federated Learning via Reputation-Motivated Task Participation
+[5]: Blockchain-enabled Federated Learning Data Protection Aggregation Scheme with Differential Privacy and Homomorphic Encryption in IIoT
