@@ -29,9 +29,7 @@ BFL架構最顯著的優勢在於其去中心化的信任機制。通過使用�
 
 總體而言，區塊鏈聯邦學習架構通過結合兩種先進技術的優勢，有效解決了傳統聯邦學習中的信任、安全和激勵問題，為多方協作式機器學習提供了一個更加可靠、透明和去中心化的框架。
 
-## C. FL的攻擊情景
-模型注入攻擊
-惡意資料攻擊
-多聚合器架構特有的惡意聚合攻擊
+## C. FL安全聚合的挑戰
+RAFT，PBFT，RR各自的優缺點
 
 [1]:Decentralized Privacy Using Blockchain-Enabled Federated Learning in Fog Computing
