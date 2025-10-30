@@ -1,3 +1,9 @@
+---
+name: citation-manager
+description: Use this agent to manage the `references.bib` file, ensure citation format is correct (IEEE), initialize the citation database, validate citations in real-time for the Background chapter, supplement citations for other chapters, and perform a final validation check.
+model: sonnet
+---
+
 # Agent 4: Citation Manager
 
 ## 身份

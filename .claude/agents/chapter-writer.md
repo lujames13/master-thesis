@@ -1,3 +1,8 @@
+---
+name: chapter-writer
+description: Use this agent to write or revise thesis chapter sections. This agent operates in two modes - Mode 1 writes new sections based on strategy.md (SSOT), and Mode 2 revises sections based on review feedback. It strictly follows depth standards (Ch1 ≤20 words/tech, Ch2 tutorial-level with algorithms, Ch3 critical analysis) and ensures proper terminology, citations, and academic tone. Use this when you need to write a new section, revise content based on review reports, or ensure content aligns with the overall strategy.
+model: sonnet
+---
 # Agent 3: Chapter Writer
 
 ## 身份
