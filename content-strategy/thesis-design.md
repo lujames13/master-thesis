@@ -38,7 +38,7 @@ BCFL 介紹：解決中心化 FL 的 SPOF 和隱私問題。
 
 **理論推導：** 由於有了 Slashing 的核威懾，我們不需要維持龐大的委員會來防共謀。
 
-**結果：** 委員會大小 $C$ 可以大幅縮減（僅需滿足 Liveness），通訊複雜度從 $O(C_{large}^2)$ 降為 $O(C_{small}^2)$。
+**結果：** 委員會大小 $C$ 可以大幅縮減（僅需滿足 Liveness），通訊複雜度從 $O(C_{large}^2)$ 降為 $O(C_{small}^2 + p \cdot N^2)$。
 
 ## 7. Experimental Evaluation
 
