@@ -1,5 +1,5 @@
-# 基於激勵相容機制的區塊鏈聯邦學習抗委員會佔領防禦
-# Incentive-Compatible Defense Against Committee Capture in Blockchain-based Federated Learning
+# 漸進式委員會佔領攻擊與激勵相容防禦：區塊鏈聯邦學習的安全性研究
+# Progressive Committee Capture Attack and Incentive-Compatible Defense: Security Analysis for Blockchain-based Federated Learning
 
 ## 摘要 (Abstract)
 
