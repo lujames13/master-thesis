@@ -1,0 +1,66 @@
+# 基於激勵相容機制的區塊鏈聯邦學習抗委員會佔領防禦
+# Incentive-Compatible Defense Against Committee Capture in Blockchain-based Federated Learning
+
+## 摘要 (Abstract)
+
+**Abstract**—Blockchain-based Federated Learning (BCFL) has emerged as a promising paradigm to address the single-point-of-failure and privacy concerns in traditional Federated Learning. However, current BCFL systems exhibit a critical "Verification Blind Spot," primarily focusing on data poisoning attacks while operating under the assumption that the verifier committee itself remains honest or follows an honest majority. This assumption is vulnerable to "Committee Capture," where rational attackers strategically accumulate stake to dominate the consensus process. In this thesis, we identify a novel threat, the "Progressive Committee Capture Attack (PCCA)," where attackers manipulate the incentive mechanism to starve honest nodes and centralize control. To address this, we propose an **Incentive-Compatible Optimistic Architecture** that decouples system liveness from security. Our approach utilizes a small committee for efficiency and a game-theoretic challenge mechanism for security, ensuring that any malicious behavior triggers a slashing penalty that outweighs potential gains. Experimental results demonstrate that our mechanism maintains model convergence (91.8% accuracy) even under 30% attacker collusion, where traditional methods fail (65% accuracy). Furthermore, our architecture achieves a 1000x improvement in communication efficiency by eliminating the need for large, redundant committees.
+
+**Keywords**—Blockchain, Federated Learning, Committee Capture, Incentive Compatibility, Verifier Collusion
+
+---
+
+## 第一章 緒論 (Introduction)
+
+### 1.1 研究背景 (Background & Context)
+
+隨著物聯網 (IoT) 設備的普及和隱私法規 (如 GDPR) 的日益嚴格，聯邦學習 (Federated Learning, FL) 作為一種隱私保護的分散式機器學習範式，獲得了廣泛關注。FL 允許客戶端在本地訓練模型並僅上傳模型更新，從而避免了原始數據的傳輸。然而，傳統的 FL 依賴於中心化的聚合伺服器 (Central Server)，這不僅構成了單點故障 (Single Point of Failure)，還面臨著服務器惡意篡改模型或遭受攻擊的風險。
+
+為了解決這些問題，區塊鏈聯邦學習 (Blockchain-based Federated Learning, BCFL) 應運而生。BCFL 利用區塊鏈的去中心化、不可篡改和智能合約特性，取代了傳統的中心化聚合器。在 BCFL 架構中，模型更新的驗證和聚合通常由一組選定的「委員會 (Committee)」或「驗證者 (Verifiers)」負責。這種架構試圖通過共識機制 (Consensus Mechanism) 來確保模型更新的正確性，並通過加密貨幣激勵機制來鼓勵節點參與。
+
+目前，主流的 BCFL 系統 (如 BlockDFL) 多採用基於權益 (Stake) 或聲譽 (Reputation) 的委員會選舉機制，並依賴拜占庭容錯 (BFT) 共識來達成決策。這些系統通常假設誠實節點佔據多數 (Honest Majority)，並以此作為安全性的基石。
+
+### 1.2 問題陳述 (Problem Statement)
+
+儘管 BCFL 在去中心化方面取得了進展，但現有研究存在一個關鍵的「驗證盲點 (Verification Blind Spot)」。絕大多數 (約 93%) 的現有文獻主要關注數據層面的投毒攻擊 (Data Poisoning)，例如標籤翻轉或後門攻擊，並開發了如 Krum、Trimmed Mean 等魯棒聚合算法。然而，這些防禦機制隱含地假設執行聚合算法的「委員會」本身是誠實的。
+
+本研究指出，這一假設在面對「理性攻擊者 (Rational Attacker)」時是極其脆弱的。我們定義了一種新的威脅模型——**委員會佔領 (Committee Capture)**，特別是其具體實現形式**「漸進式委員會佔領攻擊 (Progressive Committee Capture Attack, PCCA)」**。在此攻擊中，理性攻擊者並非旨在破壞模型，而是追求利益最大化。他們通過以下兩個階段實施攻擊：
+
+1.  **潛伏階段 (Infiltration Phase)：** 攻擊者表現誠實，積累權益 (Stake) 以進入驗證者池。
+2.  **佔領階段 (Capture Phase)：** 一旦在委員會中獲得多數席位，攻擊者便實施「戰略性餓死 (Strategic Starvation)」，即拒絕打包誠實節點的更新，獨佔系統獎勵。
+
+這種攻擊導致誠實節點的權益停滯，而攻擊者的權益呈指數級增長，從而進一步鞏固其在未來委員會中的控制權。傳統的 BFT 共識機制面臨著「安全性與效率的兩難 (Security-Efficiency Dilemma)」：為了防禦共謀，必須擴大委員會規模 ($C$)，但通訊複雜度 ($O(C^2)$) 會隨之呈二次方增長，導致系統效率急劇下降。
+
+### 1.3 研究目標 (Research Objectives)
+
+針對上述問題，本研究的主要目標是設計一種既能防禦理性共謀，又能保持高效率的 BCFL 架構。具體目標包括：
+
+1.  **防禦委員會佔領：** 設計一種機制，使系統在面對理性驗證者共謀時仍能保持安全，打破對「誠實多數」的依賴。
+2.  **解耦安全性與效率：** 打破傳統 BFT 系統中安全性與委員會規模的綁定關係，實現在使用小型委員會 (確保活性) 的同時，提供不亞於大型委員會的安全性。
+3.  **實現激勵相容 (Incentive Compatibility)：** 利用博弈論設計獎懲機制，使得「誠實行為」成為理性節點的納什均衡 (Nash Equilibrium) 策略。
+
+### 1.4 研究貢獻 (Contributions)
+
+本研究的主要貢獻歸納如下：
+
+1.  **識別新型威脅 (New Threat Identification)：** 我們系統地分析了 BCFL 的驗證層漏洞，並定義了「漸進式委員會佔領攻擊 (PCCA)」。我們揭示了理性攻擊者如何利用權益機制進行中心化接管，這補充了現有文獻僅關注數據投毒的不足。
+
+2.  **提出激勵相容防禦架構 (Incentive-Compatible Architecture)：** 我們提出了一種基於「樂觀執行 (Optimistic Execution)」與「事後挑戰 (Post-hoc Challenge)」的新型防禦機制。
+    *   引入**挑戰者 (Challenger)** 角色，允許任何節點對委員會的結果發起異議。
+    *   設計**內部罰沒機制 (Internal Slashing)**，確保 $Slashing \gg Gain$，從根本上遏制理性攻擊者的作惡動機。
+
+3.  **驗證與評估 (Evaluation)：** 我們通過理論分析和模擬實驗驗證了所提機制的有效性。
+    *   **安全性：** 在 30% 節點共謀的極端情況下，本方案仍能維持模型收斂 (準確率 91.8%)，而對照組 (BlockDFL) 則崩潰 (65%)。
+    *   **效率：** 本方案成功將通訊複雜度從 $O(C_{large}^2)$ 降低至 $O(C_{small}^2)$ (正常情況)，在保證高安全性的前提下實現了約 2~7 倍的效率提升。
+
+### 1.5 論文組織 (Thesis Organization)
+
+本論文共分為七章，組織結構如下：
+
+*   **第一章 緒論 (Introduction)：** 介紹研究背景、問題陳述、研究目標及貢獻。
+*   **第二章 背景知識 (Background)：** 介紹聯邦學習、區塊鏈技術及博弈論基礎。
+*   **第三章 相關工作 (Related Work)：** 回顧現有的 BCFL 方案及其局限性，特別是針對共識層安全的討論。
+*   **第四章 威脅模型 (Threat Model)：** 詳細定義系統模型、攻擊者能力及 PCCA 攻擊策略。
+*   **第五章 架構設計 (Framework Design)：** 闡述所提出的激勵相容樂觀架構，包括協議流程、挑戰機制及智能合約設計。
+*   **第六章 理論分析 (Theoretical Analysis)：** 從博弈論角度證明機制的安全性，並分析系統的通訊與計算複雜度。
+*   **第七章 實驗評估 (Evaluation)：** 展示模擬實驗結果，對比本方案與基準方案在模型效能、權益動態及系統效率上的表現。
+*   **第八章 結論與未來展望 (Conclusion and Future Work)：** 總結全文並提出未來的研究方向。

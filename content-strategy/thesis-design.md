@@ -2,7 +2,17 @@
 
 ## 1. Background
 
-BCFL 介紹：解決中心化 FL 的 SPOF 和隱私問題。
+A. Federated Learning and Its Vulnerabilities
+簡述 FL 架構及其面臨的投毒攻擊（Poisoning Attacks）。
+
+B. Blockchain-based Federated Learning (BCFL)
+介紹 BCFL 如何解決 FL 的單點故障問題，以及現有的委員會架構（如 BlockDFL）。
+
+C. Optimistic Verification Paradigm
+介紹從 Layer 2 借鑑的樂觀驗證與欺詐證明機制，強調其在效率上的優勢。
+
+D. Game Theory and Rational Security
+定義理性節點模型與激勵相容性，為後續的 Slashing 機制鋪路。
 
 ## 2. Related Work (Committee & Consensus)
 
