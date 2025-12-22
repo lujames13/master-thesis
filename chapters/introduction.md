@@ -1,13 +1,4 @@
-# 漸進式委員會佔領攻擊與激勵相容防禦：區塊鏈聯邦學習的安全性研究
-# Progressive Committee Capture Attack and Incentive-Compatible Defense: Security Analysis for Blockchain-based Federated Learning
 
-## 摘要 (Abstract)
-
-**Abstract**—Blockchain-based Federated Learning (BCFL) has emerged as a promising paradigm to address the single-point-of-failure and privacy concerns in traditional Federated Learning. However, current BCFL systems exhibit a critical "Verification Blind Spot," primarily focusing on data poisoning attacks while operating under the assumption that the verifier committee itself remains honest or follows an honest majority. This assumption is vulnerable to "Committee Capture," where rational attackers strategically accumulate stake to dominate the consensus process. In this thesis, we identify a novel threat, the "Progressive Committee Capture Attack (PCCA)," where attackers manipulate the incentive mechanism to starve honest nodes and centralize control. To address this, we propose an **Incentive-Compatible Optimistic Architecture** that decouples system liveness from security. Our approach utilizes a small committee for efficiency and a game-theoretic challenge mechanism for security, ensuring that any malicious behavior triggers a slashing penalty that outweighs potential gains. Experimental results demonstrate that our mechanism maintains model convergence (91.8% accuracy) even under 30% attacker collusion, where traditional methods fail (65% accuracy). Furthermore, our architecture achieves a 1000x improvement in communication efficiency by eliminating the need for large, redundant committees.
-
-**Keywords**—Blockchain, Federated Learning, Committee Capture, Incentive Compatibility, Verifier Collusion
-
----
 
 ## 第一章 緒論 (Introduction)
 

@@ -1,2 +1,21 @@
 .env
 .DS_store*
+.vscode/
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.run.xml
+*-blx.bib
+
+# LaTeX output
+main.pdf
