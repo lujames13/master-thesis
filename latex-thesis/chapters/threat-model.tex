@@ -10,30 +10,35 @@
 
 \subsection{網絡模型}
 
-本研究考慮一個去中心化的區塊鏈聯邦學習系統，由以下組件構成：
+本研究考慮一個去中心化的區塊鏈聯邦學習系統，採用 BlockDFL 架構，由以下三種核心角色構成：
 
-客戶端集合 $\mathcal{C} = \{c_1, c_2, ..., c_N\}$：共 $N$ 個參與訓練的客戶端，每個客戶端 $c_i$ 持有本地私有數據集 $\mathcal{D}_i$。客戶端負責在本地數據上訓練模型，並提交模型更新 (梯度或權重) 至區塊鏈網絡。
+\begin{enumerate}
+    \item \textbf{Update Providers (UP)}：原為客戶端 (Clients)，集合記為 $\mathcal{U} = \{u_1, u_2, ..., u_N\}$。每個 Update Provider 持有本地私有數據集 $\mathcal{D}_i$，負責在本地進行模型訓練，將計算出的模型更新 (Model Updates) 提交給 Aggregator。
+    
+    \item \textbf{Aggregators (AG)}：集合記為 $\mathcal{A} = \{a_1, a_2, ..., a_K\}$。Aggregators 負責收集來自 UP 的模型更新，執行初步聚合 (如生成 Aggregated Gradient)，並將聚合結果打包成「提案 (Proposal)」提交給委員會。Aggregator 的選擇同樣基於權益 (Stake-based)，權益越高的節點越有機會被選為當輪的 Aggregator。
+    
+    \item \textbf{Verifiers (VE)}：集合記為 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$。Verifiers 組成驗證委員會 (Committee)，負責驗證 Aggregator 提交的提案。委員會成員通過共識機制決定是否批准該提案，並將合法的全局模型記錄上鏈。
+\end{enumerate}
 
-驗證者集合 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$：共 $M$ 個驗證者節點，每個驗證者 $v_j$ 持有一定數量的權益 $s_j$。驗證者負責驗證客戶端提交的更新、執行聚合算法，並通過共識機制將聚合結果記錄上鏈。
-
-委員會選擇機制：在每個訓練輪次 $r$，系統從驗證者集合中選擇一個大小為 $C$ 的委員會 $\mathcal{V}_r \subset \mathcal{V}$。選擇機制基於權益加權隨機抽樣，驗證者 $v_j$ 被選中的機率為：
-
-\begin{equation}
-P(v_j \in \mathcal{V}_r) = \frac{s_j}{\sum_{k=1}^{M} s_k}
-\end{equation}
-
-這種機制確保權益較高的驗證者有更高機率參與委員會，從而獲得更多獎勵機會。
+系統在每個訓練輪次 $r$ 動態選擇 Aggregators 和 Verifiers，選擇概率均與其持有的權益成正比。
 
 \subsection{聚合與共識流程}
 
 在每個訓練輪次，系統執行以下流程：
 
 \begin{enumerate}
-    \item 本地訓練：客戶端在本地數據上訓練模型，計算模型更新 $\Delta w_i$。
-    \item 更新提交：客戶端將更新提交至區塊鏈網絡，等待委員會處理。
-    \item 委員會聚合：委員會 $\mathcal{V}_r$ 收集客戶端更新，執行拜占庭魯棒聚合算法 (如 Krum、Trimmed Mean) 計算全局更新 $\Delta w_g$。
-    \item 共識驗證：委員會成員通過 BFT 共識協議 (如 PBFT) 對聚合結果達成一致，並將結果記錄上鏈。
-    \item 獎勵分配：成功參與聚合的委員會成員獲得獎勵 $R$，平分給所有參與成員。每個成員的權益增加 $\Delta s = R / C$。
+    \item \textbf{本地訓練}：Update Providers 在本地數據上訓練模型，計算模型更新 $\Delta w_i$ 並發送給選定的 Aggregator。
+    \item \textbf{初步聚合}：Aggregator 收集來自多個 UP 的更新，執行聚合算法 (如 FedAvg) 生成聚合更新 $\Delta w_{agg}$，並構建提案交易提交至區塊鏈。
+    \item \textbf{委員會驗證}：委員會 $\mathcal{V}_r$ 下載 Aggregator 的提案，執行驗證逻辑 (如評估聚合模型在驗證集上的準確率)。
+    \item \textbf{共識決策}：委員會成員通過 BFT 共識協議對提案進行投票。
+    \item \textbf{獎勵分配 (Reward Linkage)}：
+    若提案獲得委員會批准通過：
+    \begin{itemize}
+        \item 投贊成票的 \textbf{Verifiers} 獲得驗證獎勵。
+        \item 提案的 \textbf{Aggregator} 獲得聚合獎勵。
+        \item 被包含在該提案中的 \textbf{Update Providers} 獲得貢獻獎勵。
+    \end{itemize}
+    若提案被拒絕，則該鏈條上的所有角色 (包括 Aggregator 和 UP) 均無法獲得獎勵。這種「捆綁式獎勵 (Bundled Reward)」機制強化了角色間的利益關聯。
 \end{enumerate}
 
 \subsection{權益動態機制}
@@ -135,6 +140,8 @@ P(v_j \in \mathcal{V}_r) = \frac{s_j}{\sum_{k=1}^{M} s_k}
 
 如第三章文獻分析所示，現有區塊鏈聯邦學習研究存在系統性的「驗證層盲點」：約 93\% 的研究假設驗證者是誠實的或滿足誠實多數，僅有極少數研究 (如 KFC) 明確考慮惡意驗證者的場景。
 
+此外，現有的 BlockDFL 類論文雖然引入了 Verifier 機制，但大多假設 Aggregator 和 Verifier 之間是獨立的，或者假設 Verifier 是誠實的。本研究指出了 Verifier 和 Aggregator 可以是同一利益集團 (Cartel) 的風險，即攻擊者可能同時控制委員會與聚合節點，這是對現有 BlockDFL 架構安全分析的重要補充。
+
 本研究聚焦於共識層攻擊，特別是委員會佔領攻擊。這種攻擊的危險性在於：
 
 \begin{itemize}
@@ -185,9 +192,9 @@ P(v_j \in \mathcal{V}_r) = \frac{s_j}{\sum_{k=1}^{M} s_k}
 在潛伏階段，攻擊者的目標是積累初始權益並建立信譽，具體策略包括：
 
 \begin{itemize}
-    \item 誠實行為：攻擊者控制的節點在被選入委員會時，誠實執行聚合算法，提交正確的聚合結果。
-    \item 權益積累：通過誠實參與，攻擊者節點獲得獎勵，權益逐漸增加。
-    \item 等待時機：攻擊者持續觀察委員會組成，等待多個惡意節點同時被選入委員會，形成多數席位的時機。
+    \item 誠實行為 (Honest Behavior)：攻擊者控制的節點無論是作為 UP、Aggregator 還是 Verifier，均嚴格遵守協議規則，提交高質量的模型更新與正確的驗證結果。
+    \item 權益積累 (Stake Accumulation)：通過誠實參與，攻擊者節點獲得系統獎勵，權益逐漸增加。
+    \item 等待時機 (Waiting)：攻擊者持續觀察委員會組成，等待多個惡意節點同時被選入委員會，形成多數席位的時機。
 \end{itemize}
 
 潛伏階段的持續時間取決於攻擊者的初始權益佔比與委員會大小。假設攻擊者控制 $f = 0.3$ 的節點，委員會大小 $C = 7$，則攻擊者需要至少 4 個節點被選入委員會才能形成多數。根據超幾何分佈，這種情況發生的機率為：
@@ -200,43 +207,37 @@ P(\text{多數}) = \sum_{k=\lceil C/2 \rceil}^{\min(fM, C)} \frac{\binom{fM}{k} 
 
 \subsubsection{階段二：佔領階段 (Capture Phase)}
 
-一旦攻擊者在委員會中形成多數，立即啟動佔領階段：
+當攻擊者在系統中累積了足夠的權益並控制了委員會的多數席位時，PCCA 進入佔領階段。不同於傳統攻擊單一的破壞模式，本研究根據攻擊者對系統組件 (Verifier 和 Aggregator) 的控制程度，定義了兩種層次的攻擊場景：戰略性餓死與全棧投毒。
+
+\paragraph{A. 場景一：戰略性餓死 (Strategic Starvation via Committee Capture)}
+
+在此場景中，攻擊者控制了 Verifier 委員會的多數席位 ($|\mathcal{V}_{mal}| > \frac{1}{2} |\mathcal{V}_{committee}|$)，但當前輪次的 Aggregator 為誠實節點或未受攻擊者完全控制。
+
+攻擊者的目標是最大化相對權益增益。基於 BlockDFL 的獎勵連鎖機制，只有當提案被委員會批准時，相關聯的 Aggregator 和 Update Providers 才能獲得獎勵。利用這一點，惡意委員會採取以下策略：
 
 \begin{itemize}
-    \item 戰略性餓死 (Strategic Starvation)：惡意委員會拒絕打包誠實節點提交的更新，僅接受攻擊者自身控制的客戶端更新。
-    \item 排他性獎勵：由於只有惡意節點的更新被接受，獎勵僅分配給惡意委員會成員，誠實節點無法獲得任何獎勵。
-    \item 權益分化：經過一輪攻擊後，惡意節點的平均權益增加 $\Delta s = R / C$，而誠實節點的權益保持不變。隨著攻擊輪次增加，權益差距呈線性擴大。
-    \item 循環強化：權益差距擴大後，攻擊者在未來委員會中的佔比進一步提高，獲得攻擊機會的頻率增加，形成自我強化的惡性循環。
+    \item \textbf{拒絕誠實提案}：惡意委員會投票否決由誠實 Aggregator 提交的高質量聚合結果。這導致誠實 Aggregator 及其背後的誠實 Update Providers 無法獲得本輪獎勵，造成「零收益」懲罰。
+    \item \textbf{批准次優更新}：如果存在一個包含較多惡意 Update Providers 的 Aggregator (即使其聚合結果為次優，Sub-optimal)，惡意委員會會優先批准該提案。
 \end{itemize}
 
-\subsection{核心機制分析}
+\textbf{後果分析}：這種攻擊雖然在短期內僅導致模型收斂速度減緩 (因為接受了次優而非最優更新)，但其主要破壞力在於經濟層面。誠實節點的權益因持續被「餓死」而停滯，而惡意節點的權益則持續增長，導致攻擊者的權益佔比 (Stake Ratio) 在下一輪選擇中進一步擴大，形成正反饋循環。
 
-PCCA 的成功依賴於三個核心機制：
+\paragraph{B. 場景二：全棧投毒 (Full Stack Poisoning)}
 
-\subsubsection{機制一：次優更新 (Sub-optimal Update)}
+在此場景中，攻擊者同時實現了對共識層和聚合層的滲透，即同時控制了委員會多數席位以及當選的 Aggregator。這是 PCCA 最危險的形態。
 
-惡意委員會不一定需要提交完全錯誤的聚合結果，而是可以提交「次優更新」：
+攻擊者的目標轉變為直接破壞模型性能。由於 Aggregator 和 Verifier 均被攻陷，現有的防禦機制 (如聚合層的 Krum 算法或驗證層的準確率檢查) 將完全失效：
 
 \begin{itemize}
-    \item 選擇性接受：僅接受部分客戶端的更新，排除誠實節點的貢獻。
-    \item 偏向性聚合：在執行聚合算法時，給予惡意客戶端更新更高的權重。
+    \item \textbf{惡意聚合}：惡意 Aggregator 接收來自惡意 Update Providers 的「標籤翻轉 (Label Flipping)」更新，或者直接構造被污染的全局模型更新。
+    \item \textbf{強制共識}：儘管該更新包含明顯的錯誤或惡意特徵，惡意委員會成員仍會協同投出贊成票，強制達成共識並將毒化模型寫入區塊鏈。
 \end{itemize}
 
-這種策略的隱蔽性在於，次優更新仍然可能使模型收斂，只是收斂速度較慢或最終準確率較低。在訓練初期，這種差異不易被察覺，使得攻擊者有足夠時間積累權益。
+\textbf{後果分析}：全棧投毒繞過了系統所有的檢測機制。由於惡意 Aggregator 和 Verifier 瓜分了系統獎勵，攻擊者不僅成功破壞了全域模型 (Global Model) 的準確率，還進一步鞏固了其權益優勢，使得系統難以通過正常的選舉機制自我修復。
 
-\subsubsection{機制二：戰略性餓死 (Strategic Starvation)}
+\subsection{權益增長動態分析 (Stake Growth Dynamics Analysis)}
 
-戰略性餓死是 PCCA 的關鍵策略，其目標不是直接破壞模型，而是通過排他性的獎勵分配阻止誠實節點的權益增長：
-
-\begin{itemize}
-    \item 獎勵壟斷：惡意委員會獨佔訓練獎勵，誠實節點即使提交了正常更新，也無法獲得任何收益。
-    \item 相對權益下降：雖然誠實節點的絕對權益不變，但其相對權益佔比持續下降，因為惡意節點的權益在不斷增長。
-    \item 選擇機率下降：由於委員會選擇基於權益加權，誠實節點被選入委員會的機率逐輪下降，進一步減少其獲得獎勵的機會。
-\end{itemize}
-
-\subsubsection{機制三：權益指數增長}
-
-在沒有外部干預的情況下，PCCA 會導致惡意節點的權益呈指數增長：
+在沒有外部干預的情況下，PCCA 會導致惡意節點的權益呈指數增長。我們可以通過數學模型來量化這種權益壟斷的過程：
 
 \begin{itemize}
     \item 初始階段：假設攻擊者初始權益佔比為 $f_0 = 0.3$。
