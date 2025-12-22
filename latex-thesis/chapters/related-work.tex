@@ -9,10 +9,10 @@
 隨著模型參數規模的擴大，在區塊鏈上直接驗證模型更新的計算開銷已成為瓶頸。
 
 \subsection{零知識證明與機器學習 (zkML)}
-Chen等人 \cite{chen2024zkml} 探討了使用 zkSNARKs 來驗證模型推論的技術。雖然 zkML 能提供極強的密碼學保證，但其產生的證明時間（Proof generation time）極長。例如，對於具備千萬級參數的模型，生成一次證明可能需要數十分鐘甚至數小時，且需耗費巨大的記憶體資源。這類方案對於需要高頻更新的聯邦學習（FL）場景顯得過於笨重且缺乏實用性。
+Chen等人 \cite{chen2024zkml} 探討了使用 zkSNARKs 來驗證模型推論的技術。雖然 zkML 能提供極強的密碼學保證，但其產生的證明時間（Proof generation time）極長。例如，對於具備千萬級參數的模型，生成一次證明可能需要數十分鐘甚至數小時，且需耗費巨大的記憶體資源。Sun等人提出的 zkLLM \cite{sun2024zkllm} 進一步將以此擴展至大型語言模型，但仍面臨極高的計算消耗。針對聯邦學習，RiseFL \cite{zhu2024risefl} 嘗試利用 Pedersen 承諾與 Bulletproofs 進行輕量化驗證，而 Heiss 等人 \cite{heiss2022advancing} 與 Wang 等人 \cite{wang2024zkfl} 則分別提出利用鏈下運算 (VOC) 與礦工驗證的 zkFL 框架。
 
 \subsection{Optimistic Rollup 與挑戰機制}
-在區塊鏈擴展領域，Optimistic Rollup 提出了一種「預設為真，有疑則挑戰」的邏輯。Conway等人提出的 opML \cite{conway2024opml} 嘗試將此思路引入機器學習，大幅降低了平時的運算負擔。然而，現有的 opML 主要關注單一 Prover 的正確性，且其挑戰期（Challenge Period）通常設為數天至一週，難以適應聯邦學習快速迭代的需求。本研究借鑑了此「樂觀執行」與「經濟激勵挑戰」的精神，但將其改造為適用於去中心化委員會架構的即時防禦方案。
+在區塊鏈擴展領域，Optimistic Rollup 提出了一種「預設為真，有疑則挑戰」的邏輯。Conway等人提出的 opML \cite{conway2024opml} 嘗試將此思路引入機器學習，大幅降低了平時的運算負擔。然而，現有的 opML 主要關注單一 Prover 的正確性，且其挑戰期（Challenge Period）通常設為數天至一週，難次適應聯邦學習快速迭代的需求。本研究借鑑了此「樂觀執行」與「經濟激勵挑戰」的精神，但將其改造為適用於去中心化委員會架構的即時防禦方案。
 
 \section{委員會共識之效率與安全性權衡}
 \label{sec:related_committee}

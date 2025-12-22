@@ -23,9 +23,10 @@
 在開放或非受信任環境中，部分參與者可能發生拜占庭故障（Byzantine fault），即發送任意、甚至是蓄意偽造的梯度向量。Blanchard等人證明了線性聚合規則（如算術平均）無法抵禦即便只有一個拜占庭節點的攻擊 \cite{blanchard2017machine}。為了應對此威脅，研究界提出了多種拜占庭容錯（Byzantine-robust）聚合機制，例如：
 \begin{itemize}
     \item \textbf{Krum/Multi-Krum}：透過計算各向量間的歐幾里得距離，選擇與周圍節點距離最近的向量，以排除偏離較大的惡意更新。
-    \item \textbf{座標式裁剪均值 (Trimmed Mean)}：在各維度上移除最大與最小的部分觀測值，對剩餘值取平均。
+    \item \textbf{座標式裁剪均值 (Trimmed Mean)}：在各維度上移除最大與最小的部分觀測值，對剩餘值取平均。Yin等人證明了該方法在特定機率分佈下可達到階數最優統計誤差率 \cite{yin2018byzantine}。
     \item \textbf{座標式中位數 (Coordinate-wise Median)}：取各維度上的中位數作為聚合結果，具有較高的崩潰點（Breakdown point）。
 \end{itemize}
+同樣地，Bulyan 演算法 \cite{el2018hidden} 被提出用於縮減高維度下投毒攻擊的空間。
 儘管這些機制增強了對惡意客戶端的防禦力，但它們均隱含了一個關鍵的前提：執行這些規則的「中央聚合器」必須是絕對誠實的。
 
 \section{基於區塊鏈的聯邦學習 (Blockchain-based Federated Learning)}
@@ -36,8 +37,8 @@
 \subsection{BCFL 架構演進}
 BCFL的發展經歷了從全節點共識到委員會機制的演進：
 \begin{enumerate}
-    \item \textbf{早期架構 (PoW-based)}：如 BlockFL \cite{kim2020blockchained} 使用工作量證明（PoW）達成共識，雖具備高度去中心化特性，但面臨高能耗與高延遲問題。
-    \item \textbf{委員會共識 (Committee-based)}：如 BFLC \cite{li2021blockchain} 與 BlockDFL \cite{qin2024blockdfl}。為了提升效能，系統從全體參與者中選出一個子集（委員會）負責驗證與聚合。此種機制將通訊複雜度從 $O(n^2)$ 降低至 $O(C^2)$，其中 $C$ 為委員會大小。
+    \item \textbf{早期架構 (PoW-based)}：如 BlockFL \cite{kim2020blockchained} 使用工作量證明（PoW）達成共識，雖具備高度去中心化特性，但面臨高能耗與高延遲問題。Lu等人則探討了將訓練品質（PoQ）與共識結合的工業物聯網架構 \cite{lu2020blockchain}。
+    \item \textbf{委員會共識 (Committee-based)}：如 BFLC \cite{li2021blockchain} 與 BlockDFL \cite{qin2024blockdfl}。為了提升效能，系統從全體參與者中選出一個子集（委員會）負責驗證與聚合。此種機制將通訊複雜度從 $O(n^2)$ 降低至 $O(C^2)$，其中 $C$ 為委員會大小。隨後的研究如 VBFL \cite{chen2021robust} 與 VFChain \cite{peng2022vfchain} 分別引入了基於權益的共識與可審計的聚合證明。
 \end{enumerate}
 
 \subsection{基於質押的參與機制}
@@ -49,7 +50,7 @@ BCFL的發展經歷了從全節點共識到委員會機制的演進：
 加密經濟安全性（Crypto-economic Security）的核心在於確保「攻擊成本高於潛在收益」。這主要透過權益質押與罰沒（Slashing）機制來達成。
 
 \subsection{權益質押與經濟終局性}
-在主流共識協議（如 Casper FFG \cite{buterin2017casper} 或 Tendermint \cite{tendermint}）中，驗證者必須存入押金。若驗證者違反協定規則（例如雙重投票），其部分或全部押金將被系統自動沒收。這種機制確保了系統具有「可問責性」（Accountability），即任何破壞安全性的行為都能被識別並追究經濟責任。
+在主流共識協議（如 Casper FFG \cite{buterin2017casper}、Tendermint \cite{tendermint}、Cosmos \cite{kwon2016cosmos} 或 Polkadot \cite{wood2016polkadot}）中，驗證者必須存入押金。若驗證者違反協定規則（例如雙重投票），其部分或全部押金將被系統自動沒收。這種機制確保了系統具有「可問責性」（Accountability），即任何破壞安全性的行為都能被識別並追究經濟責任 \cite{chiu2018incentive}。
 
 \subsection{罰沒機制的設計原則}
 一個完善的罰沒機制具備以下特性：
