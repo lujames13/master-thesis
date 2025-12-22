@@ -1,0 +1,54 @@
+\chapter{相關工作 (Related Work)}
+\label{chapter:related_work}
+
+本章節將現有關於區塊鏈聯邦學習之安全性與效率的研究分為三類進行探討，並分析其局限性，最後精確定義本研究欲填補之學術 Gap。
+
+\section{BCFL 的擴展開銷與 Layer-2 方案}
+\label{sec:related_l2}
+
+隨著模型參數規模的擴大，在區塊鏈上直接驗證模型更新的計算開銷已成為瓶頸。
+
+\subsection{零知識證明與機器學習 (zkML)}
+Chen等人 \cite{chen2024zkml} 探討了使用 zkSNARKs 來驗證模型推論的技術。雖然 zkML 能提供極強的密碼學保證，但其產生的證明時間（Proof generation time）極長。例如，對於具備千萬級參數的模型，生成一次證明可能需要數十分鐘甚至數小時，且需耗費巨大的記憶體資源。這類方案對於需要高頻更新的聯邦學習（FL）場景顯得過於笨重且缺乏實用性。
+
+\subsection{Optimistic Rollup 與挑戰機制}
+在區塊鏈擴展領域，Optimistic Rollup 提出了一種「預設為真，有疑則挑戰」的邏輯。Conway等人提出的 opML \cite{conway2024opml} 嘗試將此思路引入機器學習，大幅降低了平時的運算負擔。然而，現有的 opML 主要關注單一 Prover 的正確性，且其挑戰期（Challenge Period）通常設為數天至一週，難以適應聯邦學習快速迭代的需求。本研究借鑑了此「樂觀執行」與「經濟激勵挑戰」的精神，但將其改造為適用於去中心化委員會架構的即時防禦方案。
+
+\section{委員會共識之效率與安全性權衡}
+\label{sec:related_committee}
+
+為了降低 $O(n^2)$ 的全節點通訊開銷，現代 BCFL 方案普遍採用委員會架構。
+
+\subsection{現有委員會選擇機制}
+BlockDFL \cite{qin2024blockdfl} 採用基於哈希環（Hash-ring）的偽隨機選取，而 FLCoin \cite{ren2024scalable} 則利用滑動視窗（Sliding window）機制。這些方法確實成功地將共識複雜度降低至 $O(C^2)$ 或 $O(C)$，使得系統在大規模節點下仍能運作。
+
+\subsection{誠實大多數假設的局限性}
+儘管效率獲得提升，上述方案之安全性均根本性地依賴於「委員會內超過 2/3 為誠實節點」的假設。
+\begin{itemize}
+    \item \textbf{漸進式佔領風險}：惡意節點可以透過長期表現「誠實」來累積 Stake 或聲譽，逐步增加被選入委員會的機率。
+    \item \textbf{缺乏自癒能力}：當惡意比例跨越門檻（例如佔領 >1/3 或 >1/2 權限）時，系統會陷入僵局或被惡意控制。目前的機制多半缺乏在「委員會已淪陷」的情況下，由系統外部或低權限節點發起有效挑戰並逆轉結果的能力。
+\end{itemize}
+
+\section{安全性威脅與防禦缺口}
+\label{sec:related_attacks}
+
+本節區分傳統威脅與本研究聚焦之高機密性威脅。
+
+\subsection{客戶端投毒與後門攻擊}
+現有防禦如 Krum 或 Trimmed Mean 主要針對惡意客戶端造成的模型偏差。然而，Fang等人 \cite{fang2020local} 證明了即使是這些魯棒聚合規則，在面對具備最佳化能力的攻擊者時，防禦效果依舊有限。
+
+\subsection{聚合端攻擊：被忽視的「監督者」風險}
+大部分研究假設聚合者（Aggregator）或驗證者（Verifier）是受信任的節點或誠實執行協議者。但在去中心化環境中，驗證者可能被賄賂、共謀或被駭客攻陷。FLTrust \cite{cao2021fltrust} 嘗試引入信任根，但其信任根仍高度依賴伺服器持有的乾淨資料。一旦執行聚合與驗證的「委員會」集體作惡（例如共同核可一個投毒後的模型以賺取不當獎勵），現有框架將完全失效。
+
+\section{本研究之定位 (The Research Gap)}
+\label{sec:gap}
+
+總結現有文獻，我們發現一個顯著的研究空白：\textbf{如何設計一個具備「激勵相容性」的機制，使得當獲取合法權限的驗證委員會集體舞弊時，系統仍能透過非對稱的經濟激勵（挑戰機制）來識別並清除這些惡意驗證者？}
+
+相較於前人研究：
+\begin{enumerate}
+    \item 不同於 zkML，本研究追求「非阻塞、低延遲」的效能。
+    \item 不同於 BlockDFL，本研究不假設委員會恆誠實，而是引入「賞金獵人 (Bounty Hunters)」角色來實施動態監督。
+    \item 不同於傳統 BFT 協議，本研究利用「罰沒 (Slashing)」作為強力的經濟制裁手段，將安全性從「門檻安全性」提升至「經濟安全性」。
+\end{enumerate}
+本研究提出的 Challenge-Augmented Committee 框架正是為了彌補此一缺口。
