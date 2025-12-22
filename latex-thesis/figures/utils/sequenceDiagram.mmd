@@ -1,0 +1,87 @@
+sequenceDiagram
+    participant Admin
+    participant FS as Flower Server (Requester)
+    participant BC as Blockchain Connector
+    participant IPFS as IPFS Connector
+    participant Blockchain
+    participant Aggregator
+    participant FC as Flower Clients
+    participant V as Validators
+
+    Admin->>FS: initiate_task(params)
+    FS->>BC: create_task(task_params)
+    BC->>Blockchain: createTask(params)
+    Blockchain-->>BC: task_id
+    BC-->>FS: task_id
+    
+    FS->>IPFS: upload_initial_model(model)
+    IPFS-->>FS: model_hash
+    
+    FS->>BC: register_model(task_id, model_hash)
+    BC->>Blockchain: registerModel(task_id, model_hash)
+    
+    FS->>FS: configure_server()
+    
+    loop For each training round
+        FS->>FS: select_clients()
+        FS->>FC: fit(global_model, config)
+        
+        par Client Training
+            FC->>IPFS: download_model(model_hash)
+            IPFS-->>FC: model_weights
+            FC->>FC: train_locally()
+            FC->>IPFS: upload_update(updated_weights)
+            IPFS-->>FC: update_hash
+            FC->>BC: submit_update(task_id, update_hash)
+            BC->>Blockchain: submitUpdate(task_id, update_hash)
+        end
+        
+        Blockchain-->>Aggregator: notify_updates_ready()
+        Aggregator->>Blockchain: get_updates()
+        Blockchain-->>Aggregator: updates_hashes
+        
+        Aggregator->>IPFS: download_updates(update_hashes)
+        IPFS-->>Aggregator: updates
+        
+        Aggregator->>Aggregator: aggregate_result()
+        Aggregator->>IPFS: upload_aggregated_model(result)
+        IPFS-->>Aggregator: aggregated_hash
+        
+        Aggregator->>Blockchain: submitAggregatedResult(aggregated_hash)
+        Blockchain->>Blockchain: start_challenge_period()
+        
+        Blockchain-->>FS: notify_new_aggregation()
+        FS->>IPFS: get_new_global_model(aggregated_hash)
+        IPFS-->>FS: new_global_model
+        
+        FS->>FS: evaluate_global_model()
+        
+        alt Task Complete
+            FS->>BC: finalize_task(task_id)
+            BC->>Blockchain: finalizeTask(task_id)
+            Blockchain->>Blockchain: distribute_rewards()
+        else Continue Training
+            FS->>BC: start_new_round(task_id)
+            BC->>Blockchain: startNewRound(task_id)
+        end
+    end
+    
+    opt Challenge Process (At any time during challenge period)
+        Note over Blockchain,V: Optimistic Challenge Period (e.g. 7 days)
+        
+        V->>Blockchain: submitChallenge(evidence)
+        Blockchain->>Aggregator: requestVerification(challenge_id)
+        Aggregator->>Blockchain: submitVerificationResponse(response)
+        Blockchain->>Blockchain: verifyChallenge(response)
+        
+        alt Challenge Successful
+            Blockchain->>Blockchain: revert_update()
+            Blockchain->>Blockchain: penalize_aggregator()
+            Blockchain->>FS: notify_challenge_success()
+            FS->>FS: rollback_to_previous_model()
+            FS->>BC: restart_round()
+        else Challenge Failed
+            Blockchain->>Blockchain: penalize_challenger()
+            Blockchain->>Blockchain: continue_process()
+        end
+    end
