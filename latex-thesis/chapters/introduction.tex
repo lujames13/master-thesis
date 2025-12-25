@@ -1,68 +1,16 @@
 \chapter{緒論 (Introduction)}
 \label{chapter:introduction}
 
-\section{研究背景 (Background \& Context)}
+隨著人工智慧與分佈式計算技術的進步，區塊鏈賦能的聯邦學習 (Blockchain-based Federated Learning, BCFL) 已成為解決多方互不信任情境下協作機器學習的核心技術路徑。在諸如低軌衛星網絡 (LEO) \cite{pokhrel2021blockchain, wu2024sharded, elmahallawy2025decentralized}、車聯網 (V2X) \cite{lu2020asynchronous, liu2021blockchain, pokhrel2020autonomous} 以及工業物聯網 (IIoT) \cite{lu2020blockchain, qu2020decentralized, eppbcfl2025} 等實際應用場景中，BCFL 展現了其不可替代的重要性。特別是以 LEO 衛星星座為代表的太空 AI 應用場景，星地通訊窗口通常僅約 5 分鐘，且下行帶寬受限於 8Mbps 左右 \cite{wu2024sharded}，使得依賴地面站聚合的傳統模型訓練方案難以實施。BCFL 通過在異質衛星營運商間建立去中心化信任層，成功將收斂時間減少達 30 小時 \cite{elmahallawy2025decentralized}。同樣地，在工業 4.0 的背景下，BCFL 允許協作工廠在不洩露商業機密的前提下進行預測性維護，實驗數據顯示其通訊開銷可較集中式架構減少約 41\% \cite{lu2020blockchain}。這些場景共同呈現出「無可信中心」、「資源受限」與「數據高度異質」的特徵，促使 BCFL 成為通用去中心化學習架構的首選方案。
 
-隨著物聯網 (IoT) 設備的普及和隱私法規 (如 GDPR) 的日益嚴格，聯邦學習 (Federated Learning, FL) 作為一種隱私保護的分散式機器學習範式，獲得了廣泛關注。FL 允許客戶端在本地訓練模型並僅上傳模型更新，從而避免了原始數據的傳輸。然而，傳統的 FL 依賴於中心化的聚合伺服器 (Central Server)，這不僅構成了單點故障 (Single Point of Failure)，還面臨著服務器惡意篡改模型或遭受攻擊的風險。
+然而，BCFL 在邁向大規模部署時面臨著嚴峻的效率瓶頸，這在業界被稱為「可擴展性兩難」。目前絕大多數 BCFL 系統採用 PBFT (Practical Byzantine Fault Tolerance) 或其變體作為共識機制，其 $O(n^2)$ 的訊息複雜度在節點數增加時會導致效能急劇下降。根據 FLCoin \cite{qi2024scalable} 的實證研究，當參與節點數達到 100 個時，單輪共識產生的訊息量將超過 20,000 條，導致共識延遲攀升至 25 秒以上，此延遲水平已達到模型訓練時間的量級。在極端的車載網路 (VANET) 實測中，100 輛車進行 BCFL 協作會產生 360.57 MB 的巨大數據量，單輪訓練的總通訊開銷高達 19.51 秒 \cite{vanetbcfl2024}。此外，區塊鏈節點對存儲的高需求 (如比特幣需 200GB，乙太坊超過 465GB) 與邊緣設備 KB 至 MB 級的有限內存形成強烈衝突 \cite{fedchain2024}。這種效能與資源的雙重束縛，使得全節點驗證的傳統架構在實際工業部署中顯得難以維繫。
 
-為了解決這些問題，區塊鏈聯邦學習 (Blockchain-based Federated Learning, BCFL) 應運而生。BCFL 利用區塊鏈的去中心化、不可篡改和智能合約特性，取代了傳統的中心化聚合器。在 BCFL 架構中，模型更新的驗證和聚合通常由一組選定的「委員會 (Committee)」或「驗證者 (Verifiers)」負責。這種架構試圖通過共識機制 (Consensus Mechanism) 來確保模型更新的正確性，並通過加密貨幣激勵機制來鼓勵節點參與。
+為了解決上述可擴展性挑戰，學界近年來轉向研究「委員會機制 (Committee Mechanism)」，其核心思想是將驗證責任從全體節點縮減至一組小型驗證者委員會。目前主流的選拔機制包含基於哈希環的隨機抽樣 \cite{qin2024blockdfl}、基於幣齡或權益的權重選舉 \cite{li2021blockchain, qi2024scalable} 以及基於預言機 (VRF) 的 Sortition 機制 \cite{shayan2021biscotti, weng2021deepchain}。委員會機制的引入立竿見影地改善了系統效能：FLCoin \cite{qi2024scalable} 通過滑動窗口選舉將通訊開銷降低了 90\%，並實現了 5.7 倍的訓練加速；BFLC \cite{li2021blockchain} 則利用委員會驗證成功將共識延遲穩定在 3 秒以內。這些優化雖成功將通訊複雜度降至與委員會規模 $C$ 相關的 $O(C^2)$ 或 $O(C)$。然而，這種為了效率而進行的「算力與權力集中」也同時引入了新的、尚未被充分探討的安全攻擊面。
 
-目前，主流的 BCFL 系統 (如 BlockDFL) 多採用基於權益 (Stake) 或聲譽 (Reputation) 的委員會選舉機制，並依賴拜占庭容錯 (BFT) 共識來達成決策。這些系統通常假設誠實節點佔據多數 (Honest Majority)，並以此作為安全性的基石。
+最令學界擔憂的危機在於現有委員會防禦機制對「誠實多數假設 (Honest Majority Assumption)」的過度依賴。根據 2024 年針對拜占庭強健聯邦學習的全面調查 \cite{li2025enhancing, xing2023zero}，目前超過 93.3\% 的 BCFL 研究雖部署了 Krum、Trimmed Mean 或 Median 等防禦算法，但皆隱含地假設執行這些算法的實體 (即委員會成員) 是絕對誠實的。現有的威脅模型大多只考慮惡意客戶端上傳毒化梯度，卻忽略了「理性驗證者 (Rational Verifiers)」的危害。最新研究指出，理性對手可以先透過合法行為積累聲譽，一旦在委員中取得超過 33\% (針對 BFT 系統) 或 50\% (針對一般投票系統) 的主導權，即可輕易繞過所有魯棒聚合算法，甚至偽造聚合結果而不受懲罰。BlockDFL \cite{qin2024blockdfl} 與 FedBlock \cite{nguyen2024fedblock} 等前沿工作亦坦言，現有機制無法抵禦具備長期策略的委員會共謀攻擊。
 
-\section{問題陳述 (Problem Statement)}
+上述現象揭示了一個關鍵的「研究缺口 (Research Gap)」：現有 BCFL 缺乏應對「漸進式委員會佔領 (Progressive Committee Capture, PCC)」的自癒機制。在 PCCA 攻擊中，對手並非採取暴力破壞，而是實施「策略性餓死 (Strategic Starvation)」——即在掌控委員會後，優先打包與自身利益相關的更新，並拒絕為誠實參與者提供驗證服務，從而操縱獎勵分配與權益動態。由於缺乏事後的「可追溯審計」與「有效威懾」，一旦誠實多數假設在某一輪次被攻破，系統權力將產生雪崩式的中心化。現有的基於同態加密或權益證明的方案雖然能保護隱私，卻無法在委員會本身已不再可信的情況下，保證模型更新的正確性與資源分配的公平性。如何解耦安全性與共識節點集體信用，成為實現真正去中心化 AI 平台的最後一哩路。
 
-儘管 BCFL 在去中心化方面取得了進展，但現有研究存在一個關鍵的「驗證盲點 (Verification Blind Spot)」。絕大多數 (約 93\%) 的現有文獻主要關注數據層面的投毒攻擊 (Data Poisoning)，例如標籤翻轉或後門攻擊，並開發了如 Krum、Trimmed Mean 等魯棒聚合算法。然而，這些防禦機制隱含地假設執行聚合算法的「委員會」本身是誠實的。
+針對這一挑戰，本文提出了一種「挑戰者增強委員會架構 (Challenge-Augmented Committee Architecture, CACA)」，旨在為 BCFL 引入一種全新的安全性保險機制。本研究提出的核心思想是「即時執行、異步審計、罰沒威懾」，這與傳統的「先驗證、後提交」模式有本質區別。我們的主要創新點在於將系統的「活性 (Liveness)」與「安全性 (Security)」進行解耦：即使在委員會不完全可信、甚至被捕獲的情況下，系統仍能通過去中心化的挑戰者網絡來檢舉委員會的錯誤決策。具體貢獻概括如下：(1) 我們首次定義並模擬量化了漸進式委員會佔領攻擊對 BCFL 長期激勵相容性的破壞力；(2) 我們提出了一套基於博弈論設計的「內部罰沒 (Internal Slashing)」協議，確保審計成本低於作惡罰金，從而使得誠實行為成為理性節點的納什均衡；(3) 實驗結果顯示，在 30\% 惡意共謀的極端環境下，本框架仍能維持 91.8\% 的模型準確率，且在 500 節點規模下提供了相較於 BlockDFL 顯著的效率與回原能力。
 
-本研究指出，這一假設在面對「理性攻擊者 (Rational Attacker)」時是極其脆弱的。我們定義了一種新的威脅模型——\textbf{委員會佔領 (Committee Capture)}，特別是其具體實現形式\textbf{「漸進式委員會佔領攻擊 (Progressive Committee Capture Attack, PCCA)」}。在此攻擊中，理性攻擊者並非旨在破壞模型，而是追求利益最大化。他們通過以下兩個階段實施攻擊：
-
-\begin{enumerate}
-    \item \textbf{潛伏階段 (Infiltration Phase)：} 攻擊者表現誠實，積累權益 (Stake) 以進入驗證者池。
-    \item \textbf{佔領階段 (Capture Phase)：} 一旦在委員會中獲得多數席位，攻擊者便實施「戰略性餓死 (Strategic Starvation)」，即拒絕打包誠實節點的更新，獨佔系統獎勵。
-\end{enumerate}
-
-這種攻擊導致誠實節點的權益停滯，而攻擊者的權益呈指數級增長，從而進一步鞏固其在未來委員會中的控制權。傳統的 BFT 共識機制面臨著「安全性與效率的兩難 (Security-Efficiency Dilemma)」：為了防禦共謀，必須擴大委員會規模 ($C$)，但通訊複雜度 ($O(C^2)$) 會隨之呈二次方增長，導致系統效率急劇下降。
-
-\section{研究目標 (Research Objectives)}
-
-針對上述問題，本研究的主要目標是設計一種既能防禦理性共謀，又能保持高效率的 BCFL 架構。具體目標包括：
-
-\begin{enumerate}
-    \item \textbf{防禦委員會佔領：} 設計一種機制，使系統在面對理性驗證者共謀時仍能保持安全，打破對「誠實多數」的依賴。
-    \item \textbf{解耦安全性與效率：} 打破傳統 BFT 系統中安全性與委員會規模的綁定關係，實現在使用小型委員會 (確保活性) 的同時，提供不亞於大型委員會的安全性。
-    \item \textbf{實現激勵相容 (Incentive Compatibility)：} 利用博弈論設計獎懲機制，使得「誠實行為」成為理性節點的納什均衡 (Nash Equilibrium) 策略。
-\end{enumerate}
-
-\section{研究貢獻 (Contributions)}
-
-本研究的主要貢獻歸納如下：
-
-\begin{enumerate}
-    \item \textbf{識別新型威脅 (New Threat Identification)：} 我們系統地分析了 BCFL 的驗證層漏洞，並定義了「漸進式委員會佔領攻擊 (PCCA)」。我們揭示了理性攻擊者如何利用權益機制進行中心化接管，這補充了現有文獻僅關注數據投毒的不足。
-
-    \item \textbf{提出基於異步審計的激勵相容架構 (Incentive-Compatible Architecture with Asynchronous Audit)：} 我們提出了一種結合「即時執行 (Immediate Execution)」與「異步審計 (Asynchronous Audit)」的新型防禦機制。
-    \begin{itemize}
-        \item 採用\textbf{即時執行}策略，移除傳統的驗證等待期，確保模型訓練的零延遲與高活性 (Liveness)。
-        \item 引入\textbf{異步審計 (Asynchronous Audit)} 機制，允許挑戰者在事後對委員會的決策進行回溯性驗證。
-        \item 設計\textbf{內部罰沒機制 (Internal Slashing)}，確保 $Slashing \gg Gain$，從根本上遏制理性攻擊者的作惡動機。
-    \end{itemize}
-
-    \item \textbf{驗證與評估 (Evaluation)：} 我們通過理論分析和模擬實驗驗證了所提機制的有效性。
-    \begin{itemize}
-        \item \textbf{安全性：} 在 30\% 節點共謀的極端情況下，本方案仍能維持模型收斂 (準確率 91.8\%)，而對照組 (BlockDFL) 則崩潰 (65\%)。
-        \item \textbf{效率：} 本方案成功將通訊複雜度從 $O(C_{large}^2)$ 降低至 $O(C_{small}^2)$ (正常情況)，在保證高安全性的前提下實現了約 2~7 倍的效率提升。
-    \end{itemize}
-\end{enumerate}
-
-\section{論文組織 (Thesis Organization)}
-
-本論文共分為六章，組織結構如下：
-
-\begin{itemize}
-    \item \textbf{第一章 緒論 (Introduction)：} 介紹研究背景、問題陳述、研究目標及貢獻。
-    \item \textbf{第二章 背景知識 (Background)：} 介紹聯邦學習、區塊鏈技術及博弈論基礎。
-    \item \textbf{第三章 相關工作 (Related Work)：} 回顧現有的 BCFL 方案及其局限性，特別是針對共識層安全的討論。
-    \item \textbf{第四章 威脅模型 (Threat Model)：} 詳細定義系統模型、攻擊者能力及 PCCA 攻擊策略。
-    \item \textbf{第五章 架構設計 (Framework Design)：} 闡述所提出的異步審計與即時執行架構，包括協議流程、審計機制及智能合約設計。
-    \item \textbf{第六章 實驗評估 (Evaluation)：} 展示模擬實驗結果，對比本方案與基準方案在模型效能、權益動態及系統效率上的表現。
-    \item \textbf{第七章 結論與未來展望 (Conclusion and Future Work)：} 總結全文並提出未來的研究方向。
-\end{itemize}
+本論文的組織結構編排如下：第一章為緒論，闡明研究動機、目標與貢獻。第二章介紹聯邦學習、區塊鏈底層架構及拜占庭容錯技術等背景知識。第三章對現有的去中心化聯邦學習文獻進行分類與批判性評述。第四章定義本研究的系統模型與 PCC 攻擊者的行為特徵。第五章詳細描述 CACA 的具體設計流程、智能合約實現及安全協議。第六章呈現模擬實驗的參數設定與效能對比結果，驗證所提架構的有效性。第七章對全論文進行總結，並探討本研究在大型語言模型 (LLM) 與 Web3 領域的未來延伸方向。
