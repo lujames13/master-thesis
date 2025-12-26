@@ -15,10 +15,10 @@
 本系統包含四個核心角色，各自承擔不同的職責：
 
 \begin{itemize}
-    \item \textbf{訓練者 (Update Provider, UP)}：持有本地數據的參與節點，負責在本地數據集上訓練模型並產生本地更新。訓練者不直接參與共識過程，而是將訓練結果提交給聚合者。
-    \item \textbf{聚合者 (Aggregator, AG)}：負責收集多個訓練者的本地更新，執行聚合算法 (如聯邦平均或 Krum)，並產生候選全局更新。聚合者需要質押一定數量的代幣以確保其行為誠實。
+    \item \textbf{訓練者 (Update Provider, UP)}：持有本地資料的參與節點，負責在本地資料集上訓練模型並產生本地更新。訓練者不直接參與共識過程，而是將訓練結果提交給聚合者。
+    \item \textbf{聚合者 (Aggregator, AG)}：負責收集多個訓練者的本地更新，執行演算法 (如聯邦平均或 Krum)，並產生候選全域更新。聚合者需要質押一定數量的代幣以確保其行為誠實。
     \item \textbf{驗證委員會 (Verifier Committee, VC)}：由質押權重選出的小型委員會，負責對聚合者提交的更新進行即時簽署與上鏈。與傳統方法不同，委員會不進行長時間的等待與繁重的全網共識，而是專注於快速確認。
-    \item \textbf{挑戰者 (Challenger / Fisherman)}：任何持有足夠質押的節點都可以擔任挑戰者角色。挑戰者在背景異步監聽鏈上數據，當發現異常 (如輸入數據與聚合結果不符) 時，隨時發起挑戰。
+    \item \textbf{挑戰者 (Challenger / Fisherman)}：任何持有足夠質押的節點都可以擔任挑戰者角色。挑戰者在背景異步監聽鏈上資料，當發現異常 (如輸入資料與聚合結果不符) 時，隨時發起挑戰。
 \end{itemize}
 
 \subsection{工作流程重構}
@@ -28,14 +28,14 @@
 \begin{enumerate}
     \item \textbf{提案與共識 (Proposal and Consensus)}：
     \begin{itemize}
-        \item 聚合者收集本地更新並計算全域模型。
+        \item 聚合者收集本地更新並運算全域模型。
         \item 委員會對聚合結果進行快速驗證 (如格式檢查、基本範圍檢查) 並簽名。
         \item 更新立即寫入區塊鏈，標記為最終確認 (Finalized)，且下一輪訓練直接基於此新模型開始。此過程實現了訓練流程的零阻塞 (Non-blocking)。
     \end{itemize}
     
     \item \textbf{異步審計 (Asynchronous Audit)}：
     \begin{itemize}
-        \item 在更新上鏈後的任意時間 (但在證據過期前，例如若干區塊內)，挑戰者可異步下載鏈上數據進行驗證。
+        \item 在更新上鏈後的任意時間 (但在證據過期前，例如若干區塊內)，挑戰者可異步下載鏈上資料進行驗證。
         \item 若挑戰者發現委員會簽署的更新存在數學錯誤或惡意操縱，即可發起挑戰。
     \end{itemize}
     
@@ -67,12 +67,12 @@
 挑戰流程的設計旨在確保任何惡意行為無所遁形，同時避免對正常流程造成干擾。
 
 \begin{enumerate}
-    \item \textbf{觸發條件}：挑戰者監控鏈上數據，發現輸入的本地模型哈希值與輸出的聚合結果不一致。
-    \item \textbf{挑戰發起}：挑戰者提交挑戰交易並附帶質押金 (Stake)。質押金用於防止濫用挑戰機制的DoS攻擊。
+    \item \textbf{觸發條件}：挑戰者監控鏈上資料，發現輸入的本地模型雜湊值與輸出的聚合結果不一致。
+    \item \textbf{挑戰發起}：挑戰者提交挑戰交易並附帶質押金 (Stake)。質押金用於防止濫用挑戰機制的DoS攻擊.
     \item \textbf{仲裁執行 (Arbitration)}：
     \begin{itemize}
         \item 智能合約鎖定相關質押金，並觸發全網仲裁 (Network-wide Arbitration)。
-        \item 全網驗證者 (或隨機抽選的大型陪審團) 下載原始數據重新計算聚合結果。
+        \item 全網驗證者 (或隨機抽選的大型陪審團) 下載原始資料重新運算聚合結果。
         \item 採用 PBFT 共識機制對仲裁結果進行投票，以獲得最終判決。
     \end{itemize}
 \end{enumerate}
@@ -82,13 +82,13 @@
 當仲裁認定委員會作惡時，系統採取「僅懲罰不回滾」的處置策略。
 
 \begin{itemize}
-    \item \textbf{決策依據}：若選擇回滾模型 (Revert)，將導致基於該惡意模型後續訓練的所有輪次失效，造成巨大的算力浪費與系統停擺。考慮到 FL 算法對雜訊的魯棒性，系統選擇承受單次攻擊的代價以換取無限的執行效率。
+    \item \textbf{決策依據}：若選擇回滾模型 (Revert)，將導致基於該惡意模型後續訓練的所有輪次失效，造成巨大的算力浪費與系統停擺。考慮到 FL 演算法對雜訊的強健性，系統選擇承受單次攻擊的代價以換取無限的執行效率.
     \item \textbf{處理方式}：
     \begin{itemize}
         \item \textbf{執行懲罰}：罰沒惡意委員會成員與聚合者的全額質押金，並將其分配給挑戰者作為獎勵。
-        \item \textbf{模型處理}：保留該次 (可能微毒的) 更新。系統依靠 FL 算法自身的自我修正能力，或者由下一輪的誠實更新逐步覆蓋其影響。
+        \item \textbf{模型處理}：保留該次 (可能微毒的) 更新。系統依靠 FL 演算法自身的自我修正能力，或者由下一輪的誠實更新逐步覆蓋其影響。
     \end{itemize}
-    \item \textbf{威懾力}：雖然攻擊者成功注入了一次毒，但其付出了巨額資金損失且被踢出網絡，無法維持長期的多數控制，從而中斷了連續的攻擊鏈 (如 Progressive Committee Capture Attack, PCCA)。
+    \item \textbf{威懾力}：雖然攻擊者成功注入了一次毒，但其付出了巨額資金損失且被踢出網路，無法維持長期的多數控制，從而中斷了連續的攻擊鏈 (如 Progressive Committee Capture Attack, PCCA)。
 \end{itemize}
 
 \section{安全性保證}
@@ -105,7 +105,7 @@
     \item \textbf{仲裁層 (Arbitration Layer)}：採用 \textbf{全網 2/3 誠實假設}。當挑戰發起後，最終判決權回歸全網 (或大型陪審團)。假設 $N_{total} > 3f$，即全網誠實節點佔多數。這是區塊鏈系統的標準安全假設。
 \end{itemize}
 
-\textbf{邏輯總結}：小委員會 (Small Committee) 負責效率，容忍其可能被短暫收買；大網絡 (Full Network) 負責最終安全與仲裁，因其規模巨大而難以被收買。
+\textbf{邏輯總結}：小委員會 (Small Committee) 負責效率，容忍其可能被短暫收買；大網路 (Full Network) 負責最終安全與仲裁，因其規模巨大而難以被收買。
 
 \subsection{攻擊成本分析}
 
@@ -151,7 +151,7 @@ E[Comm] = (1-p) \cdot O(C^2) + p \cdot (O(C^2) + O(N^2)) \approx O(C^2)
 \textbf{參數定義}：
 \begin{itemize}
     \item $N$: 驗證者總池大小。
-    \item $f$: 網絡中惡意節點的比例 (例如 30\%)。
+    \item $f$: 網路中惡意節點的比例 (例如 30\%)。
     \item $X$: 委員會中惡意節點的數量。
 \end{itemize}
 
