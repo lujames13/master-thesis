@@ -44,7 +44,12 @@ def fix_file(filepath):
 
         # Apply unambiguous mappings
         for old, new in mapping.items():
-            content = content.replace(old, new)
+            if old == "算法":
+                # Special case to avoid "演演算法"
+                content = content.replace("演算法", "算法") # Revert any already converted ones to base
+                content = content.replace("算法", "演算法")
+            else:
+                content = content.replace(old, new)
 
         for old, new in computing_mapping.items():
             content = content.replace(old, new)
@@ -52,6 +57,8 @@ def fix_file(filepath):
         for old, new in information_mapping.items():
             content = content.replace(old, new)
 
+        # Handle "計算" vs "運算" carefully
+        content = content.replace("運算", "計算") # Revert to base
         content = content.replace("計算", "運算")
 
         with open(filepath, 'w', encoding='utf-8') as f:

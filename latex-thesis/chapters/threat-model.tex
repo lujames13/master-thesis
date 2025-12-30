@@ -226,7 +226,7 @@ P(\text{超過 2/3}) = \sum_{k=\lfloor 2C/3 \rfloor + 1}^{\min(fM, C)} \frac{\bi
 
 在此場景中，攻擊者同時實現了對共識層和聚合層的滲透，即同時控制了委員會超過 2/3 席位以及當選的 Aggregator。這是 PCCA 最危險的形態。
 
-攻擊者的目標轉變為直接破壞模型性能。由於 Aggregator 和 Verifier 均被攻陷，現有的防禦機制 (如聚合層的 Krum 算法或驗證層的準確率檢查) 將完全失效：
+攻擊者的目標轉變為直接破壞模型性能。由於 Aggregator 和 Verifier 均被攻陷，現有的防禦機制 (如聚合層的 Krum 演算法或驗證層的準確率檢查) 將完全失效：
 
 \begin{itemize}
     \item \textbf{惡意聚合}：惡意 Aggregator 接收來自惡意 Update Providers 的「標籤翻轉 (Label Flipping)」更新，或者直接構造被污染的全域模型更新。
