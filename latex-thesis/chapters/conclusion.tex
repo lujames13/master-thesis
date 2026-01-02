@@ -3,4 +3,18 @@
 
 \section{結論}
 
+\subsection{研究總結 (Summary of Research)}
+本研究針對區塊鏈聯邦學習 (Blockchain-based Federated Learning, BCFL) 在委員會架構下過度依賴「誠實多數假設」的安全漏洞進行了系統性分析 \cite{ref1}。我們識別出一種針對權益機制缺陷的「漸進式委員會佔領攻擊 (Progressive Committee Capture Attack, PCCA)」，揭示了理性攻擊者如何透過累積治理資源，規避傳統的資料層防禦 \cite{ref2}。為了彌補這一安全性缺口，本論文提出「挑戰增強型委員會架構 (Challenge-Augmented Committee Architecture, CACA)」，其核心設計哲學在於安全性與治理規模的解耦 \cite{ref3}。透過引入異步審計與內部罰沒協議，我們將系統的安全防禦從「門檻安全性 (Threshold Security)」轉向「經濟安全性 (Economic Security)」，確保系統在面對具備策略性的理性對手時，仍能維持高度的活性與模型聚合的正確性 \cite{ref4}。
+
+\subsection{研究發現與貢獻 (Research Findings and Contributions)}
+本研究的主要發現與貢獻總結如下：
+
+\begin{itemize}
+    \item 定義並驗證 PCCA 的威脅演化：本研究首次定義了漸進式委員會佔領攻擊的兩階段模型（潛伏與佔領），並量化了權益機制正反饋如何加速網路控制權的轉移 \cite{ref5}。實驗證實，傳統架構（如 BlockDFL \cite{qin2024blockdfl}）在長期運行中存在顯著的財富固化與治理失效風險 \cite{ref6}。
+    \item 強化系統在極端環境下的服務能力：透過 CACA 的挑戰機制，系統在遭受 30\% 惡意共謀的壓力下，能有效將成功受擊頻率壓制在極低水平 \cite{ref7}。數據顯示，本架構不僅能將最低不可用率從 20\% 降至 5\% 以下，更能在 Non-IID 資料分佈下維持與 IID 環境相近的收斂穩定性 \cite{ref8}。
+    \item 重塑理性攻擊者的誘因結構 (Incentive Realignment)：長期賽局實驗顯示，罰沒機制能有效打破惡意節點的「權益累積循環」 \cite{ref9}。數據指出，攻擊失敗導致的治理權益驟降（至誠實節點的 22.6\%），實質上內部化了作惡的外部性成本，使得攻擊的預期收益遠低於潛在損失 \cite{ref10}。這種經濟上的不對稱性，迫使理性節點趨向誠實策略，從而實現了無須依賴中心化仲裁的去中心化治理平衡 \cite{ref11}。
+    \item 打破安全性與通訊開銷的強耦合：本研究證明了「事前預防」轉向「事後追責」的效率優勢 \cite{ref12}。在維持相同安全性邊界的前提下，CACA 允許系統在常態下僅維持輕量級的小型委員會運作（如 $c=5$），成功減少了約 44.4\% 的通訊冗餘，為資源受限的邊緣運算場景提供具擴展性的防禦方案。
+\end{itemize}
+
 \section{未來展望}
+
