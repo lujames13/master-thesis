@@ -29,7 +29,7 @@
 \begin{enumerate}
     \item \textbf{本地訓練}：Update Providers 在本地資料上訓練模型，運算模型更新 $\Delta w_i$ 並發送給選定的 Aggregator。
     \item \textbf{初步聚合}：Aggregator 收集來自多個 UP 的更新，執行演算法 (如 FedAvg) 生成聚合更新 $\Delta w_{agg}$，並構建提案交易提交至區塊鏈。
-    \item \textbf{委員會驗證}：委員會 $\mathcal{V}_r$ 下載 Aggregator 的提案，執行驗證邏輯 (如評估聚合模型在驗證集上的準確率)。
+    \item \textbf{委員會驗證}：委員會 $\mathcal{V}_r$ 下載 Aggregator 的提案，執行 Krum 驗證邏輯。
     \item \textbf{共識決策}：委員會成員通過 BFT 共識協議對提案進行投票。
     \item \textbf{獎勵分配 (Reward Linkage)}：
     若提案獲得委員會批准通過：
