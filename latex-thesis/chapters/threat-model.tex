@@ -17,7 +17,7 @@
     
     \item \textbf{Aggregators (AG)}：集合記為 $\mathcal{A} = \{a_1, a_2, ..., a_K\}$。Aggregators 負責收集來自 UP 的模型更新，執行初步聚合 (如生成 Aggregated Gradient)，並將聚合結果打包成「提案 (Proposal)」提交給委員會。Aggregator 的選擇同樣基於權益 (Stake-based)，權益越高的節點越有機會被選為當輪的 Aggregator。
     
-    \item \textbf{Verifiers Committee (VC)}：集合記為 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$。Verifiers 組成驗證委員會 (Committee)，負責驗證 Aggregator 提交的提案。委員會成員通過共識機制決定是否批准該提案，並將合法的全局模型記錄上鏈。
+    \item \textbf{Verifier Committee (VC)}：集合記為 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$。Verifiers 組成驗證委員會 (Committee)，負責驗證 Aggregator 提交的提案。委員會成員通過共識機制決定是否批准該提案，並將合法的全局模型記錄上鏈。
 \end{enumerate}
 
 系統在每個訓練輪次 $r$ 動態選擇 Aggregators 和 Verifiers，選擇概率均與其持有的權益成正比。

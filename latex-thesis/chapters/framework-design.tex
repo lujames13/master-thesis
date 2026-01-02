@@ -81,7 +81,7 @@
 
     \item \textbf{處理方式}：
     \begin{itemize}
-        \item \textbf{執行懲罰}：系統將立即沒收 (Slash) 惡意委員會成員與聚合者的全額質押金。該筆資金除了作為挑戰者的賞金外，其餘部分將分配給全體誠實參與者作為補償獎勵，以維持激勵相容性。
+        \item \textbf{執行懲罰}：系統將立即罰沒 (Slash) 惡意委員會成員與聚合者的全額質押金。該筆資金除了作為挑戰者的賞金外，其餘部分將分配給全體誠實參與者作為補償獎勵，以維持激勵相容性。
         \item \textbf{模型處理}：保留受影響的更新紀錄，不執行狀態回退。系統依靠 FL 演算法自身的強健性，由後續輪次的誠實更新逐步覆蓋並修正其影響。
     \end{itemize}
 
@@ -157,7 +157,7 @@ E[Comm] = (1-p) \cdot O(C^2) + p \cdot (O(C^2) + O(N^2)) \approx O(C^2)
 \begin{equation}
 P(X = k) = \frac{\binom{fN}{k} \binom{(1-f)N}{C-k}}{\binom{N}{C}}
 \end{equation}
-惡意節點佔據超過 2/3 (即攻擊成功) 的概率 $P_{mal}$ 為 $X \ge \lfloor 2C/3 \rfloor + 1$ 的累像概率：
+惡意節點佔據超過 2/3 (即攻擊成功) 的概率 $P_{mal}$ 為 $X \ge \lfloor 2C/3 \rfloor + 1$ 的累積機率：
 \begin{equation}
 P(X \ge \lfloor 2C/3 \rfloor + 1) = \sum_{k=\lfloor 2C/3 \rfloor + 1}^{C} \frac{\binom{fN}{k} \binom{(1-f)N}{C-k}}{\binom{N}{C}}
 \end{equation}
@@ -180,7 +180,7 @@ P(X \ge \lfloor 2C/3 \rfloor + 1) = \sum_{k=\lfloor 2C/3 \rfloor + 1}^{C} \frac{
 激勵機制是維持系統長期安全運行的動力核心。本系統維持基於 Slashing 的獎懲邏輯，但強調資金流向與即時執行的配合。
 
 \begin{itemize}
-    \item \textbf{獎勵來源}：系統不依賴額外的增發來支付高額的審計費用，而是透過對違規者的資產沒收 (Slashing) 來支付審計與仲裁成本。
+    \item \textbf{獎勵來源}：系統不依賴額外的增發來支付高額的審計費用，而是透過對違規者的資產罰沒 (Slashing) 來支付審計與仲裁成本。
     \item \textbf{動態調整}：若系統長期無挑戰發生，可適當降低挑戰者的質押門檻以鼓勵更多節點參與監聽；若挑戰頻發，則提高質押門檻與懲罰力度。
     \item \textbf{長期收益}：對於誠實節點，參與委員會獲得的區塊獎勵是穩定的預期收益；而對於潛在攻擊者，一次攻擊的收益是有限的 (本次更新的控制權)，但損失是巨大的 (全額質押金)。这种不對稱的風險收益比確保了誠實是經濟上的最優策略。
 \end{itemize}
