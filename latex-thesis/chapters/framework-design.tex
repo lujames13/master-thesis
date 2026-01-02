@@ -3,60 +3,51 @@
 \chapter{系統架構設計}
 \label{chap:framework-design}
 
-本章詳細描述基於異步審計與即時執行機制的區塊鏈聯邦學習系統架構。針對分散式學習中的效率瓶頸與安全性挑戰，本研究提出一個創新的防禦框架。該框架核心理念在於移除傳統區塊鏈的「確認等待期」，改採「即時執行 (Immediate Execution)」配合「異步審計 (Asynchronous Audit)」或稱「回溯挑戰 (Retrospective Challenge)」。此設計在確保系統活性 (Liveness) 的同時，透過雙層安全假設與嚴格的懲罰機制，實現對惡意行為的有效威懾與究責。
+本章詳細描述本研究提出的「挑戰增強型委員會架構 (Challenge-Augmented Committee Architecture, CACA)」之系統設計。針對區塊鏈聯邦學習在共識層可能遭遇的安全性挑戰，CACA 引入了「非阻塞式異步挑戰 (Non-blocking Asynchronous Challenge)」機制，旨在解耦系統的「活性 (Liveness)」與「安全性 (Security)」。該框架的核心設計在於採用「即時執行 (Immediate Execution)」配合「異步審計 (Asynchronous Audit)」。基於聯邦學習模型對噪聲的強健性與天然的自癒能力，本架構採取「僅懲罰不回滾 (Slash-only Policy)」的處置策略，在確保系統最高運作效率的前提下，透過嚴格的經濟罰沒機制實現對惡意行為的有效威懾，並建立完善的系統究責體系。
 
 \section{系統架構概覽}
 \label{sec:arch_overview}
 
-本節介紹系統的整體架構、核心角色職責以及重構後的工作流程。
+本系統旨在建立一個具備經濟安全性與執行效率的去中心化學習平台。圖 \ref{fig:caca_arch} 展示了本研究所提出的 Challenge-Augmented Committee Architecture (CACA) 整體運作流程，涵蓋了從角色分配、模型訓練、聚合驗證到潛在挑戰仲裁的完整生命週期。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/utils/Challenge-Augmented-Committee-Architecture.drawio.png}
+    \caption{Challenge-Augmented Committee Architecture (CACA) 系統架構與工作流程圖}
+    \label{fig:caca_arch}
+\end{figure}
 
 \subsection{核心角色定義}
 
 本系統包含四個核心角色，各自承擔不同的職責：
 
 \begin{itemize}
-    \item \textbf{訓練者 (Update Provider, UP)}：持有本地資料的參與節點，負責在本地資料集上訓練模型並產生本地更新。訓練者不直接參與共識過程，而是將訓練結果提交給聚合者。
-    \item \textbf{聚合者 (Aggregator, AG)}：負責收集多個訓練者的本地更新，執行演算法 (如聯邦平均或 Krum)，並產生候選全域更新。聚合者需要質押一定數量的代幣以確保其行為誠實。
-    \item \textbf{驗證委員會 (Verifier Committee, VC)}：由質押權重選出的小型委員會，負責對聚合者提交的更新進行即時簽署與上鏈。與傳統方法不同，委員會不進行長時間的等待與繁重的全網共識，而是專注於快速確認。
-    \item \textbf{挑戰者 (Challenger / Fisherman)}：任何持有足夠質押的節點都可以擔任挑戰者角色。挑戰者在背景異步監聽鏈上資料，當發現異常 (如輸入資料與聚合結果不符) 時，隨時發起挑戰。
+    \item \textbf{訓練者 (Update Provider, UP)}：持有本地私有資料的參與節點。負責在本地進行模型訓練，並將運算出的本地更新 (Local Updates) 提交給選定的聚合者。
+    \item \textbf{聚合者 (Aggregator, AG)}：負責收集來自多個訓練者的本地更新，執行初步彙整並生成聚合更新 (Aggregated Updates)，隨後將其作為「提案 (Proposal)」提交給驗證委員會。
+    \item \textbf{驗證委員會 (Verifier Committee, VC)}：由質押權重選出的小型委員會。其核心職責是針對多個聚合者提交的提案運行 Krum 評分，並透過 PBFT 共識投票決定其中哪一份定為該輪之全域更新 (Global Update)，隨後將其上鏈。
+    \item \textbf{挑戰者 (Challenger)}：任何持有足夠質押的節點均可擔任。挑戰者在背景異步監聽鏈上資料，重新運算 Krum 演算法；若發現委員會選定的全域更新與正確之 Krum 計算結果不符，則發起挑戰。
 \end{itemize}
 
-\subsection{工作流程重構}
+\subsection{工作流程}
 
-為了極大化訓練效率，本系統移除了傳統的「等待期」，工作流程分為三個主要階段：
+本系統之工作流程分為以下階段，旨在兼顧訓練效率與共識公正性：
 
 \begin{enumerate}
-    \item \textbf{提案與共識 (Proposal and Consensus)}：
-    \begin{itemize}
-        \item 聚合者收集本地更新並運算全域模型。
-        \item 委員會對聚合結果進行快速驗證 (如格式檢查、基本範圍檢查) 並簽名。
-        \item 更新立即寫入區塊鏈，標記為最終確認 (Finalized)，且下一輪訓練直接基於此新模型開始。此過程實現了訓練流程的零阻塞 (Non-blocking)。
-    \end{itemize}
-    
-    \item \textbf{異步審計 (Asynchronous Audit)}：
-    \begin{itemize}
-        \item 在更新上鏈後的任意時間 (但在證據過期前，例如若干區塊內)，挑戰者可異步下載鏈上資料進行驗證。
-        \item 若挑戰者發現委員會簽署的更新存在數學錯誤或惡意操縱，即可發起挑戰。
-    \end{itemize}
-    
-    \item \textbf{仲裁與懲罰 (Arbitration and Slashing)}：
-    \begin{itemize}
-        \item 若挑戰被觸發，智能合約將啟動全網仲裁流程。
-        \item 全網節點 (或隨機抽選的大型陪審團) 介入進行最終驗證。
-        \item 若判定為惡意，系統執行「僅懲罰不回滾 (Slash-Only)」策略：罰沒惡意委員會與聚合者的質押金，但不回滾模型狀態。
-    \end{itemize}
+    \item \textbf{動態角色抽選}：在每一輪次起始時，區塊鏈根據前一區塊的哈希值 (Hash) 分配該輪角色。抽選機率與節點權益 (Stake) 成正比，且嚴格按照 \textbf{Verifier $\rightarrow$ Aggregator $\rightarrow$ Update Provider} 的順序進行抽選。
+    \item \textbf{本地訓練與廣播}：被選定為 UP 的節點使用本地資料進行模型訓練，並將結果傳遞給當輪選定的 Aggregators。
+    \item \textbf{提案彙整與提交}：Aggregators 整合接收到的多個 Local Updates，計算出初步的 Aggregated Updates 並提交給 Verifier Committee。
+    \item \textbf{委員會驗證與投票}：驗證委員會針對所有收到的聚合提案運行 Krum 演算法進行評分。委員會成員隨後透過 PBFT 共識投票，選出評分最優的提案作為最終的 Global Update。
+    \item \textbf{即時更新與獎勵分發}：區塊鏈更新全域模型，並根據貢獻度向 UP、AG 與 VC 成員發放獎勵。此過程為非阻塞式，下一輪訓練將立即基於新模型開始。
+    \item \textbf{異步挑戰 (選用階段)}：若挑戰者發現委員會選定的結果與 Krum 運算答案不一致，可質押押金發起挑戰。隨後區塊鏈發起全參與者的 PBFT 仲裁，重新執行 Krum 運算以判定正確答案。
 \end{enumerate}
 
 \section{異步審計與究責機制}
 \label{sec:async_audit}
 
-本節詳細闡述異步審計與究責機制的設計哲學與運作細節，取代傳統的樂觀挑戰窗口機制。
-
 \subsection{即時執行策略}
 
-設計哲學上，本系統區別於金融交易系統對「強一致性 (Strong Consistency)」的追求。聯邦學習作為一種機器學習過程，具有天然的「抗噪性 (Noise Tolerance)」。模型參數的微小偏差通常不會導致災難性後果，且可透過後續訓練修正。
+設計哲學上，本系統區別於金融交易系統對「強一致性 (Strong Consistency)」的追求。聯邦學習作為一種機器學習過程，具有天然的「抗噪性 (Noise Tolerance)」。模型參數的微小偏差通常不會導致災難性後果，且可透過後續訓練修正。因此，本系統優先保證「活性 (Liveness)」：
 
-因此，本系統優先保證「活性 (Liveness)」：
 \begin{itemize}
     \item \textbf{機制}：只要驗證委員會達成共識，更新即視為有效。模型參數立即更新，所有訓練者基於新模型進行下一輪訓練。
     \item \textbf{優勢}：端到端延遲 (End-to-End Latency) 降至最低，系統運作效率與無防禦的中心化系統幾乎一致。
@@ -64,16 +55,15 @@
 
 \subsection{異步挑戰流程}
 
-挑戰流程的設計旨在確保任何惡意行為無所遁形，同時避免對正常流程造成干擾。
+挑戰流程之核心在於「數學確定性」，確保委員會無法利用資訊不對稱來操縱模型聚合結果。
 
 \begin{enumerate}
-    \item \textbf{觸發條件}：挑戰者監控鏈上資料，發現輸入的本地模型雜湊值與輸出的聚合結果不一致。
-    \item \textbf{挑戰發起}：挑戰者提交挑戰交易並附帶質押金 (Stake)。質押金用於防止濫用挑戰機制的DoS攻擊.
+    \item \textbf{觸發條件}：挑戰者監控鏈上資料，發現委員會選定的全域更新與對該輪所有聚合提案執行 Krum 運算所得之結果不一致。
+    \item \textbf{挑戰發起}：挑戰者提交挑戰交易並繳納質押金，以防止濫用挑戰機制造成的 DoS 攻擊。
     \item \textbf{仲裁執行 (Arbitration)}：
     \begin{itemize}
-        \item 智能合約鎖定相關質押金，並觸發全網仲裁 (Network-wide Arbitration)。
-        \item 全網驗證者 (或隨機抽選的大型陪審團) 下載原始資料重新運算聚合結果。
-        \item 採用 PBFT 共識機制對仲裁結果進行投票，以獲得最終判決。
+        \item 智能合約鎖定相關質押金，並調取該輪鏈上緩存的所有聚合提案。
+        \item 觸發全網仲裁，全網驗證者重新運算 Krum 演算法並通過 PBFT 共識對仲裁結果進行投票判決。
     \end{itemize}
 \end{enumerate}
 
@@ -82,13 +72,13 @@
 當仲裁認定委員會作惡時，系統採取「僅懲罰不回滾」的處置策略。
 
 \begin{itemize}
-    \item \textbf{決策依據}：若選擇回滾模型 (Revert)，將導致基於該惡意模型後續訓練的所有輪次失效，造成巨大的算力浪費與系統停擺。考慮到 FL 演算法對雜訊的強健性，系統選擇承受單次攻擊的代價以換取無限的執行效率.
+    \item \textbf{決策依據}：若選擇回滾模型 (Revert)，將導致基於該惡意模型後續訓練的所有輪次失效，造成巨大的算力浪費。系統選擇承受單次攻擊的代價以換取高執行效率。
     \item \textbf{處理方式}：
     \begin{itemize}
         \item \textbf{執行懲罰}：罰沒惡意委員會成員與聚合者的全額質押金，並將其分配給挑戰者作為獎勵。
-        \item \textbf{模型處理}：保留該次 (可能微毒的) 更新。系統依靠 FL 演算法自身的自我修正能力，或者由下一輪的誠實更新逐步覆蓋其影響。
+        \item \textbf{模型處理}：保留該次更新。系統依靠 FL 演算法自身的自我修正能力，由後續誠實更新逐步覆蓋其影響。
     \end{itemize}
-    \item \textbf{威懾力}：雖然攻擊者成功注入了一次毒，但其付出了巨額資金損失且被踢出網路，無法維持長期的多數控制，從而中斷了連續的攻擊鏈 (如 Progressive Committee Capture Attack, PCCA)。
+    \item \textbf{威懾力}：雖然攻擊者成功注入一次毒化更新，但其付出了巨額資金損失且被踢出網路，中斷了 PCCA 的權益指數增長鏈。
 \end{itemize}
 
 \section{安全性保證}

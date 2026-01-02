@@ -35,23 +35,41 @@
 
 \subsection{實驗參數}
 
-系統參數配置如下：
+本研究實驗採用的系統參數配置如表 \ref{tab:exp_params} 所示。這些參數的設定遵循了 BlockDFL \cite{qin2024blockdfl} 等主流 BCFL 研究的標準配置，確保實驗結果的可比性。
 
-\begin{itemize}
-    \item 訓練輪數：$R = 300$
-    \item 客戶端總數：$N = 100$ (Verifier Pool Size)
-    \item 委員會大小：$C = 7$
-    \item 攻擊者數量：$M = 30$ (初始權益佔比 30\%)
-    \item 初始權益：所有節點均分配 100 單位的初始權益
-    \item 設備池大小：Aggregator 池為 4 位, Provider 為其餘節點
-    \item 獎勵機制：Verifier 1.0 單位, Aggregator 1.0 單位, Provider 0.05 單位
-    \item 罰沒機制：當挑戰成功時，惡意委員會成員的權益被全額罰沒 (Full Slashing)
-    \item 學習率：$\eta = 0.01$ (with decay 0.99)
-    \item 本地訓練參數：Epochs = 1, Batch Size = 32
-    \item 資料分佈：IID 及 Dirichlet-based Non-IID ($\alpha=0.5$)
-\end{itemize}
-
-這些參數的設定遵循了 BlockDFL 等主流 BCFL 研究的標準配置，確保實驗結果的可比性。
+\begin{table}[htbp]
+    \centering
+    \caption{實驗參數配置 (Experimental Parameter Configurations)}
+    \label{tab:exp_params}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{參數名稱} & \textbf{設定值} \\
+        \hline
+        訓練輪數 & $R = 300$ \\
+        \hline
+        客戶端總數 & $N = 100$ (Verifier Pool Size) \\
+        \hline
+        委員會大小 & $C = 7$ \\
+        \hline
+        攻擊者數量 & $M = 30$ (初始權益佔比 30\%) \\
+        \hline
+        初始權益分配 & 所有參與節點初始均分配 100 單位 \\
+        \hline
+        設備池分配 & Aggregator: 4 位，Provider: 其餘節點 \\
+        \hline
+        獎勵機制 (每輪) & Verifier: 1.0, Aggregator: 1.0, Provider: 0.05 \\
+        \hline
+        罰沒機制 & 挑戰成功時，惡意委員全額罰沒 (Full Slashing) \\
+        \hline
+        學習率 & $\eta = 0.01$ (衰減率 0.99) \\
+        \hline
+        本地訓練參數 & Epochs = 1, Batch Size = 32 \\
+        \hline
+        資料分佈環境 & IID 及 Dirichlet-based Non-IID ($\alpha=0.5$) \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \section{實驗結果與分析}
 \label{sec:experimental_results}
@@ -197,7 +215,7 @@
 \label{sec:efficiency}
 \subsection{系統開銷與安全性需求對比}
 
-為了評估系統在極端壓力下的效能表現，我們設定基準安全性要求為「受攻擊頻率（成功被劫持機率）低於 $1\%$」。在總節點數 $N=100$、惡意節點佔比 $f=30\%$ 的環境下，對比 BlockDFL 與本研究所提出的方案。
+為了評估系統在極端壓力下的效能表現，我們設定基準安全性要求為「受攻擊頻率（成功被劫持機率 $p$）低於 $1\%$」。在總節點數 $N=100$、惡意節點佔比 $f=30\%$ 的環境下，對比 BlockDFL 與本研究所提出的方案。
 
 \begin{table}[htbp]
     \centering
@@ -208,6 +226,8 @@
     \begin{tabular}{|l|l|l|l|}
         \hline
         \textbf{評估維度} & \textbf{傳統方案 (BlockDFL)} & \textbf{本研究方法 (Ours)} & \textbf{差異性質分析} \\
+        \hline
+        核心安全性模型 & 門檻安全性 (Threshold-based) & 經濟安全性 (Economic-based) & 信任多數 vs. 激勵相容 \\
         \hline
         設計哲學 & 悲觀併發控制 (Pessimistic) & 樂觀執行與異步審計 (Optimistic) & 預防 vs. 治理 \\
         \hline
