@@ -183,6 +183,27 @@
     \item 權益壟斷：由於誠實節點無法獲得獎勵，其權益停滯；而惡意節點持續獲得獎勵，權益呈指數增長，進一步提高其在未來委員會中的佔比。
 \end{enumerate}
 
+\begin{algorithm}[t]
+\caption{High-Level Strategy of Progressive Committee Capture Attack (PCCA)}
+\label{alg:pcca_strategy}
+\begin{algorithmic}[1]
+\Require Current Committee $\mathcal{V}$, Adversary Controlled Nodes $\mathcal{C}_{adv}$
+\Ensure Action for the current round
+\State \textbf{Check Phase:} Calculate control ratio $r = \frac{|\mathcal{V} \cap \mathcal{C}_{adv}|}{|\mathcal{V}|}$
+\If{$r \leq 2/3$} 
+    \State \textit{// State 1: Shadow Mode (Lurking)}
+    \State Follow the protocol honestly to accumulate stake and await majority.
+\Else 
+    \State \textit{// State 2: Capture Mode (Occupying)}
+    \If{\textbf{Aggregator is Adversarial}}
+        \State \textbf{Full Stack Poisoning}: Force approve malicious proposal.
+    \Else
+        \State \textbf{Strategic Starvation}: Force reject honest proposal.
+    \EndIf
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
 這種攻擊的關鍵在於利用了權益機制的正反饋特性：權益高的節點更容易被選入委員會，獲得更多獎勵，進而權益更高。攻擊者通過操縱這一循環，實現權益的指數增長與網路控制權的轉移。
 
 \subsection{攻擊階段詳述}

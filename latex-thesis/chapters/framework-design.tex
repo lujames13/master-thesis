@@ -41,6 +41,51 @@
     \item \textbf{異步挑戰 (選用階段)}：若挑戰者發現委員會選定的結果與 Krum 運算答案不一致，可質押押金發起挑戰。隨後區塊鏈發起全參與者的 PBFT 仲裁，重新執行 Krum 運算以判定正確答案。
 \end{enumerate}
 
+\begin{algorithm}[t]
+\caption{CACA Execution Protocol (Instant Update)}
+\label{alg:caca_execution}
+\begin{algorithmic}[1]
+\Require Current Round $r$, Total Stake Weighted Nodes $\mathcal{N}$
+\Ensure Updated Global Model $w_{r+1}$
+\vspace{0.1cm}
+\State \textbf{Role Assignment:} 
+\State Blockchain selects $\mathcal{V}$ (Committee), $\mathcal{A}$ (Aggregators), $\mathcal{U}$ (Update Providers) from $\mathcal{N}$ based on stake and randomness.
+\vspace{0.1cm}
+\State \textbf{Training \& Aggregation:}
+\State Each $u \in \mathcal{U}$ trains using $w_r$, broadcasts updates to $\mathcal{A}$.
+\State Each $a \in \mathcal{A}$ aggregates updates into proposal $p_a$, sends to $\mathcal{V}$.
+\vspace{0.1cm}
+\State \textbf{Consensus \& Update:}
+\State $\mathcal{V}$ runs Krum on all proposals $\{p_a\}$.
+\State $\mathcal{V}$ votes on the best proposal via PBFT.
+\State Commit $w_{r+1}$ to blockchain \textbf{immediately}.
+\State Distribute rewards to $\mathcal{U}, \mathcal{A}, \mathcal{V}$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{Asynchronous Challenge Mechanism (Slash-Only)}
+\label{alg:caca_challenge}
+\begin{algorithmic}[1]
+\Require Challenge Window $T$, Challengers $\mathcal{C}$
+\Ensure Punishment for Malicious Acts
+\vspace{0.1cm}
+\For{each Challenger $c \in \mathcal{C}$ inside window $T$}
+    \State $c$ retrieves committee inputs and re-executes Krum.
+    \If{$c$ detects outcome mismatch with $w_{r+1}$}
+        \State $c$ posts \textbf{Challenge Transaction} with deposit.
+        \State \textbf{Arbitration Triggered:} All nodes re-verify.
+        \If{Malicious Consensus Confirmed}
+            \State \textbf{Burn/Slash} stake of malicious $\mathcal{V}$.
+            \State Reward Challenger $c$ and all nodes.
+            \State \textit{// Note: Model $w_{r+1}$ is NOT reverted.}
+        \EndIf
+        \State \textbf{Exit Loop}.
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
 \section{異步審計與究責機制}
 \label{sec:async_audit}
 
