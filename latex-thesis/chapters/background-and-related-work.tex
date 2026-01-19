@@ -49,31 +49,40 @@ BCFL的發展經歷了從全節點共識到委員會機制的演進：
 \subsection{委員會機制與效率優化}
 為了進一步提升效能，現代 BCFL 方案普遍採用委員會架構。隨後的研究如 VBFL \cite{chen2021robust} 與 VFChain \cite{peng2022vfchain} 分別引入了基於權益的共識與可審計的聚合證明。這些方法將安全性與經濟質押（Staking）掛鉤，建立了加密經濟安全性（Crypto-economic Security）的基礎，確保攻擊成本高於潛在收益。
 
-\section{相關研究 (Related Work)}
+\section{相關研究與盲點分析 (Related Work and Blind Spot Analysis)}
 \label{sec:related_work_merged}
 
-本節將現有關於區塊鏈聯邦學習之安全性與效率的研究分為三類進行探討，並分析其局限性。
+本節基於 2023 年至 2025 年的區塊鏈聯邦學習（BCFL）文獻，對現有的防禦機制進行系統性分析。研究顯示，雖然大多數方案引入了拜占庭容錯聚合（Byzantine-robust Aggregation）來抵禦惡意客戶端（Malicious Clients），但在驗證層（Verification Layer）的安全性上存在顯著的盲點。
 
-\subsection{基於驗證的方法 (opML/zkML)}
-隨著模型規模擴大，直接驗證運算開銷成為瓶頸。
+\subsection{現有文獻中的驗證者信任假設}
+區塊鏈聯邦學習系統依賴礦工、驗證者或委員會成員執行 Krum、Trimmed Mean 等聚合演算法。然而，這些防禦機制僅在執行者誠實的前提下有效。我們的分析發現，約 93\% 的 BCFL 相關研究在不同程度上假設了驗證者的誠實性。
+
+\subsubsection{顯式或隱式的誠實假設}
+許多研究在威脅模型中未將驗證者列為潛在攻擊者。例如，BRFLATA \cite{li2025enhancing} 明確假設「服務器是可靠的」，僅針對客戶端與鏈路攻擊進行防禦。Szel\k{a}g 等人的調查 \cite{szelag2025adaptive} 雖然深入探討了適應性對手（Adaptive Adversaries），但仍隱含假設聚合器能正確執行防禦協議。
+
+即便是強調去中心化的方案，如 BlockDFL \cite{qin2024blockdfl} 與 LiteChain \cite{chen2025litechain}，也依賴於誠實多數假設。BlockDFL 指出系統安全性建立在「超過 2/3 的驗證者為誠實」的基礎上；LiteChain 則透過選舉機制選出委員會，並假設獲選成員值得信賴。這類假設在面對具備經濟動機的理性攻擊者（Rational Attackers）或共謀攻擊時顯得脆弱。
+
+\subsubsection{依賴冗餘與輪替的信任機制}
+部分研究試圖透過架構設計降低單點故障風險，但未根本解決惡意驗證問題。FLock \cite{flock2025} 利用多個聚合器進行狀態通道聚合，透過冗餘性提升容錯能力。BRFL \cite{song2024byzantine} 利用皮爾森相關係數（PPCC）動態選擇聚合節點，雖然實現了輪替，但仍假設被選中的高相關性節點是誠實的。
+
+\subsection{針對惡意驗證者的防禦嘗試}
+在近年的文獻中，僅有極少數研究直接面對驗證者可能完全惡意（Fully Malicious）的情況。
+
 \begin{itemize}
-    \item \textbf{zkML}：Chen等人 \cite{chen2024zkml} 與 Sun等人 \cite{sun2024zkllm} 探討使用零知識證明驗證模型。雖具強密碼學保證，但生成證明之運算開銷巨大，難以適應快速迭代。
-    \item \textbf{opML}：Conway等人 \cite{conway2024opml} 引入 Optimistic Rollup 思路，採取「預設為真，有疑則挑戰」的邏輯。然而現有 opML 設計多針對單一 Prover，且挑戰期過長，不適用去中心化委員會環境。
+    \item \textbf{KFC (Krum Federated Chain)} \cite{garcia2025krum}：這是目前唯一針對「所有驗證者皆可能惡意」場景提出完整防禦方案的研究。KFC 將 Krum 演算法與工作量證明（PoW）結合，設計了專屬的共識機制，確保即便驗證節點受損，系統仍能維持運作。
+    \item \textbf{FedBlock} \cite{nguyen2024fedblock}：該研究明確指出了現有方法的缺陷，即「如果任何人都可以成為驗證者，僅假設誠實多數是不夠的」。然而，作者將「偵測並忽略惡意驗證者」列為未來工作，並未在文中提供具體解決方案。
+    \item \textbf{Fantastyc} \cite{fantastyc2024}：該方案利用有效性證明（Validity Proofs）將驗證工作外包，能容忍高達 1/3 的拜占庭聚合者。儘管如此，它仍需維持誠實多數的底層假設。
 \end{itemize}
 
-\subsection{基於委員會的方法 (FLCoin, BlockDFL)}
-BlockDFL \cite{qin2024blockdfl} 與 FLCoin \cite{ren2024scalable} 利用隨機或基於權益的機制選取委員會。這些方法成功將複雜度降低，使得系統具備擴展性。
+\subsection{傳統聯邦學習與 BCFL 的信任模型對比}
+值得注意的是，傳統（非區塊鏈）聯邦學習社群在處理惡意聚合器（Malicious Server）問題上，反而領先於 BCFL 社群。在傳統 FL 中，如 ELSA、zkFL \cite{chen2024zkml} 和 Mario 等方案，已廣泛利用零知識證明（ZKP）、可信執行環境（TEE）或多方計算（MPC）來強迫聚合器證明其計算正確性。這些研究將聚合器的惡意行為視為首要威脅（First-class Threat）。
 
-\subsection{現有方法的局限性分析}
-儘管效率獲得提升，現有方案仍存在根本性缺陷：
-\begin{itemize}
-    \item \textbf{誠實大多數假設}：安全性均依賴於「委員會內超過 2/3 為誠實節點」的靜態假設。
-    \item \textbf{漸進式佔領風險}：惡意節點可透過長期誠實表現積累權益，逐步提高入選委員會機率。
-    \item \textbf{缺乏自癒能力}：當委員會被滲透（例如惡意佔比 >1/3）時，系統缺乏外部介入機制來逆轉錯誤結果或懲罰委員會。
-\end{itemize}
+相對地，BCFL 社群傾向認為「區塊鏈的去中心化」本身即能解決信任問題。然而，區塊鏈僅提供數據的不可篡改性（Immutability），並不能保證鏈下或鏈上計算邏輯（如 Krum 的執行）未被惡意節點操弄。
 
-\subsection{研究缺口總結}
-總結而言，現有方法主要關注資料層的客戶端防禦或靜態的委員會共識，系統性地忽略了「委員會本身可能淪陷」的風險。本研究欲填補之缺口在於：如何設計一個激勵相容機制，使得當委員會集體舞弊時，外部節點仍能透過經濟挑戰（Challenge）識別並清除惡意驗證者。
+\subsection{系統性盲點與研究缺口}
+綜合上述分析，現有 BCFL 研究存在一個系統性的盲點（Systematic Blind Spot）：防禦機制高度集中於識別惡意客戶端的模型中毒攻擊（Model Poisoning），卻忽視了**驗證層本身的拜占庭風險**。
+
+具體而言，當攻擊者透過賄賂、累積權益或女巫攻擊（Sybil Attack）掌控了委員會或驗證節點時，現有的 Krum 或 Trimmed Mean 防禦將被繞過或惡意執行。目前的文獻缺乏針對「驗證者共謀」與「基於權益的接管攻擊」的有效對策。本研究旨在填補此一缺口，提出一套在驗證者可能集體作惡的環境下，仍能透過經濟賽局機制保證系統安全性的方案。
 
 \section{系統模型與前置定義 (System Model and Preliminaries)}
 \label{sec:system_model}
