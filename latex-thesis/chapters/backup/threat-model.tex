@@ -3,7 +3,65 @@
 \chapter{威脅模型 (Threat Model)}
 \label{chap:threat-model}
 
-基於第二章定義的委員會架構系統模型（詳見 \ref{sec:system_model} 節），本章分析該架構在面對理性攻擊者時的安全脆弱性。本章重點定義「漸進式委員會佔領攻擊」(Progressive Committee Capture Attack, PCCA)，揭示攻擊者如何利用權益機制的正反饋特性逐步實現網路控制權的轉移，並為後續章節的防禦機制設計提供明確的安全目標。
+本章定義本研究所針對的威脅模型，特別聚焦於區塊鏈聯邦學習系統中的「委員會佔領攻擊」(Committee Capture Attack)。如第三章文獻分析所示，現有研究主要關注資料層的惡意客戶端攻擊，而系統性地忽略了共識層的驗證者共謀問題。本章將詳細描述系統模型、攻擊者能力、攻擊向量，並重點定義「漸進式權益佔領攻擊」(Progressive Committee Capture Attack, PCCA)，為後續章節的防禦機制設計提供明確的安全目標。
+
+\section{系統模型與假設}
+\label{sec:system_model}
+
+\subsection{網路模型}
+
+本研究考慮一個去中心化的區塊鏈聯邦學習系統，採用 BlockDFL 架構，由以下三種核心角色構成：
+
+\begin{enumerate}
+    \item \textbf{Update Providers (UP)}：原為客戶端 (Clients)，集合記為 $\mathcal{U} = \{u_1, u_2, ..., u_N\}$。每個 Update Provider 持有本地私有資料集 $\mathcal{D}_i$，負責在本地進行模型訓練，將運算出的模型更新 (Model Updates) 提交給 Aggregator。
+    
+    \item \textbf{Aggregators (AG)}：集合記為 $\mathcal{A} = \{a_1, a_2, ..., a_K\}$。Aggregators 負責收集來自 UP 的模型更新，執行初步聚合 (如生成 Aggregated Gradient)，並將聚合結果打包成「提案 (Proposal)」提交給委員會。Aggregator 的選擇同樣基於權益 (Stake-based)，權益越高的節點越有機會被選為當輪的 Aggregator。
+    
+    \item \textbf{Verifier Committee (VC)}：集合記為 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$。Verifiers 組成驗證委員會 (Committee)，負責驗證 Aggregator 提交的提案。委員會成員通過共識機制決定是否批准該提案，並將合法的全局模型記錄上鏈。
+\end{enumerate}
+
+系統在每個訓練輪次 $r$ 動態選擇 Aggregators 和 Verifiers，選擇概率均與其持有的權益成正比。
+
+\subsection{聚合與共識流程}
+
+在每個訓練輪次，系統執行以下流程：
+
+\begin{enumerate}
+    \item \textbf{本地訓練}：Update Providers 在本地資料上訓練模型，運算模型更新 $\Delta w_i$ 並發送給選定的 Aggregator。
+    \item \textbf{初步聚合}：Aggregator 收集來自多個 UP 的更新，執行演算法 (如 FedAvg) 生成聚合更新 $\Delta w_{agg}$，並構建提案交易提交至區塊鏈。
+    \item \textbf{委員會驗證}：委員會 $\mathcal{V}_r$ 下載 Aggregator 的提案，執行 Krum 驗證邏輯。
+    \item \textbf{共識決策}：委員會成員通過 BFT 共識協議對提案進行投票。
+    \item \textbf{獎勵分配 (Reward Linkage)}：
+    若提案獲得委員會批准通過：
+    \begin{itemize}
+        \item 投贊成票的 \textbf{Verifiers} 獲得驗證獎勵。
+        \item 提案的 \textbf{Aggregator} 獲得聚合獎勵。
+        \item 被包含在該提案中的 \textbf{Update Providers} 獲得貢獻獎勵。
+    \end{itemize}
+    若提案被拒絕，則該鏈條上的所有角色 (包括 Aggregator 和 UP) 均無法獲得獎勵。這種「捆綁式獎勵 (Bundled Reward)」機制強化了角色間的利益關聯。
+\end{enumerate}
+
+\subsection{權益動態機制}
+
+權益在系統中扮演雙重角色：
+
+\begin{itemize}
+    \item 選擇權重：權益決定驗證者與其被選入委員會的機率，權益越高，參與機會越多。
+    \item 經濟激勵：參與委員會的驗證者獲得獎勵，進一步增加其權益，形成正反饋循環。
+\end{itemize}
+
+這種機制設計的初衷是激勵誠實行為：誠實驗證者通過持續參與獲得獎勵，權益不斷增長，從而鞏固其在系統中的影響力。然而，如本章後續所示，這種機制也可能被惡意驗證者利用，通過排他性的獎勵分配實現權益壟斷。
+
+\subsection{系統假設}
+
+本研究基於以下假設：
+
+\begin{itemize}
+    \item 網路假設：網路為部分同步模型，訊息最終會被傳遞，但傳遞延遲有上界。
+    \item 密碼學假設：密碼學原語 (如數位簽章、雜湊函數) 是安全的，攻擊者無法偽造簽章或碰撞雜湊。
+    \item 誠實客戶端存在：系統中至少存在一定比例的誠實客戶端，其提交的更新是基於真實資料的正常訓練結果。
+    \item 可驗證性假設：聚合結果的正確性可以被驗證。任何節點都可以重新運算演算法，驗證委員會提交的結果是否正確。
+\end{itemize}
 
 \section{攻擊者模型}
 \label{sec:adversary_model}

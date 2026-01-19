@@ -1,0 +1,122 @@
+\chapter{背景知識與相關研究}
+\label{chap:background-related}
+
+本章旨在建立理解本研究所需之技術基礎，並對現有研究進行系統性回顧。首先介紹聯邦學習與區塊鏈技術的結合動力，接著探討共識機制與經濟安全設計的基本原理。在相關研究部分，本章分析了現有區塊鏈聯邦學習方案在效率與安全性上的權衡，並指出現有方法在面對理性攻擊者時的局限性。最後，本章定義了本研究所採用的基準系統模型。
+
+\section{聯邦式學習基礎 (Federated Learning Fundamentals)}
+\label{sec:fl_fundamentals}
+
+聯邦學習（Federated Learning, FL）是由McMahan等人於2017年正式提出之分散式機器學習框架 \cite{mcmahan2017communication}。其核心目標在於多個參與方（Clients）協同訓練模型，而無需將原始資料集中於中央伺服器，從而保護資料隱私。
+
+\subsection{聯邦式學習的動機與定義}
+在標準聯邦學習架構中，目標是最小化全域損失函數 $F(w)$：
+\begin{equation}
+    \min_{w} F(w) = \sum_{k=1}^{K} \frac{n_k}{n} F_k(w)
+\end{equation}
+其中 $K$ 為參與客戶端總數，$n_k$ 為第 $k$ 個客戶端之本地樣本數，$F_k(w)$ 為其本地損失函數。
+
+\subsection{FedAvg 演算法與數學框架}
+經典的 \textit{FederatedAveraging} (FedAvg) 演算法透過週期性地收集客戶端模型更新 $w_{t+1}^k$，並在伺服器端進行加權聚合：
+\begin{equation}
+    w_{t+1} \leftarrow \sum_{k=1}^{K} \frac{n_k}{n} w_{t+1}^k
+\end{equation}
+此方法雖然顯著降低了通訊開銷，但其安全性建立在中央聚合器完全誠實且客戶端皆非惡意的假設之上。在此框架下，任何單一聚合點的失效或惡意行為都將導致全局模型的崩潰。
+
+\section{區塊鏈聯邦式學習 (Blockchain-based Federated Learning)}
+\label{sec:bcfl_background}
+
+為了消除對單一中央伺服器的依賴，研究者引入區塊鏈技術，提出區塊鏈式聯邦學習（BCFL）架構。在此架構中，去中心化帳本取代了傳統聚合器，提供不可篡改性與透明性。
+
+\subsection{BCFL 的動機：解決信任問題}
+BCFL 透過將模型聚合邏輯嵌入共識過程或智能合約，解決了聯邦學習中的「單點信任」問題。所有的模型更新、聚合歷史與獎勵分配均記錄於鏈上，確保了過程的可追溯性與可審計性。
+
+\subsection{BCFL 基本架構與智能合約}
+BCFL的發展經歷了從全節點共識到委員會機制的演進：
+\begin{enumerate}
+    \item \textbf{早期架構 (PoW-based)}：如 BlockFL \cite{kim2020blockchained} 使用工作量證明（PoW）達成共識，雖具備高度去中心化特性，但面臨高能耗與高延遲問題。
+    \item \textbf{委員會共識 (Committee-based)}：如 BFLC \cite{li2021blockchain} 與 BlockDFL \cite{qin2024blockdfl}。為了提升效能，系統從全體參與者中選出一個子集（委員會）負責驗證與聚合。此種機制將通訊複雜度從 $O(n^2)$ 降低至 $O(C^2)$，其中 $C$ 為委員會大小。
+\end{enumerate}
+當前研究多採用智能合約來自動化執行聚合演算與獎勵發放，減少人為干預風險。
+
+\section{拜占庭容錯機制 (Byzantine Fault Tolerance)}
+\label{sec:bft_background}
+
+在去中心化環境中，系統必須能夠抵禦拜占庭節點（發送任意或偽造訊息的節點）。
+
+\subsection{PBFT 共識協議}
+實用拜占庭容錯（Practical Byzantine Fault Tolerance, PBFT）是區塊鏈委員會常用的共識協議。它保證了在不超過 $1/3$ 節點失效的情況下，系統仍能達成一致性（Safety）與存活性（Liveness）。PBFT 的三階段投票流程（Pre-prepare, Prepare, Commit）確保了提案的終局性。
+
+\subsection{委員會機制與效率優化}
+為了進一步提升效能，現代 BCFL 方案普遍採用委員會架構。隨後的研究如 VBFL \cite{chen2021robust} 與 VFChain \cite{peng2022vfchain} 分別引入了基於權益的共識與可審計的聚合證明。這些方法將安全性與經濟質押（Staking）掛鉤，建立了加密經濟安全性（Crypto-economic Security）的基礎，確保攻擊成本高於潛在收益。
+
+\section{相關研究 (Related Work)}
+\label{sec:related_work_merged}
+
+本節將現有關於區塊鏈聯邦學習之安全性與效率的研究分為三類進行探討，並分析其局限性。
+
+\subsection{基於驗證的方法 (opML/zkML)}
+隨著模型規模擴大，直接驗證運算開銷成為瓶頸。
+\begin{itemize}
+    \item \textbf{zkML}：Chen等人 \cite{chen2024zkml} 與 Sun等人 \cite{sun2024zkllm} 探討使用零知識證明驗證模型。雖具強密碼學保證，但生成證明之運算開銷巨大，難以適應快速迭代。
+    \item \textbf{opML}：Conway等人 \cite{conway2024opml} 引入 Optimistic Rollup 思路，採取「預設為真，有疑則挑戰」的邏輯。然而現有 opML 設計多針對單一 Prover，且挑戰期過長，不適用去中心化委員會環境。
+\end{itemize}
+
+\subsection{基於委員會的方法 (FLCoin, BlockDFL)}
+BlockDFL \cite{qin2024blockdfl} 與 FLCoin \cite{ren2024scalable} 利用隨機或基於權益的機制選取委員會。這些方法成功將複雜度降低，使得系統具備擴展性。
+
+\subsection{現有方法的局限性分析}
+儘管效率獲得提升，現有方案仍存在根本性缺陷：
+\begin{itemize}
+    \item \textbf{誠實大多數假設}：安全性均依賴於「委員會內超過 2/3 為誠實節點」的靜態假設。
+    \item \textbf{漸進式佔領風險}：惡意節點可透過長期誠實表現積累權益，逐步提高入選委員會機率。
+    \item \textbf{缺乏自癒能力}：當委員會被滲透（例如惡意佔比 >1/3）時，系統缺乏外部介入機制來逆轉錯誤結果或懲罰委員會。
+\end{itemize}
+
+\subsection{研究缺口總結}
+總結而言，現有方法主要關注資料層的客戶端防禦或靜態的委員會共識，系統性地忽略了「委員會本身可能淪陷」的風險。本研究欲填補之缺口在於：如何設計一個激勵相容機制，使得當委員會集體舞弊時，外部節點仍能透過經濟挑戰（Challenge）識別並清除惡意驗證者。
+
+\section{系統模型與前置定義 (System Model and Preliminaries)}
+\label{sec:system_model}
+
+本節定義本研究所採用的基準系統模型。此模型基於 BlockDFL 委員會架構，作為後續威脅分析與防禦設計的基礎。
+
+\subsection{網路模型}
+
+本研究考慮一個去中心化的區塊鏈聯邦學習系統，由以下三種核心角色構成：
+
+\begin{enumerate}
+    \item \textbf{Update Providers (UP)}：原為客戶端 (Clients)，集合記為 $\mathcal{U} = \{u_1, u_2, ..., u_N\}$。每個 Update Provider 持有本地私有資料集 $\mathcal{D}_i$，負責在本地進行模型訓練並提交更新。
+    
+    \item \textbf{Aggregators (AG)}：集合記為 $\mathcal{A} = \{a_1, a_2, ..., a_K\}$。負責收集 UP 的更新，執行初步聚合生成提案。Aggregator 的選擇基於權益 (Stake-based)。
+    
+    \item \textbf{Verifier Committee (VC)}：集合記為 $\mathcal{V} = \{v_1, v_2, ..., v_M\}$。Verifiers 組成委員會，負責驗證 Aggregator 的提案。委員會成員通過共識機制批准提案並上鏈。
+\end{enumerate}
+
+\subsection{聚合與共識流程}
+
+在每個訓練輪次 $r$，系統執行以下流程：
+\begin{enumerate}
+    \item \textbf{本地訓練}：UP 訓練 model update $\Delta w_i$ 並發送給 AG。
+    \item \textbf{初步聚合}：AG 生成聚合更新 $\Delta w_{agg}$ 並提交提案交易。
+    \item \textbf{委員會驗證}：委員會 $\mathcal{V}_r$ 執行驗證邏輯（如 Krum 檢驗）。
+    \item \textbf{共識決策}：委員會通過 BFT 共識對提案投票。
+    \item \textbf{獎勵分配}：若提案通過，AG、UP 與投票贊成的 Verifiers 共同瓜分系統獎勵。
+\end{enumerate}
+
+\subsection{獎勵機制與權益動態}
+
+權益在系統中扮演雙重角色：
+\begin{itemize}
+    \item \textbf{選擇權重}：權益越高，被選入委員會或擔任 Aggregator 的機率越高。
+    \item \textbf{經濟正反饋}：成功參與共識可獲得獎勵，進一步增加權益。
+\end{itemize}
+這種「贏家通吃」的正反饋特性雖然激勵了誠實行為，但也為後續描述的佔領攻擊埋下了伏筆。
+
+\section{本章小結}
+\label{sec:background_summary}
+
+本章首先介紹了聯邦式學習的基本框架與 FedAvg 演算法，接著說明區塊鏈技術如何解決聯邦學習中的信任問題。在共識機制方面，本章詳細闡述了 PBFT 協議及其在委員會架構中的應用。
+
+針對現有區塊鏈聯邦學習方案的分析顯示，基於驗證的方法（如 opML、zkML）受限於計算通用性，而基於委員會的方法（如 FLCoin、BlockDFL）雖提升了效率，但其安全性仍依賴「誠實多數假設」。當理性攻擊者透過權益累積逐步滲透委員會時，現有機制缺乏有效的偵測與防禦能力。
+
+\ref{sec:system_model} 節定義的系統模型將作為後續分析的基礎。下一章將針對此架構，深入分析「漸進式委員會佔領攻擊」的威脅模型，揭示理性攻擊者如何利用權益機制的正反饋特性實現網路控制權的轉移。

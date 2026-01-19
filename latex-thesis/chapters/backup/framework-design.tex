@@ -1,12 +1,9 @@
 \begin{ZhChapter}
 
-\chapter{挑戰增強型委員會架構 (Challenge-Augmented Committee Architecture)}
-\label{chap:framework}
+\chapter{系統架構設計}
+\label{chap:framework-design}
 
-為達成第三章提出的五項安全目標，本章提出「挑戰增強型委員會架構」(Challenge-Augmented Committee Architecture, CACA)。此架構在第二章 \ref{sec:system_model} 節定義的基準委員會模型上，新增異步審計機制與內部罰沒協議，將安全性從「門檻安全性」轉向「經濟安全性」。
-
-本章首先概述 CACA 的設計哲學與整體架構（\ref{sec:arch_overview} 節），接著詳細描述各組件的設計，並透過通訊複雜度與概率模型分析論證其在維持高效率的同時如何提供強大且具備激勵相容性的安全保障。
-
+本章詳細描述本研究提出的「挑戰增強型委員會架構 (Challenge-Augmented Committee Architecture, CACA)」之系統設計。針對區塊鏈聯邦學習在共識層可能遭遇的安全性挑戰，CACA 引入了「非阻塞式異步挑戰 (Non-blocking Asynchronous Challenge)」機制，旨在解耦系統的「活性 (Liveness)」與「安全性 (Security)」。該框架的核心設計在於採用「即時執行 (Immediate Execution)」配合「異步審計 (Asynchronous Audit)」。基於聯邦學習模型對噪聲的強健性與天然的自癒能力，本架構採取「僅懲罰不回滾 (Slash-only Policy)」的處置策略，在確保系統最高運作效率的前提下，透過嚴格的經濟罰沒機制實現對惡意行為的有效威懾，並建立完善的系統究責體系。
 
 \section{系統架構概覽}
 \label{sec:arch_overview}
@@ -235,7 +232,6 @@ P(X \ge \lfloor 2C/3 \rfloor + 1) = \sum_{k=\lfloor 2C/3 \rfloor + 1}^{C} \frac{
 
 \section{本章小結}
 
-本章提出了一種基於異步審計與即時執行的防禦框架。透過移除傳統的確認等待期，我們最大化了聯邦學習的訓練效率。同時，利用雙層信任模型與超幾何分佈分析，我們證明了小委員會配合異步挑戰機制，能夠在極低的通訊成本下實現等同於全網共識的安全性。這種設計成功解決了區塊鏈聯邦學習中效率與安全的兩難困境。下一章將通過多維度的模擬實驗，驗證本架構在面對漸進式委員會佔領攻擊時的有效性與穩健性。
-
+本章提出了一種基於異步審計與即時執行的防禦框架。透過移除傳統的確認等待期，我們最大化了聯邦學習的訓練效率。同時，利用雙層信任模型與超幾何分佈分析，我們證明了小委員會配合異步挑戰機制，能夠在極低的通訊成本下實現等同於全網共識的安全性。這種設計成功解決了區塊鏈聯邦學習中效率與安全的兩難困境。
 
 \end{ZhChapter}
