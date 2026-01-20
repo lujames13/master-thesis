@@ -1,7 +1,7 @@
 \chapter{背景知識與相關研究}
 \label{chap:background-related}
 
-本章旨在建立理解本研究所需之技術基礎，並對現有研究進行系統性回顧。首先介紹聯邦學習的基本原理及其面臨的拜占庭威脅，接著探討傳統防禦機制的局限性與區塊鏈聯邦學習（BCFL）的興起。在相關研究部分，本章深入分析了現有 BCFL 方案在委員會選擇與驗證機制上的設計盲點，特別是針對「誠實多數假設」的依賴。最後，本章定義了本研究所採用的基準系統模型。
+本章旨在建立理解本研究所需之技術基礎，並對現有區塊鏈聯邦學習（BCFL）的驗證機制進行系統性回顧與批判性分析。首先介紹聯邦學習的基本原理及其面臨的拜占庭威脅，接著探討區塊鏈技術如何重塑聯邦學習的信任模型。在相關研究部分，本章將深入剖析當前主流的密碼學驗證（zkML）、樂觀驗證（opML）與委員會共識機制，運用具體數據論證現有方案在安全性、效率與通用性上的結構性權衡。最後，本章定義了本研究所採用的基準系統模型，為後續的威脅建模與防禦設計奠定基礎。
 
 \section{聯邦式學習與拜占庭威脅 (Federated Learning and Byzantine Threats)}
 \label{sec:fl_background}
@@ -43,163 +43,108 @@
 \section{區塊鏈聯邦式學習 (Blockchain-based Federated Learning, BCFL)}
 \label{sec:bcfl_background}
 
-區塊鏈聯邦式學習（BCFL）透過將分散式帳本技術（Distributed Ledger Technology, DLT）引入聯邦學習架構，從根本上重塑了多方協作訓練的信任模型。本節將探討 BCFL 的技術動機、架構演進脈絡、委員會共識機制的設計權衡，並深入分析現有方案在安全性上的結構性缺陷。
+區塊鏈聯邦式學習（BCFL）透過將分散式帳本技術（Distributed Ledger Technology, DLT）引入聯邦學習架構，從根本上重塑了多方協作訓練的信任模型。
 
 \subsection{技術動機：從中心化信任到去中心化共識}
 
 \subsubsection{傳統聯邦學習的信任集中化困境}
-儘管聯邦學習承諾「數據不出本地」，其標準架構仍高度依賴單一中央聚合器（Central Aggregator），這種中心化設計引入了三類關鍵的信任風險。首先是\textbf{聚合器的誠實性風險}：由於缺乏外部監督，中央伺服器可能執行選擇性聚合，故意排除特定客戶端的更新以操縱模型表現，甚至如同 Geiping 等人 \cite{geiping2020inverting} 指出，惡意伺服器可對梯度執行反演攻擊（Gradient Inversion Attack），從更新中重建原始訓練影像。其次是\textbf{單點故障（Single Point of Failure, SPOF）}：中央伺服器的可用性直接決定了整個系統的穩定性，任何網路攻擊或硬體故障皆會導致訓練全面中斷。最後是\textbf{拜占庭容錯能力的缺乏}：在惡意客戶端佔比超過 50\% 或中央伺服器本身遭入侵的情況下，傳統的穩健聚合演算法（如 Krum 或 Median）將失效，導致全域模型被投毒 \cite{fang2020local}。
+儘管聯邦學習承諾「數據不出本地」，其標準架構仍高度依賴單一中央聚合器（Central Aggregator），這種中心化設計引入了三類關鍵的信任風險。首先是\textbf{聚合器的誠實性風險}：由於缺乏外部監督，中央伺服器可能執行選擇性聚合，故意排除特定客戶端的更新以操縱模型表現，甚至如同 Geiping 等人 \cite{geiping2020inverting} 指出，惡意伺服器可對梯度執行反演攻擊（Gradient Inversion Attack），從更新中重建原始訓練影像。其次是\textbf{單點故障（Single Point of Failure, SPOF）}：中央伺服器的可用性直接決定了整個系統的穩定性。最後是\textbf{拜占庭容錯能力的缺乏}：在惡意客戶端佔比超過 50\% 或中央伺服器本身遭入侵的情況下，傳統的穩健聚合演算法將失效。
 
 \subsubsection{區塊鏈技術的解決方案}
-區塊鏈技術的引入為上述問題提供了結構性的解方。\textbf{不可篡改性（Immutability）}確保了所有模型更新與聚合結果一旦上鏈便無法被回溯修改，為系統提供了可信任的審計軌跡，解決了結果篡改與抵賴問題。\textbf{智能合約的透明性（Transparency）}將聚合規則與客戶端選擇邏輯代碼化，使得所有參與者皆能驗證聚合過程的正確性，消除了黑箱操作的空間。\textbf{去中心化架構（Decentralization）}則通過點對點網路（P2P）取代了中央節點，利用共識機制（Consensus Mechanism）確保在部分節點失效或作惡的情況下，系統仍能維持運作並達成資料一致性。這種架構轉變將對單一實體的信任轉移至對密碼學協議與多數共識的信任，實現了更強健的安全性與容錯能力。
+區塊鏈技術的引入為上述問題提供了結構性的解方。\textbf{不可篡改性（Immutability）}確保了所有模型更新與聚合結果一旦上鏈便無法被回溯修改，為系統提供了可信任的審計軌跡。\textbf{智能合約的透明性（Transparency）}將聚合規則與客戶端選擇邏輯代碼化，使得所有參與者皆能驗證聚合過程的正確性。\textbf{去中心化架構（Decentralization）}則通過點對點網路（P2P）取代了中央節點，利用共識機制（Consensus Mechanism）確保在部分節點失效或作惡的情況下，系統仍能維持運作並達成資料一致性。
 
-\subsection{BCFL 架構的演進：效率與安全的權衡}
+\subsection{BCFL 架構的演進概況}
+BCFL 的發展歷程反映了學界在去中心化程度、通訊效率與安全性三者之間的權衡。早期的研究如 BlockFL \cite{kim2020blockchained} 採用工作量證明（PoW）與全節點驗證，雖實現了極致的去中心化但帶來了難以承受的計算負擔與延遲。隨後，為了克服擴展性瓶頸，基於委員會（Committee-based）的架構逐漸成為主流，如 BFLC \cite{li2021blockchain} 與 BlockDFL \cite{qin2024blockdfl}，透過選舉小型驗證委員會來降低通訊複雜度，這也是本研究主要的探討對象。
 
-BCFL 的發展歷程反映了學界在去中心化程度、通訊效率與安全性三者之間的權衡與探索。早期的研究，如 Kim 等人提出的 **BlockFL** \cite{kim2020blockchained}，採用完全耦合架構（Fully Coupled Architecture），利用工作量證明（PoW）機制要求所有礦工驗證本地模型更新。這種設計雖然實現了極致的去中心化，但全節點驗證帶來了巨大的計算負擔，且 PoW 的共識延遲（Consensus Latency）嚴重拖累了模型訓練的迭代速度，使其難以應用於對時效性要求較高的邊緣運算場景。
+\subsection{智能合約的功能職責}
+在 BCFL 系統中，智能合約扮演著自動化管理者的角色，其功能通常劃分為四個核心模組：\textbf{註冊模組}維護參與者身分與權益；\textbf{聚合模組}協調訓練輪次與參數收集；\textbf{驗證模組}執行校驗邏輯（如準確率測試）以過濾惡意更新；\textbf{獎勵模組}則依據貢獻度自動分配代幣激勵，並對被偵測到的惡意行為執行罰沒（Slashing）。
 
-為了克服擴展性瓶頸，**委員會共識架構（Committee-based Consensus）** 逐漸成為主流。Li 等人提出的 **BFLC** \cite{li2021blockchain} 與 Qin 等人的 **BlockDFL** \cite{qin2024blockdfl} 引入了代議制概念，從全體參與者中選出一個規模較小的驗證委員會（Verifier Committee）負責執行聚合與共識。此舉將共識的通訊複雜度從全網的 $O(n^2)$ 顯著降低至委員會內部的 $O(C^2)$ 或 $O(C)$。以 FLCoin \cite{ren2024scalable} 為例，其採用滑動視窗機制選取委員會，在維持安全性的前提下將通訊開銷降低了 90\%，並將共識延遲控制在數秒級別。然而，這種效率的提升也引入了新的攻擊面：系統的安全性從依賴全網多數誠實，轉變為依賴委員會成員的誠實性，這使得針對委員會的滲透攻擊成為可能。
+\section[拜占庭容錯機制]{拜占庭容錯機制 (Byzantine Fault Tolerance Mechanisms)}
+\label{sec:bft_background}
+
+分散式系統在面對節點故障時，必須具備持續運作的能力。當故障涉及節點發送矛盾訊息或與其他惡意節點共謀時，系統便需要更強韌的拜占庭容錯機制。
+
+\subsection{拜占庭將軍問題與容錯閾值}
+拜占庭將軍問題由 Lamport 等人 \cite{lamport1982byzantine} 提出，定義了在存在叛徒的情況下如何達成一致性。Lamport 證明了在僅使用口頭訊息的情況下，系統若要達成拜占庭容錯，總節點數 $n$ 與惡意節點數 $f$ 必須滿足 $n \geq 3f + 1$。此理論極限確立了 PBFT 等共識協議的安全性邊界。
+
+\subsection{實用拜占庭容錯協議 (PBFT)}
+Castro 與 Liskov 於 1999 年提出的 PBFT 協議 \cite{castro1999practical} 首次將 BFT 共識的通訊複雜度從指數級降至多項式級別 $O(n^2)$。協議透過 Pre-prepare、Prepare 與 Commit 三個階段達成共識。當節點收集到 $2f+1$ 個匹配的 Commit 訊息時，即確認達成共識。在聯盟鏈環境下，PBFT 提供了堅實的信任基礎，特別適用於本研究所探討的委員會共識場景。
+
+\section[相關研究與盲點分析]{相關研究與盲點分析 (Related Work and Blind Spot Analysis)}
+\label{sec:related_work}
+
+現有的區塊鏈聯邦學習驗證方法可大致分為兩大類：基於密碼學證明的驗證方法與基於委員會的共識方法。前者追求數學上可證明的計算正確性，但往往面臨嚴重的效能瓶頸；後者則透過經濟激勵與多數決達成共識，但高度依賴誠實多數假設。本節將系統性分析這些方法的技術原理、效能數據與固有局限，以釐清本研究的學術定位。
+
+\subsection{基於密碼學驗證的方法 (Cryptographic Verification Methods)}
+\subsubsection{零知識機器學習 (zkML) 的計算瓶頸}
+零知識機器學習（zkML）試圖透過將機器學習計算轉換為算術電路，使驗證者無需重新執行模型即可確認計算的正確性與數據隱私 \cite{chen2024zkml}。其技術堆疊通常包括 Groth16（以約 200 bytes 的極小證明著稱）、PLONK（具備通用可更新設置特性）\cite{gabizon2019plonk} 與 zk-STARK（無需信任設置且具量子抗性）。轉換過程需經歷三個高成本階段：首先將浮點數量化為有限域整數，接著將每個運算分解為多項式約束，最後生成密碼學證明。
+
+然而，約束數量隨深度學習模型的複雜度呈指數級膨脹。根據 ZEN 編譯器的基準測試 \cite{feng2021zen}，一個簡單的 ShallowNet-MNIST 模型需要 4.31 百萬（4.31M）個約束，而稍大的 LeNet-Face-large-ORL 則暴增至 2.63 億（263M）個約束。Chen 等人在 EuroSys 2024 的實驗數據進一步揭示了其效能瓶頸 \cite{chen2024zkml}：ResNet-18 模型的證明生成需耗時 52.9 秒，VGG16 需要 637 秒，而 DistillGPT-2 更高達 3,651 秒（約一小時），且在生成過程中需要高達 1TB RAM 的高規格硬體支援。儘管框架效能持續優化——例如 EZKL 相比 RISC Zero 快了 65.88 倍且記憶體使用減少 98.13\% \cite{ezkl2024benchmarking}——但對於需要頻繁迭代的聯邦學習而言，此類開銷仍難以負荷。
+
+此外，zkML 的核心局限在於難以支援複雜的拜占庭容錯聚合演算法。Krum 與 Multi-Krum 等演算法需計算所有客戶端更新間的成對距離，這將產生 $O(n^2 \cdot d)$ 的約束爆炸；排序與中位數運算在零知識電路中亦極度昂貴。現有 zkFL 方案如 RiseFL \cite{zhu2024risefl} 僅能支援 L2-norm 等簡單有效性檢查，將密碼學成本從 $O(d)$ 降至 $O(d/\log d)$，但仍無法實現完整的距離計算防禦。因此，zkML 雖然提供了強大的密碼學安全性，卻以犧牲聚合演算法的通用性與系統效率為代價。
+
+\subsection{基於樂觀驗證的方法 (Optimistic Verification Methods)}
+\subsubsection{opML 的架構限制與延遲挑戰}
+樂觀機器學習（optimistic Machine Learning, opML）採用「預設正確」的執行模式，僅在爭議發生時才啟動驗證程序 \cite{conway2024opml}。其運作流程為：服務提供者於鏈下執行機器學習推論並提交結果，驗證者在規定的挑戰期內可發起欺詐證明（Fraud Proof），透過二分協議（Bisection Protocol）逐步縮小爭議範圍至單一計算步驟，最終由鏈上的 FPVM（欺詐證明虛擬機）進行仲裁。ORA Protocol 作為首個開源 opML 實現，已能支援 LLaMA 2 等 70 億參數模型直接於以太坊環境下運行 \cite{ora2024opml}。
+
+挑戰期的設計反映了安全性與效率的根本權衡。為了確保驗證者有充足時間偵測並提交證明，同時容納網路延遲與潛在的審查攻擊，主流 Optimistic Rollup 協議如 Optimism 與 Arbitrum 分別採用了 7 天與 6.4 天的挑戰期 \cite{optimism2024rollup}。這種長週期的確認機制與聯邦學習的需求存在本質衝突——聯邦學習依賴快速的迭代更新與聚合，若每一輪訓練皆需等待數天的挑戰期，將使模型訓練完全不可行。
+
+此外，opML 基於 AnyTrust 假設（即系統中至少存在一個誠實驗證者），這與 BCFL 的多方共識需求存在差異。opML 設計初衷為處理單一提交者與單一挑戰者間的爭議，而非多方參與者間的複雜共識。加之 FPVM 的記憶體限制需採用延遲載入設計，當聯邦學習模型涉及大量參與者的梯度更新時，可能超出其實際處理能力。雖然部分方案試圖整合 zkML 元件以增強隱私，但仍受限於單一證明者架構，無法滿足 BCFL 對於多驗證者去中心化共識的需求。
+
+\subsection{基於委員會共識的方法 (Committee-Based Consensus Methods)}
+相較於上述驗證方法，基於委員會的共識機制在效率與實用性之間取得了較佳的平衡，因而成為當前 BCFL 的主流選擇。現有研究主要在委員會的「選舉機制」上進行創新。
+
+\subsubsection{FLCoin：基於滑動窗口的動態選舉}
+FLCoin 提出了一種基於滑動窗口（Sliding Window）的動態委員會選舉機制 \cite{ren2024scalable}，將聯邦學習的貢獻歷史作為委員會成員資格的依據。每個有效的更新區塊代表一份成員資格，窗口大小固定為 $s$，隨著新區塊的生成而滑動更新。節點的貢獻值 $C_k$ 由訓練數據規模 $|D_k|$ 決定，貢獻值最高者將成為委員會領導者。
+
+根據其安全性分析，在網路規模 $n=500$、惡意節點比例 $\leq 25\%$、窗口大小 $s=100$ 的條件下，委員會內惡意節點數不超過容錯閾值的機率可達 98.4\%；若將 $s$ 提升至 150，此機率更可提升至 99.8\%。在效能方面，FLCoin 透過此機制相較於傳統 PBFT 實現了 90\% 的通訊開銷降低與 35\% 的訓練時間縮短。在 100 個節點的配置下，其共識延遲僅需 3.05 秒。然而，FLCoin 的滑動窗口設計未建立權益衰減機制，且依賴「預定義的可信管理者群組」來維護身分鏈，引入了潛在的中心化風險。更關鍵的是，該研究未考慮惡意節點採取長期策略，透過持續參與逐步累積權益以控制委員會的情境。
+
+\subsubsection{BlockDFL：基於權益加權的雙層驗證}
+BlockDFL 採用了完全去中心化的點對點架構 \cite{qin2024blockdfl}，透過區塊雜湊值與權益加權（Stake-weighted）實現委員會選舉的隨機性與可驗證性。其核心假設為「持有大量權益的參與者傾向誠實行為，因為他們能從貨幣獎勵中獲益更多」。該系統設計了雙層評分機制：第一層由聚合者進行本地推論篩選，第二層由驗證者使用 Krum 演算法過濾異常值。
+
+BlockDFL 宣稱能容忍高達 40\% 的惡意參與者，優於多數現有框架。其獎勵連鎖機制確保了權益能均等地分配給貢獻者。與 FLCoin 的關鍵差異在於，BlockDFL 的選舉基礎是經濟權益而非純粹的貢獻次數。這雖然提高了攻擊門檻，但也引入了新的攻擊面：國家級攻擊者或競爭對手可能願意承擔經濟損失（Sacrifice Stake）來破壞模型。此外，該機制同樣缺乏防止 Sybil 攻擊者跨多重身份逐步累積權益的防禦手段。
+
+\subsubsection{BFLC 與其他信譽機制}
+BFLC 開創性地將委員會共識引入 BCFL \cite{li2021blockchain}，採用雙區塊儲存設計並利用 K-fold 交叉驗證評估更新品質。然而，BFLC 面臨嚴重的冷啟動問題（Cold Start Problem）——新加入節點因缺乏歷史數據而難以建立信任，導致系統容易被早期進入的惡意節點掌控。後續研究如 VBFL \cite{chen2021robust} 與 VFChain \cite{peng2022vfchain} 雖引入了準確度差異（VAD）指標與可審計的雙跳鏈結構來增強安全性，但仍共同面臨 50\% 拜占庭閾值的硬性限制以及資源受限裝置的計算負擔問題。
+
+\subsection{現有方法的系統性局限與研究缺口}
+
+\subsubsection{安全性、效率與通用性的三難困境}
+綜合上述分析，揭示了現有方法在「安全性-效率-通用性」三個維度上的 Pareto 前沿權衡（Trade-off）。如表 \ref{tab:methodology_comparison} 所示，zkML 提供了最強的密碼學安全性，無需依賴誠實假設，但其證明生成時間隨模型規模呈超線性增長，且無法支援 Krum 等複雜聚合算法。opML 透過經濟激勵大幅降低了計算成本，但其長達數天的挑戰期與單一證明者架構使其難以應用於即時性要求高的聯邦學習場景。委員會方法在效率與實用性間取得了折衷，但均依賴某種形式的誠實多數假設。
 
 \begin{table}[ht]
 \centering
-\caption{代表性 BCFL 系統比較}
-\label{tab:bcfl_system_comparison}
+\caption{現有 BCFL 驗證與共識機制之比較分析}
+\label{tab:methodology_comparison}
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|}
 \hline
-\textbf{系統} & \textbf{共識機制} & \textbf{通訊複雜度} & \textbf{容錯能力} & \textbf{主要創新} & \textbf{潛在局限} \\ \hline
-BlockFL \cite{kim2020blockchained} & PoW & 依 PoW 難度 & 50\% 算力 & 首個 BCFL 框架 & 高能耗、高延遲 \\ \hline
-BFLC \cite{li2021blockchain} & 委員會共識 & $O(C^2)$ & 33\% (3f+1) & K-fold 驗證 & 委員會負擔重 \\ \hline
-Lu et al. \cite{lu2020blockchain} & PoTQ & IIoT 優化 & 33\% & 共識與訓練整合 & 需可信實體 \\ \hline
-BlockDFL \cite{qin2024blockdfl} & PBFT 投票 & $O(A \times V)$ & \textbf{40\%} & 雙層評分 & 聚合器影響延遲 \\ \hline
-FLCoin \cite{ren2024scalable} & 滑動視窗 & $O(s)$ 線性 & <25\% & 通訊大幅降低 & 視窗大小權衡 \\ \hline
+\textbf{方案類型} & \textbf{代表技術/系統} & \textbf{安全性保證來源} & \textbf{效率 (典型延遲)} & \textbf{聚合通用性} \\ \hline
+密碼學驗證 & zkML (Groth16, PLONK) & 數學證明 (無信任假設) & 分鐘至小時 (極慢) & 僅限簡單聚合 (如 FedAvg) \\ \hline
+樂觀驗證 & opML (Optimism, ORA) & 經濟賽局 (AnyTrust) & 7 天挑戰期 & 受限於 FPVM 實作 \\ \hline
+\multirow{3}{*}{委員會共識} & FLCoin & 統計機率 (98.4\%) & 3.05 秒 & 支援多種聚合 \\ \cline{2-5} 
+ & BlockDFL & 經濟權益 (40\% 容錯) & <3 秒 & 支援 Krum/Median \\ \cline{2-5} 
+ & BFLC & 聲譽積累 (50\% 閾值) & 中等 & 支援 \\ \hline
 \end{tabular}%
 }
 \end{table}
 
-\subsection{關鍵技術組件與委員會安全分析}
+\subsubsection{關鍵缺口：動態累積攻擊的防禦真空}
+更為關鍵的是，所有現有的委員會方案均未充分處理\textbf{長期權益累積（Long-term Stake Accumulation）}導致的委員會滲透風險。無論是 FLCoin 的滑動窗口或 BlockDFL 的權益加權，均採用静態的安全性分析模型（如超幾何分佈），假設攻擊者的資源或權益比例是固定的。然而，在實際賽局中，理性的攻擊者會採取\textbf{漸進式委員會佔領（Progressive Committee Capture）}策略：先在潛伏期表現誠實以獲取合法獎勵，待累積了足夠的權益或聲譽後，再於關鍵時刻發動攻擊。
 
-\subsubsection{智能合約的功能職責}
-在 BCFL 系統中，智能合約扮演著自動化管理者的角色，其功能通常劃分為四個核心模組：\textbf{註冊模組}負責維護參與者的身分與資格，並管理權益（Stake）的質押；\textbf{聚合模組}協調訓練輪次的同步，並管理模型更新的提交與聚合觸發；\textbf{驗證模組}是安全性的核心，負責執行預定義的校驗邏輯（如準確率測試或貢獻度評估）以過濾惡意更新；\textbf{獎勵模組}則依據 Shapley 值或其他貢獻度指標，自動分配代幣激勵，並對被偵測到的惡意行為執行罰沒（Slashing）。為了優化成本，現代架構多採用鏈下計算與鏈上驗證相結合的混合模式，僅將模型雜湊值與簡潔證明上鏈，而將高維度的參數儲存於 IPFS 等分散式存儲中。
-
-\subsubsection{委員會選擇機制與風險分析}
-委員會成員的選擇機制直接決定了系統的抗攻擊能力。現有文獻主要採用以下幾種策略：
-\begin{itemize}
-    \item \textbf{隨機選擇（Random Selection）}：如 BFLC，利用偽隨機函數選取驗證者，旨在防止特定節點被針對性攻擊。其缺點在於無法保證選出節點的品質，且若網路中存在大量惡意女巫節點（Sybil Nodes），委員會極易被滲透。
-    \item \textbf{權益導向（Stake-based）}：類似權益證明（PoS），根據節點持有的權益代幣數量決定入選機率。這雖然提高了攻擊的經濟成本，但也容易導致「富者越富」的中心化傾向，且理性攻擊者可透過長期守序累積權益來發動後期攻擊。
-    \item \textbf{聲譽導向（Reputation-based）}：依據歷史貢獻度進行選擇。然而，聲譽機制容易遭受共謀攻擊，惡意節點群可透過互相刷分來人為抬高聲譽。
-\end{itemize}
-
-從機率角度分析，若網路總節點數為 $n$，其中惡意節點數為 $m$，選取大小為 $C$ 的委員會。根據超幾何分佈，恰有 $k$ 個惡意節點入選的機率為 $P(X = k) = \frac{\binom{m}{k} \binom{n-m}{C-k}}{\binom{n}{C}}$。當惡意節點數超過 BFT 共識容忍閾值（如 $C/3$）時，委員會即被攻破。雖然增加 $C$ 可以降低被攻破的機率，但在 $n=100, m=30$ 的情境下，即便 $C=10$ 仍有約 3.88\% 的機率選出惡意委員會。對於追求高可靠性的系統而言，單純依賴隨機性顯然不足以提供充分的安全保障。
-
-\subsection{現有研究的缺口}
-儘管 BCFL 架構已日趨成熟，但在面對複雜攻擊場景時仍存在顯著的研究缺口。Nguyen 等人於 FedBlock \cite{nguyen2024fedblock} 中指出，現有的隨機選擇標準並非最佳，且缺乏有效的激勵機制來確保驗證者的持續誠實。更為關鍵的是，Taylor \& Francis 的回顧文獻 \cite{taylor2024blockchain} 明確警告，BFLC 與 FLCoin 等基於委員會的機制容易被惡意節點滲透。當攻擊者採取「漸進式委員會佔領」策略，即先表現誠實以獲取合法驗證權限，隨後在關鍵時刻發動攻擊時，現有的靜態防禦機制往往束手無策。這凸顯了對於一套具備動態偵測與事后問責能力的防禦機制的迫切需求。
-
-
-\section{拜占庭容錯機制 (Byzantine Fault Tolerance Mechanisms)}
-\label{sec:bft_background}
-
-分散式系統在面對節點故障時，必須具備持續運作的能力。當故障不僅止於節點停機，而是涉及節點發送矛盾訊息或與其他惡意節點共謀時，系統便需要更強韌的拜占庭容錯機制。理解這些機制的基本原理與安全性閾值，是剖析 BCFL 系統安全性的必要前提。
-
-\subsection{拜占庭將軍問題與容錯閾值}
-
-\subsubsection{問題的起源與形式化定義}
-拜占庭將軍問題由 Lamport 等人於 1982 年正式提出 \cite{lamport1982byzantine}。其核心在於：在存在叛徒（惡意節點）試圖破壞的情況下，忠誠的將軍（誠實節點）如何透過不可靠的通道達成一致決策。此問題定義了兩個交互一致性條件：(1) 所有忠誠副官必須執行相同的命令；(2) 若指揮官是忠誠的，則所有忠誠副官必須執行其命令。
-
-\subsubsection{三分之一閾值的不可能性證明}
-Lamport 證明了在僅使用口頭訊息的情況下，系統若要達成拜占庭容錯，總節點數 $n$ 與惡意節點數 $f$ 必須滿足 $n \geq 3f + 1$。這是因為當 $n=3f$ 時，接受者無法區分是傳送者惡意發送錯誤訊息，還是另一個轉發者在說謊。此理論極限確立了 PBFT 等共識協議的安全性邊界。
-
-\subsubsection{故障模型區分}
-表 \ref{tab:failure_models} 比較了分散式系統中最常見的兩類故障模型。在區塊鏈聯邦學習場景中，由於節點可能被攻擊者控制而表現出任意惡意行為，單純的崩潰容錯（Crash Fault Tolerance, CFT）不足以保證安全，必須採用拜占庭容錯（BFT）機制。
-
-\begin{table}[ht]
-\centering
-\caption{崩潰故障與拜占庭故障之比較}
-\label{tab:failure_models}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{特性} & \textbf{崩潰故障 (CFT)} & \textbf{拜占庭故障 (BFT)} \\ \hline
-\textbf{行為特徵} & 節點停止運作，不再回應 & 節點可發送任意、矛盾訊息 \\ \hline
-\textbf{容錯閾值} & $f < n/2$ & $f < n/3$ \\ \hline
-\textbf{典型協議} & Paxos \cite{lamport2001paxos}, Raft \cite{ongaro2014search} & PBFT \cite{castro1999practical}, Tendermint \cite{tendermint} \\ \hline
-\end{tabular}
-\end{table}
-
-\subsection{實用拜占庭容錯協議 (PBFT)}
-
-\subsubsection{協議流程}
-Castro 與 Liskov 於 1999 年提出的 PBFT 協議 \cite{castro1999practical} 首次將 BFT 共識的通訊複雜度從指數級降至多項式級別 $O(n^2)$。協議透過三個階段達成共識：
+現有文獻存在三個核心缺口：
 \begin{enumerate}
-    \item \textbf{Pre-prepare}：主節點廣播請求與序號。
-    \item \textbf{Prepare}：副本節點交換訊息以確認收到請求的一致性。
-    \item \textbf{Commit}：副本節點確認全網已有足夠多的節點準備好執行請求。
-\end{enumerate}
-當節點收集到 $2f+1$ 個匹配的 Commit 訊息時，即確認達成共識。
-
-\subsubsection{在 BCFL 中的角色}
-在本研究架構中，PBFT 扮演著挑戰驗證的最終仲裁者角色。雖然其 $O(n^2)$ 的通訊複雜度限制了大規模擴展，但在聯盟鏈環境下（驗證者數量通常 $<20$），其通訊開銷是可接受的，且其成熟的安全性證明為系統提供了堅實的信任基礎。相較於 HotStuff \cite{yin2019hotstuff} 或 Algorand \cite{gilad2017algorand} 等新一代協議，PBFT 在小規模嚴格共識場景下仍具優勢。
-
-\section{相關研究與盲點分析 (Related Work and Blind Spot Analysis)}
-
-\label{sec:related_work}
-
-本節基於近年文獻，深入分析現有 BCFL 方案在委員會選擇與安全性設計上的盲點。雖然現有方案解決了單點故障問題，但在面對具備長期策略的理性攻擊者時仍顯脆弱。
-
-\subsection{委員會選擇機制的分類與局限}
-現有的委員會選擇機制主要分為三類，各有其弱點：
-
-\subsubsection{1. 隨機選擇 (Random Selection)}
-如 BlockDFL \cite{qin2024blockdfl} 與 HoldOut SGD 採用雜湊環或 VRF（可驗證隨機函數）隨機選取驗證者。
-\begin{itemize}
-    \item \textbf{優勢}：公平性高，難以預測。
-    \item \textbf{局限}：安全性完全依賴於「誠實多數」的機率分布。一旦惡意節點透過女巫攻擊（Sybil Attack）佔據網路多數，隨機選擇將失效。
-\end{itemize}
-
-\subsubsection{2. 基於權益的選擇 (Stake-based Selection)}
-如 VBFL \cite{chen2021robust} 與 Biscotti \cite{shayan2021biscotti} 模仿权益证明（PoS），讓高权重的節點有更高機率進入委員會。
-\begin{itemize}
-    \item \textbf{優勢}：建立經濟門檻，增加攻擊成本。
-    \item \textbf{局限}：存在「富者越富」效應。理性攻擊者可通過初期表現誠實累積權益，逐步提升被選機率，最終發動「漸進式委員會佔領攻擊」（Progressive Committee Capture）。
-\end{itemize}
-
-\subsubsection{3. 基於聲譽的選擇 (Reputation-based Selection)}
-如 BFLC \cite{li2021blockchain} 與 CBRFL 根據歷史貢獻度選取高聲譽節點。
-\begin{itemize}
-    \item \textbf{優勢}：激勵高質量貢獻。
-    \item \textbf{局限}：容易遭受共謀攻擊。惡意節點群可透過互相驗證與刷分（Reputation Inflation）來人為抬高聲譽，從而壟斷委員會席位。
-\end{itemize}
-
-\subsection{系統性盲點：驗證層的內部威脅}
-綜合分析顯示，現有 BCFL 研究存在一個\textbf{系統性盲點}：絕大多數防禦機制（如 Krum, Trimmed Mean）僅針對\textbf{客戶端層}的攻擊，而假設\textbf{驗證層（或聚合層）}是誠實或至少大部分誠實的。
-
-表 \ref{tab:defense_comparison} 總結了不同防禦層級的假設與局限：
-
-\begin{table}[ht]
-\centering
-\caption{現有防禦機制的信任假設對比}
-\label{tab:defense_comparison}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{防禦類型} & \textbf{代表方法} & \textbf{核心假設} & \textbf{主要局限} \\ \hline
-傳統 Robust Aggregation & Krum, Median & 誠實聚合器 & 單點信任故障 \\ \hline
-可驗證計算 (Verifiable FL) & zkFL \cite{wang2024zkfl}, ELSA & 誠實算力/證明 & 計算開銷極高 \\ \hline
-區塊鏈委員會 (BCFL) & BlockDFL, BFLC & \textbf{誠實多數委員會} & 無法抵禦共謀/佔領 \\ \hline
-\end{tabular}
-\end{table}
-
-\subsubsection{深入分析：漸進式委員會佔領攻擊 (Progressive Committee Capture Attack)}
-現有委員會架構面臨的最深層威脅是「漸進式委員會佔領攻擊」。此攻擊利用權益或聲譽累積機制的正回饋特性，透過兩階段策略逐步控制系統：
-
-\begin{enumerate}
-    \item \textbf{潛伏階段 (Lurking Phase)}：攻擊者控制的節點在初期表現完全誠實，正常參與訓練並提交高品質的模型更新。透過持續的誠實行為，攻擊節點累積權益與聲譽，從而提高被選入委員會的機率。此階段中，攻擊者與誠實節點在行為上無法區分。
-    \item \textbf{佔領階段 (Capture Phase)}：當攻擊節點首次在某一輪隨機過程中佔據委員會多數席位（$>1/3$ 或 $>2/3$）時，他們啟動惡意行為。攻擊者利用多數優勢操控共識結果，核准投毒模型並將系統獎勵僅分配給自己控制的節點，同時拒絕誠實節點的更新。由於未來的委員會選舉通常基於持有的權益或聲譽，此操作使攻擊者的相對權益份額持續增加，進一步提高其在未來輪次佔據委員會多數的機率，形成自我強化的惡性循環。
+    \item \textbf{缺乏動態安全性分析}：忽略了攻擊者透過時間維度累積影響力的動態過程。
+    \item \textbf{驗證效率與通用性的矛盾}：尚無方案能在保持聚合演算法通用性（如支援 Krum）的同時，提供接近密碼學等級的安全性。
+    \item \textbf{缺乏抗累積機制}：現有權益證明機制多設計為線性累積，賦予了早期參與者或長期潛伏者過大的系統控制權，缺乏類似「權益衰減」或「動態輪換」的防禦設計。
 \end{enumerate}
 
-現有系統（如 BlockDFL \cite{qin2024blockdfl}, FLCoin \cite{ren2024scalable}）缺乏有效的「事後問責」與「權力撤銷」機制來打破此循環。一旦攻擊者合法獲得了多數席位，他們產生的惡意區塊將被共識協議視為合法，系統無法自癒。本研究旨在填補此一缺口，提出能在驗證者共謀情況下仍能透過挑戰機制保證安全性的方案。
+本研究旨在透過引入時間衰減權益函數與動態挑戰機制，填補上述缺口，在維持委員會機制的高效率同時，顯著提升對抗長期滲透攻擊的安全性。
 
 \section{系統模型與前置定義 (System Model and Preliminaries)}
 \label{sec:system_model}
 
-本節定義本研究所採用的基準系統模型。此模型基於 BlockDFL 委員會架構，作為後續威脅分析與防禦設計的基礎。
+本節定義本研究所採用的基準系統模型。此模型基於 BlockDFL 委員會架構並進行擴展，作為後續威脅分析與防禦設計的基礎。
 
 \subsection{網路模型}
 本研究考慮一個去中心化的區塊鏈聯邦學習系統，由以下三種核心角色構成：
