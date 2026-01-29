@@ -14,7 +14,11 @@
 \usepackage{titlesec}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[backend=bibtex,sorting=none]{biblatex}
+\usepackage{xurl}
+\usepackage[backend=biber,sorting=none]{biblatex}
+\setcounter{biburllcpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburlnumpenalty}{9000}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{csquotes}
@@ -84,6 +88,7 @@
 % 新增你自己的章節... Add chapters here
 
 % 參考文獻，請在段落上隨意註解，你同時需要 reference.bib
+\setlength{\emergencystretch}{3em}
 \include{page/reference}
 
 \end{document}

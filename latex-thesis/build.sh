@@ -1,5 +1,5 @@
 #!/bin/bash
 xelatex main
-bibtex main
+biber main
 xelatex main
 xelatex main

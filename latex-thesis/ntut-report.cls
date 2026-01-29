@@ -789,7 +789,7 @@
 %    \endgroup
 %  \fi}
 \newlength{\tocChNumberWidth}
-\setlength{\tocChNumberWidth}{1.4em}
+\setlength{\tocChNumberWidth}{4.5em}
 \newcommand*{\l@chapter}{\@dottedtocline{0}{0em}{\tocChNumberWidth}}
 \newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
 \newcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
