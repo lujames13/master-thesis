@@ -189,13 +189,13 @@ BFLC 開創性地將委員會共識引入 BCFL，採用聲譽機制決定委員�
 \centering
 \caption{BCFL 驗證方法比較}
 \label{tab:verification-comparison}
-\begin{tabular}{|l|p{3.5cm}|p{3cm}|p{3cm}|}
+\begin{tabularx}{\textwidth}{|l|X|X|X|}
 \hline
 \textbf{方法類別} & \textbf{安全性基礎} & \textbf{主要效率瓶頸} & \textbf{對 BCFL 的適用性} \\ \hline
 zkML & 密碼學證明，無需信任假設 & 證明生成耗時數分鐘至數小時 & 低：無法支援 Krum 等複雜聚合 \\ \hline
 opML & 經濟激勵與 AnyTrust 假設 & 挑戰期長達數天 & 低：架構不適用於多驗證者場景 \\ \hline
 委員會共識 & 委員會誠實多數假設 & 共識通訊成本 $O(c^2)$ & 高：主流選擇，但假設可能被違反 \\ \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{研究缺口：從激勵設計到安全隱患}
