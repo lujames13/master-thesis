@@ -1,11 +1,11 @@
-\ref{alg:caca_challenge}
-\ref{alg:caca_execution}
+\ref{alg:ac_blockdfl_challenge}
+\ref{alg:ac_blockdfl_execution}
 \ref{alg:pcca_strategy}
 \ref{chap:evaluation}
 \ref{chap:framework}
 \ref{chap:threat-model}
 \ref{fig:blockdfl-workflow}
-\ref{fig:caca_arch}
+\ref{fig:ac_blockdfl_arch}
 \ref{fig:convergence_iid}
 \ref{fig:convergence_noniid}
 \ref{fig:stake_2000}

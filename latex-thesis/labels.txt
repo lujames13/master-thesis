@@ -1,5 +1,5 @@
-\label{alg:caca_challenge}
-\label{alg:caca_execution}
+\label{alg:ac_blockdfl_challenge}
+\label{alg:ac_blockdfl_execution}
 \label{alg:pcca_strategy}
 \label{chap:background-related}
 \label{chap:conclusion}
@@ -11,7 +11,7 @@
 \label{eq:compromised-prob}
 \label{eq:hypergeometric}
 \label{fig:blockdfl-workflow}
-\label{fig:caca_arch}
+\label{fig:ac_blockdfl_arch}
 \label{fig:convergence_combined}
 \label{fig:convergence_iid}
 \label{fig:convergence_noniid}
