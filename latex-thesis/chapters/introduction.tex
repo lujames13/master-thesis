@@ -1,6 +1,6 @@
 \begin{ZhChapter}
 
-\chapter{緒論 (Introduction)}
+\chapter{緒論}
 \label{chapter:introduction}
 
 隨著人工智慧與分散式運算技術的蓬勃發展，聯邦學習 (Federated Learning) \cite{mcmahan2017communication} 與區塊鏈技術的深度整合，催生了區塊鏈賦能的聯邦學習 (Blockchain-based Federated Learning, BCFL) 這一創新技術典範。此技術路徑之所以受到學界與產業界的高度重視，根本原因在於其成功回應了多方互不信任情境下協作機器學習的核心挑戰。在低軌衛星網路 (LEO) \cite{pokhrel2021blockchain, wu2024sharded, elmahallawy2025decentralized}、車聯網 (V2X) \cite{lu2020asynchronous, liu2021blockchain, pokhrel2020autonomous} 以及工業物聯網 (IIoT) \cite{lu2020blockchain, qu2020decentralized, eppbcfl2025} 等實際應用場景中，BCFL 展現了其獨特且難以替代的技術價值。以 LEO 衛星星座為代表的太空人工智慧應用場景尤具說明性意義，在此類場景中星地通訊窗口通常僅維持約五分鐘，且下行頻寬受限於每秒 8 Mbps 左右的水準 \cite{wu2024sharded}，這種嚴苛的通訊條件使得傳統依賴地面站進行模型聚合的訓練方案在技術上幾乎無法實現。BCFL 透過在異質衛星營運商之間建立去中心化的信任基礎設施，成功將模型收斂所需時間縮減達三十小時之譜 \cite{elmahallawy2025decentralized}，充分展現了此技術路徑在極端環境下的應用潛力。類似地，在工業 4.0 的發展背景下，BCFL 使得協作工廠能夠在完全不洩露各自商業機密的前提下共同進行預測性維護模型的訓練，實驗數據顯示此種架構可將通訊開銷較傳統集中式方案降低約 $41\%$ \cite{lu2020blockchain}。上述多元應用場景共同呈現出三項關鍵特徵：缺乏可信賴的中心化協調者、計算與通訊資源高度受限、以及訓練資料在統計分布上的顯著異質性，正是這些特徵的交織作用，使得 BCFL 逐步確立其作為通用去中心化學習架構首選方案的地位。

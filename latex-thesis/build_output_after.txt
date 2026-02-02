@@ -1,0 +1,1145 @@
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21> (./ntut-report.cls
+Document Class: ntut-report 2008/12/16 v0.3 Modified Standard LaTeX document cl
+ass
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def)))
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/mla-paper/mla.sty
+MLA Package - by Ryan Aycock
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+(|extractbb --version))))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/wallpaper/wallpaper.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg))))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/ppxetex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
+(/usr/share/texlive/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber.sty
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/xurl/xurl.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-unicode.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+)) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (./ntut-labels.tex)
+No file main.aux.
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+(/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx) (./main.bbl)
+(./page/titlepage.tex [1]) (./page/blankpage.tex) (./page/titlepage.tex
+[1]) (./page/abstract.tex) [1] (./page/abstract-en.tex) [2] (./page/thanks.tex)
+[3] (./page/table-of-content.tex [4] [5]) [6] (./chapters/introduction.tex
+Chapter 1.
+
+LaTeX Warning: Citation 'mcmahan2017communication' on page 1 undefined on input
+ line 6.
+
+
+LaTeX Warning: Citation 'pokhrel2021blockchain' on page 1 undefined on input li
+ne 6.
+
+
+LaTeX Warning: Citation 'wu2024sharded' on page 1 undefined on input line 6.
+
+
+LaTeX Warning: Citation 'elmahallawy2025decentralized' on page 1 undefined on i
+nput line 6.
+
+
+LaTeX Warning: Citation 'lu2020asynchronous' on page 1 undefined on input line 
+6.
+
+
+LaTeX Warning: Citation 'liu2021blockchain' on page 1 undefined on input line 6
+.
+
+
+LaTeX Warning: Citation 'pokhrel2020autonomous' on page 1 undefined on input li
+ne 6.
+
+
+LaTeX Warning: Citation 'lu2020blockchain' on page 1 undefined on input line 6.
+
+
+
+LaTeX Warning: Citation 'qu2020decentralized' on page 1 undefined on input line
+ 6.
+
+
+LaTeX Warning: Citation 'eppbcfl2025' on page 1 undefined on input line 6.
+
+
+LaTeX Warning: Citation 'wu2024sharded' on page 1 undefined on input line 6.
+
+
+LaTeX Warning: Citation 'elmahallawy2025decentralized' on page 1 undefined on i
+nput line 6.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+
+LaTeX Warning: Citation 'lu2020blockchain' on page 1 undefined on input line 6.
+
+
+
+LaTeX Warning: Citation 'castro1999practical' on page 1 undefined on input line
+ 8.
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 1 undefined on input line 8.
+
+
+LaTeX Warning: Citation 'vanetbcfl2024' on page 1 undefined on input line 8.
+
+
+LaTeX Warning: Citation 'fedchain2024' on page 1 undefined on input line 8.
+
+[1]
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 2 undefined on input line 10.
+
+
+
+LaTeX Warning: Citation 'li2021blockchain' on page 2 undefined on input line 10
+.
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 2 undefined on input line 10.
+
+
+
+LaTeX Warning: Citation 'shayan2021biscotti' on page 2 undefined on input line 
+10.
+
+
+LaTeX Warning: Citation 'weng2021deepchain' on page 2 undefined on input line 1
+0.
+
+
+LaTeX Warning: Citation 'gilad2017algorand' on page 2 undefined on input line 1
+0.
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 2 undefined on input line 10.
+
+
+
+LaTeX Warning: Citation 'li2021blockchain' on page 2 undefined on input line 10
+.
+
+
+LaTeX Warning: Citation 'blanchard2017machine' on page 2 undefined on input lin
+e 12.
+
+
+LaTeX Warning: Citation 'yin2018byzantine' on page 2 undefined on input line 12
+.
+
+
+LaTeX Warning: Citation 'nguyen2024fedblock' on page 2 undefined on input line 
+12.
+
+[2]
+
+LaTeX Warning: Citation 'zhang2020batchcrypt' on page 3 undefined on input line
+ 14.
+
+
+LaTeX Warning: Citation 'miao2022privacy' on page 3 undefined on input line 14.
+
+
+
+LaTeX Warning: Citation 'chen2021robust' on page 3 undefined on input line 14.
+
+[3]
+
+LaTeX Warning: Citation 'chiu2018incentive' on page 4 undefined on input line 1
+8.
+
+[4]) [5] (./chapters/background-and-related-work.tex
+Chapter 2.
+
+LaTeX Warning: Citation 'mcmahan2017communication' on page 6 undefined on input
+ line 14.
+
+
+LaTeX Warning: Citation 'mcmahan2017communication' on page 6 undefined on input
+ line 16.
+
+
+LaTeX Warning: Citation 'kairouz2021advances' on page 6 undefined on input line
+ 16.
+
+[6]
+
+LaTeX Warning: Citation 'bagdasaryan2020how' on page 7 undefined on input line 
+23.
+
+
+LaTeX Warning: Citation 'zhu2019deep' on page 7 undefined on input line 23.
+
+[7]
+
+LaTeX Warning: Citation 'lamport1982byzantine' on page 8 undefined on input lin
+e 43.
+
+[8]
+
+LaTeX Warning: Citation 'castro1999practical' on page 9 undefined on input line
+ 53.
+
+[9]
+
+LaTeX Warning: Citation 'yin2019hotstuff' on page 10 undefined on input line 57
+.
+
+[10]
+
+LaTeX Warning: Citation 'li2021blockchain' on page 11 undefined on input line 7
+2.
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 11 undefined on input line 74
+.
+
+[11]
+
+LaTeX Warning: Citation 'zamani2018rapidchain' on page 12 undefined on input li
+ne 83.
+
+
+LaTeX Warning: Citation 'gasper' on page 12 undefined on input line 83.
+
+
+LaTeX Warning: Citation 'chen2021robust' on page 12 undefined on input line 85.
+
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 12 undefined on input line 85
+.
+
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 12 undefined on input line 87
+.
+
+[12] [13]
+
+LaTeX Warning: Reference `chap:framework' on page 14 undefined on input line 11
+0.
+
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 14 undefined on input line 11
+5.
+
+[14] [15]
+
+LaTeX Warning: Citation 'blanchard2017machine' on page 16 undefined on input li
+ne 131.
+
+[16]
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 17 undefined on input line 13
+9.
+
+[17]
+
+LaTeX Warning: Citation 'chen2024zkml' on page 18 undefined on input line 151.
+
+[18]
+
+LaTeX Warning: Citation 'lecun1998gradient' on page 19 undefined on input line 
+153.
+
+
+LaTeX Warning: Citation 'he2016deep' on page 19 undefined on input line 153.
+
+
+LaTeX Warning: Citation 'simonyan2015very' on page 19 undefined on input line 1
+53.
+
+
+LaTeX Warning: Citation 'chen2024zkml' on page 19 undefined on input line 153.
+
+
+LaTeX Warning: Citation 'blanchard2017machine' on page 19 undefined on input li
+ne 155.
+
+
+LaTeX Warning: Citation 'zhu2024risefl' on page 19 undefined on input line 155.
+
+
+
+Overfull \hbox (33.73633pt too wide) in paragraph at lines 155--156
+[]\TU/DFKai-SB.ttf(0)/m/n/12 更 關 鍵 的 局 限 在 於 \TU/FreeSerif(0)/m/n/12 zkML \TU/D
+FKai-SB.ttf(0)/m/n/12 難 以 支 援 拜 占 庭 容 錯 聚 合 演 算 法。| \TU/FreeSerif(0)/m/n/12 Kru
+m [[]]
+
+LaTeX Warning: Citation 'conway2024opml' on page 19 undefined on input line 160
+.
+
+
+LaTeX Warning: Citation 'touvron2023llama' on page 19 undefined on input line 1
+60.
+
+
+LaTeX Warning: Citation 'ora2024opml' on page 19 undefined on input line 160.
+
+[19]
+
+LaTeX Warning: Citation 'optimism2024rollup' on page 20 undefined on input line
+ 162.
+
+
+LaTeX Warning: Citation 'kalodner2018arbitrum' on page 20 undefined on input li
+ne 162.
+
+
+LaTeX Warning: Citation 'ren2024scalable' on page 20 undefined on input line 16
+9.
+
+
+LaTeX Warning: Citation 'li2021blockchain' on page 20 undefined on input line 1
+69.
+
+[20]
+
+LaTeX Warning: Citation 'ren2024scalable' on page 21 undefined on input line 17
+1.
+
+
+LaTeX Warning: Citation 'li2021blockchain' on page 21 undefined on input line 1
+73.
+
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 21 undefined on input line 17
+3.
+
+
+LaTeX Warning: Reference `sec:committee-size-security' on page 21 undefined on 
+input line 182.
+
+[21]
+
+LaTeX Warning: Reference `tab:verification-comparison' on page 22 undefined on 
+input line 186.
+
+
+Underfull \hbox (badness 1194) in paragraph at lines 198--198
+[]|\TU/DFKai-SB.ttf(0)/m/n/12 低：|  無 法 支 援 \TU/FreeSerif(0)/m/n/12 Krum
+[22]
+
+LaTeX Warning: Reference `sec:blockdfl-baseline' on page 23 undefined on input 
+line 209.
+
+[23]
+
+LaTeX Warning: Citation 'nguyen2024fedblock' on page 24 undefined on input line
+ 222.
+
+
+LaTeX Warning: Citation 'qin2024blockdfl' on page 24 undefined on input line 22
+2.
+
+
+LaTeX Warning: Reference `sec:blockdfl-baseline' on page 24 undefined on input 
+line 235.
+
+[24]) [25] (./chapters/threat-model.tex
+Chapter 3.
+[26] [27]
+
+LaTeX Warning: Citation 'blanchard2017machine' on page 28 undefined on input li
+ne 30.
+
+
+LaTeX Warning: Citation 'yin2018byzantine' on page 28 undefined on input line 3
+0.
+
+[28]
+
+LaTeX Warning: Reference `chap:background-related' on page 29 undefined on inpu
+t line 36.
+
+
+LaTeX Warning: Reference `tab:attack_comparison' on page 29 undefined on input 
+line 42.
+
+[29] [30]
+
+LaTeX Warning: Reference `alg:pcca_strategy' on page 31 undefined on input line
+ 67.
+
+
+LaTeX Warning: Reference `sec:committee-size-security' on page 31 undefined on 
+input line 96.
+
+[31] [32] [33] [34] [35]
+
+LaTeX Warning: Reference `tab:comparison_traditional' on page 36 undefined on i
+nput line 140.
+
+[36] [37] [38] [39] [40]) [41] (./chapters/framework-design.tex
+Chapter 4.
+
+LaTeX Warning: Reference `chap:threat-model' on page 42 undefined on input line
+ 6.
+
+
+LaTeX Warning: Reference `sec:blockdfl-baseline' on page 42 undefined on input 
+line 6.
+
+
+LaTeX Warning: Reference `sec:arch_overview' on page 42 undefined on input line
+ 10.
+
+
+LaTeX Warning: Reference `sec:protocol_flow' on page 42 undefined on input line
+ 10.
+
+
+LaTeX Warning: Reference `sec:async_audit' on page 42 undefined on input line 1
+0.
+
+
+LaTeX Warning: Reference `sec:security_guarantee' on page 42 undefined on input
+ line 10.
+
+
+LaTeX Warning: Reference `sec:efficiency_analysis' on page 42 undefined on inpu
+t line 10.
+
+
+LaTeX Warning: Reference `sec:blockdfl-baseline' on page 42 undefined on input 
+line 16.
+
+
+LaTeX Warning: Citation 'blanchard2017machine' on page 42 undefined on input li
+ne 16.
+
+[42]
+
+LaTeX Warning: Reference `fig:ac_blockdfl_arch' on page 43 undefined on input l
+ine 22.
+
+[43]
+
+LaTeX Warning: Reference `alg:ac_blockdfl_execution' on page 44 undefined on in
+put line 35.
+
+
+LaTeX Warning: Reference `sec:async_audit' on page 44 undefined on input line 6
+2.
+
+[44] [45]
+
+LaTeX Warning: Reference `alg:ac_blockdfl_challenge' on page 46 undefined on in
+put line 82.
+
+
+LaTeX Warning: Reference `sec:no_rollback' on page 46 undefined on input line 8
+2.
+
+
+LaTeX Warning: Reference `sec:no_rollback' on page 46 undefined on input line 1
+02.
+
+[46] [47] [48]
+
+LaTeX Warning: Reference `chap:evaluation' on page 49 undefined on input line 1
+37.
+
+[49] [50]
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 51 undefined on i
+nput line 168.
+
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 51 undefined on i
+nput line 172.
+
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 51 undefined on i
+nput line 175.
+
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 51 undefined on inp
+ut line 175.
+
+[51]
+
+LaTeX Warning: Reference `sec:endogenous_staking' on page 52 undefined on input
+ line 180.
+
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 52 undefined on i
+nput line 182.
+
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 52 undefined on inp
+ut line 182.
+
+[52]
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 53 undefined on inp
+ut line 195.
+
+[53]
+
+LaTeX Warning: Reference `chap:threat-model' on page 54 undefined on input line
+ 206.
+
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 54 undefined on i
+nput line 213.
+
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 54 undefined on inp
+ut line 213.
+
+
+LaTeX Warning: Reference `eq:expected_payoff' on page 54 undefined on input lin
+e 213.
+
+[54]
+
+LaTeX Warning: Reference `chap:threat-model' on page 55 undefined on input line
+ 221.
+
+
+LaTeX Warning: Citation 'chiu2018incentive' on page 55 undefined on input line 
+221.
+
+
+LaTeX Warning: Reference `sec:committee-size-security' on page 55 undefined on 
+input line 227.
+
+
+LaTeX Warning: Reference `sec:committee-size-security' on page 55 undefined on 
+input line 231.
+
+[55]
+
+LaTeX Warning: Reference `tab:efficiency_comparison' on page 56 undefined on in
+put line 235.
+
+[56] [57]
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 58 undefined on i
+nput line 280.
+
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 58 undefined on inp
+ut line 280.
+
+
+LaTeX Warning: Reference `thm:attack_cost_bound' on page 58 undefined on input 
+line 280.
+
+) [58] (./chapters/evaluation.tex
+Chapter 5.
+
+LaTeX Warning: Reference `chap:framework' on page 59 undefined on input line 6.
+
+
+
+LaTeX Warning: Reference `chap:framework' on page 59 undefined on input line 15
+.
+
+[59]
+
+LaTeX Warning: Reference `chap:threat-model' on page 60 undefined on input line
+ 17.
+
+
+LaTeX Warning: Reference `tab:exp_params' on page 60 undefined on input line 17
+.
+
+
+LaTeX Warning: Reference `sec:committee-size-security' on page 60 undefined on 
+input line 47.
+
+
+LaTeX Warning: Reference `chap:threat-model' on page 60 undefined on input line
+ 55.
+
+[60]
+
+LaTeX Warning: Reference `sec:pcca' on page 61 undefined on input line 59.
+
+
+LaTeX Warning: Reference `fig:stake_evolution_300' on page 61 undefined on inpu
+t line 65.
+
+[61]
+
+LaTeX Warning: Reference `fig:stake_evolution_2000' on page 62 undefined on inp
+ut line 81.
+
+[62]
+
+LaTeX Warning: Reference `sec:efficiency_analysis' on page 63 undefined on inpu
+t line 87.
+
+[63]
+
+LaTeX Warning: Reference `tab:attack_events_stats' on page 64 undefined on inpu
+t line 96.
+
+
+LaTeX Warning: Reference `chap:framework' on page 64 undefined on input line 12
+2.
+
+[64]
+
+LaTeX Warning: Reference `sec:security_guarantee' on page 65 undefined on input
+ line 126.
+
+
+LaTeX Warning: Reference `thm:detection_completeness' on page 65 undefined on i
+nput line 126.
+
+
+LaTeX Warning: Reference `thm:punishment_certainty' on page 65 undefined on inp
+ut line 126.
+
+[65]
+
+LaTeX Warning: Reference `fig:convergence_curve' on page 66 undefined on input 
+line 139.
+
+
+LaTeX Warning: Reference `chap:framework' on page 66 undefined on input line 13
+9.
+
+[66]
+
+LaTeX Warning: Reference `sec:game_theory_analysis' on page 67 undefined on inp
+ut line 155.
+
+) [67] (./chapters/conclusion.tex
+Chapter 6.
+[68]) [69] (./page/reference.tex
+
+LaTeX Warning: Empty bibliography on input line 1.
+
+) (./main.aux (./page/titlepage.aux) (./page/blankpage.aux)
+(./page/abstract.aux) (./page/abstract-en.aux) (./page/thanks.aux)
+(./page/table-of-content.aux) (./chapters/introduction.aux)
+(./chapters/background-and-related-work.aux) (./chapters/threat-model.aux)
+(./chapters/framework-design.aux) (./chapters/evaluation.aux)
+(./chapters/conclusion.aux) (./page/reference.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                main
+(biblatex)                and rerun LaTeX afterwards.
+
+ )
+(see the transcript file for additional information)
+Output written on main.pdf (77 pages).
+Transcript written on main.log.
+Use of uninitialized value in quotemeta at /usr/share/perl5/Biber/Config.pm line 228.
+Use of uninitialized value $tool in concatenation (.) or string at /usr/share/perl5/Biber/Config.pm line 307.
+INFO - This is Biber 2.17
+INFO - Logfile is 'main.blg'
+INFO - Reading 'main.bcf'
+INFO - Found 43 citekeys in bib section 0
+INFO - Processing section 0
+INFO - Looking for bibtex file 'reference.bib' for section 0
+INFO - LaTeX decoding ...
+INFO - Found BibTeX data source 'reference.bib'
+INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+INFO - No sort tailoring available for locale 'en-US'
+INFO - Writing 'main.bbl' with encoding 'UTF-8'
+INFO - Output to main.bbl
+WARN - legacy month field 'Dec.' in entry 'elmahallawy2025decentralized' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'Aug.' in entry 'ren2024scalable' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'May' in entry 'qin2024blockdfl' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'Jul.' in entry 'yin2018byzantine' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'Dec.' in entry 'nguyen2024fedblock' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'Jul.' in entry 'zhang2020batchcrypt' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'Apr.' in entry 'chen2024zkml' is not an integer - this will probably not sort properly.
+INFO - WARNINGS: 7
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21> (./ntut-report.cls
+Document Class: ntut-report 2008/12/16 v0.3 Modified Standard LaTeX document cl
+ass
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def)))
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/mla-paper/mla.sty
+MLA Package - by Ryan Aycock
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+(|extractbb --version))))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/wallpaper/wallpaper.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg))))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/ppxetex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
+(/usr/share/texlive/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber.sty
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/xurl/xurl.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-unicode.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+)) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (./ntut-labels.tex) (./main.aux (./page/titlepage.aux) (./page/blankpage.aux)
+ (./page/abstract.aux) (./page/abstract-en.aux) (./page/thanks.aux)
+(./page/table-of-content.aux) (./chapters/introduction.aux)
+(./chapters/background-and-related-work.aux) (./chapters/threat-model.aux)
+(./chapters/framework-design.aux) (./chapters/evaluation.aux)
+(./chapters/conclusion.aux) (./page/reference.aux))
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+(/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(./main.out) (./main.out)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx) (./main.bbl)
+(./page/titlepage.tex [1]) (./page/blankpage.tex) (./page/titlepage.tex
+[1]) (./page/abstract.tex) [1] (./page/abstract-en.tex) [2] (./page/thanks.tex)
+[3] (./page/table-of-content.tex (./main.toc
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [4] [5]) [6]
+(./main.lof) [7] (./main.lot)) [8] (./chapters/introduction.tex
+Chapter 1.
+[1] [2] [3]) [4] (./chapters/background-and-related-work.tex
+Chapter 2.
+[5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20]
+Underfull \hbox (badness 1194) in paragraph at lines 198--198
+[]|\TU/DFKai-SB.ttf(0)/m/n/12 低：|  無 法 支 援 \TU/FreeSerif(0)/m/n/12 Krum
+[21] [22]) [23] (./chapters/threat-model.tex
+Chapter 3.
+[24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38])
+[39] (./chapters/framework-design.tex
+Chapter 4.
+[40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54]
+[55]) [56] (./chapters/evaluation.tex
+Chapter 5.
+[57] [58] [59] [60] [61] [62] [63] [64]) [65] (./chapters/conclusion.tex
+Chapter 6.
+[66]) [67] (./page/reference.tex [68]
+Underfull \hbox (badness 1472) in paragraph at lines 1--1
+[]\TU/FreeSerif(0)/m/n/12 J. Weng et al. “  DeepChain: Auditable and Privacy-Pr
+eserving Deep Learning with
+[69]
+Underfull \hbox (badness 2970) in paragraph at lines 1--1
+[]\TU/FreeSerif(0)/m/n/12 Mahdi Zamani, Mahnush Movahedi, and Mariana Raykova. 
+“  RapidChain: Scaling
+) [70] (./main.aux (./page/titlepage.aux) (./page/blankpage.aux)
+(./page/abstract.aux) (./page/abstract-en.aux) (./page/thanks.aux)
+(./page/table-of-content.aux) (./chapters/introduction.aux)
+(./chapters/background-and-related-work.aux) (./chapters/threat-model.aux)
+(./chapters/framework-design.aux) (./chapters/evaluation.aux)
+(./chapters/conclusion.aux) (./page/reference.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+
+Package biblatex Warning: Please rerun LaTeX.
+
+ )
+(see the transcript file for additional information)
+Output written on main.pdf (80 pages).
+Transcript written on main.log.
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21> (./ntut-report.cls
+Document Class: ntut-report 2008/12/16 v0.3 Modified Standard LaTeX document cl
+ass
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def)))
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/mla-paper/mla.sty
+MLA Package - by Ryan Aycock
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+(|extractbb --version))))
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/wallpaper/wallpaper.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg))))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/ppxetex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
+(/usr/share/texlive/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber.sty
+(/usr/share/texlive/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/xurl/xurl.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-unicode.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx))
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def)
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+)) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (./ntut-labels.tex) (./main.aux (./page/titlepage.aux) (./page/blankpage.aux)
+ (./page/abstract.aux) (./page/abstract-en.aux) (./page/thanks.aux)
+(./page/table-of-content.aux) (./chapters/introduction.aux)
+(./chapters/background-and-related-work.aux) (./chapters/threat-model.aux)
+(./chapters/framework-design.aux) (./chapters/evaluation.aux)
+(./chapters/conclusion.aux) (./page/reference.aux))
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+(/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(./main.out) (./main.out)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx) (./main.bbl)
+(./page/titlepage.tex [1]) (./page/blankpage.tex) (./page/titlepage.tex
+[1]) (./page/abstract.tex) [1] (./page/abstract-en.tex) [2] (./page/thanks.tex)
+[3] (./page/table-of-content.tex (./main.toc
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [4] [5]) [6]
+(./main.lof) [7] (./main.lot)) [8] (./chapters/introduction.tex
+Chapter 1.
+[1] [2] [3]) [4] (./chapters/background-and-related-work.tex
+Chapter 2.
+[5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20]
+Underfull \hbox (badness 1194) in paragraph at lines 198--198
+[]|\TU/DFKai-SB.ttf(0)/m/n/12 低：|  無 法 支 援 \TU/FreeSerif(0)/m/n/12 Krum
+[21] [22]) [23] (./chapters/threat-model.tex
+Chapter 3.
+[24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38])
+[39] (./chapters/framework-design.tex
+Chapter 4.
+[40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54]
+[55]) [56] (./chapters/evaluation.tex
+Chapter 5.
+[57] [58] [59] [60] [61] [62] [63] [64]) [65] (./chapters/conclusion.tex
+Chapter 6.
+[66]) [67] (./page/reference.tex [68]
+Underfull \hbox (badness 1472) in paragraph at lines 1--1
+[]\TU/FreeSerif(0)/m/n/12 J. Weng et al. “  DeepChain: Auditable and Privacy-Pr
+eserving Deep Learning with
+[69]
+Underfull \hbox (badness 2970) in paragraph at lines 1--1
+[]\TU/FreeSerif(0)/m/n/12 Mahdi Zamani, Mahnush Movahedi, and Mariana Raykova. 
+“  RapidChain: Scaling
+) [70] (./main.aux (./page/titlepage.aux) (./page/blankpage.aux)
+(./page/abstract.aux) (./page/abstract-en.aux) (./page/thanks.aux)
+(./page/table-of-content.aux) (./chapters/introduction.aux)
+(./chapters/background-and-related-work.aux) (./chapters/threat-model.aux)
+(./chapters/framework-design.aux) (./chapters/evaluation.aux)
+(./chapters/conclusion.aux) (./page/reference.aux)) )
+(see the transcript file for additional information)
+Output written on main.pdf (80 pages).
+Transcript written on main.log.
