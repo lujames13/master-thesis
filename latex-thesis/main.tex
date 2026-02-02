@@ -48,9 +48,10 @@
 \setCJKmonofont{DFKai-SB.ttf} % 設定等寬中文字體，解決 \CJKttdefault 警告
 
 \setmainfont{FreeSerif} % 英文字體 (Replacement for missing Times New Roman)
-\geometry{a4paper,top=4.5cm,bottom=0.75cm,left=2.5cm,right=2.5cm} % 頁面設定，不需修改
+\geometry{a4paper,top=4.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,footskip=1.0cm} % 修正頁面設定，確保頁碼可見
 
 \pagestyle{plain} % 頁碼
+\pagenumbering{arabic}
 \addbibresource{reference.bib}
 
 \input{ntut-labels.tex}

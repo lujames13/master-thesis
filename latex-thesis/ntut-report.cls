@@ -85,7 +85,7 @@
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{ntut-report}
+\ProvidesClass{ntut_report}
               [2008/12/16 v0.3
  Modified Standard LaTeX document class]
 \newcommand\@ptsize{}
@@ -384,7 +384,7 @@
                          \typeout{\@chapapp\space\thechapter.}%
                          \addcontentsline{toc}{chapter}%
 %                                   {\protect\numberline{\thechapter}#1}%
-                                   {\protect\numberline{\tocprechaptername\countermapping{\zhnumber\thechapter}\tocpostchaptername}#1}%
+                                   {\tocprechaptername\protect\numberline{\countermapping{\zhnumber\thechapter}\tocpostchaptername}\hspace{2em}#1}%
                     \else
                       \addcontentsline{toc}{chapter}{#1}%
                     \fi
@@ -789,22 +789,8 @@
 %    \endgroup
 %  \fi}
 \newlength{\tocChNumberWidth}
-\setlength{\tocChNumberWidth}{4.5em}
-\newcommand*\l@chapter[2]{%
-  \ifnum \c@tocdepth >\m@ne
-    \addpenalty{-\@highpenalty}%
-    \vskip 1.0em \@plus\p@
-    \setlength\@tempdima{\tocChNumberWidth}%
-    \begingroup
-      \parindent \z@ \rightskip \@pnumwidth
-      \parfillskip -\@pnumwidth
-      \leavevmode \bfseries
-      \advance\leftskip\@tempdima
-      \hskip -\leftskip
-      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
-      \penalty\@highpenalty
-    \endgroup
-  \fi}
+\setlength{\tocChNumberWidth}{5em}
+\newcommand*{\l@chapter}{\@dottedtocline{0}{0em}{\tocChNumberWidth}}
 \newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
 \newcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
 \newcommand*\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
