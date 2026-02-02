@@ -384,7 +384,7 @@
                          \typeout{\@chapapp\space\thechapter.}%
                          \addcontentsline{toc}{chapter}%
 %                                   {\protect\numberline{\thechapter}#1}%
-                                   {\tocprechaptername\protect\numberline{\countermapping{\zhnumber\thechapter}\tocpostchaptername}\hspace{2em}#1}%
+                                   {\protect\numberline{\tocprechaptername\countermapping{\zhnumber\thechapter}\tocpostchaptername}#1}%
                     \else
                       \addcontentsline{toc}{chapter}{#1}%
                     \fi
@@ -789,7 +789,7 @@
 %    \endgroup
 %  \fi}
 \newlength{\tocChNumberWidth}
-\setlength{\tocChNumberWidth}{5em}
+\setlength{\tocChNumberWidth}{4.5em}
 \newcommand*{\l@chapter}{\@dottedtocline{0}{0em}{\tocChNumberWidth}}
 \newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
 \newcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
