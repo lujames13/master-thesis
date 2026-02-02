@@ -32,13 +32,21 @@
 }
 
 @inproceedings{mcmahan2017communication,
-  title     = {Communication-efficient learning of deep networks from decentralized data},
-  author    = {McMahan, B. and Moore, E. and Ramage, D. and Hampson, S. and y Arcas, B. A.},
-  booktitle = {Proc. Int. Conf. Artificial Intelligence and Statistics (AISTATS)},
+  title     = {{Communication-Efficient Learning of Deep Networks from Decentralized Data}},
+  author    = {McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Arcas, Blaise Aguera y},
+  booktitle = {Proceedings of the 20th International Conference on Artificial Intelligence and Statistics},
   pages     = {1273--1282},
   year      = {2017},
-  address   = {Fort Lauderdale, FL, USA}
+  editor    = {Singh, Aarti and Zhu, Jerry},
+  volume    = {54},
+  series    = {Proceedings of Machine Learning Research},
+  month     = {20--22 Apr},
+  publisher = {PMLR},
+  pdf       = {http://proceedings.mlr.press/v54/mcmahan17a/mcmahan17a.pdf},
+  url       = {https://proceedings.mlr.press/v54/mcmahan17a.html},
+  abstract  = {Modern mobile devices have access to a wealth of data suitable for learning models, which in turn can greatly improve the user experience on the device. For example, language models can improve speech recognition and text entry, and image models can automatically select good photos. However, this rich data is often privacy sensitive, large in quantity, or both, which may preclude logging to the data center and training there using conventional approaches.  We advocate an alternative that leaves the training data distributed on the mobile devices, and learns a shared model by aggregating locally-computed updates. We term this decentralized approach Federated Learning.  We present a practical method for the federated learning of deep networks based on iterative model averaging, and conduct an extensive empirical evaluation, considering five different model architectures and four datasets. These experiments demonstrate the approach is robust to the unbalanced and non-IID data distributions that are a defining characteristic of this setting. Communication costs are the principal constraint, and we show a reduction in required communication rounds by 10-100x as compared to synchronized stochastic gradient descent. }
 }
+
 
 @inproceedings{zhu2019deep,
   title     = {Deep Leakage from Gradients},
